@@ -725,7 +725,7 @@
     <h1><span class="icon">✈️</span> 旅途忆档</h1>
     <div class="nav-actions">
         <button class="nav-btn" onclick="showPage('stats')">📊 统计</button>
-        <button class="nav-btn primary" onclick="openModal('add-archive')">➕ 新建档案</button>
+        <button class="nav-btn primary" onclick="newArchive()">➕ 新建档案</button>
     </div>
 </nav>
 
@@ -855,7 +855,7 @@
 
             <div class="search-box">
                 <input type="text" id="search-input" placeholder="搜索旅行档案..." oninput="filterArchives()">
-                <button class="btn btn-primary" onclick="openModal('add-archive')">➕ 新建</button>
+                <button class="btn btn-primary" onclick="newArchive()">➕ 新建</button>
             </div>
 
             <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center;">
@@ -1537,13 +1537,16 @@ function openModal(modalName) {
     if (modal) modal.classList.add('show');
 
     if (modalName === 'add-archive') {
-        if (!document.getElementById('edit-archive-id').value) {
-            resetForm();
-        }
         setTimeout(() => {
             initDestinationAutocomplete();
         }, 50);
     }
+}
+
+// 新建档案（确保重置表单）
+function newArchive() {
+    resetForm();
+    openModal('add-archive');
 }
 
 function closeModal(modalName) {
@@ -2506,7 +2509,7 @@ function renderArchiveList() {
                 <div class="icon">📋</div>
                 <h3>暂无旅行档案</h3>
                 <p>点击"新建档案"开始记录你的第一次旅行吧</p>
-                <button class="btn btn-primary" onclick="openModal('add-archive')">➕ 新建档案</button>
+                <button class="btn btn-primary" onclick="newArchive()">➕ 新建档案</button>
             </div>
         `;
         return;
@@ -3029,71 +3032,118 @@ function renderFilteredMarkers(filtered, animate = false, compareMode = null) {
 
     const moodColors = { happy: '#FF9800', excited: '#E91E63', peaceful: '#4CAF50', tired: '#607D8B', nostalgic: '#2196F3' };
     const coordsList = [];
-    const segCoords = []; // 用于分段绘制
 
-    filtered.forEach((a, idx) => {
+    // 按目的地分组
+    const cityGroups = {};
+    filtered.forEach((a) => {
         const coords = getCityCoords(a.destination);
         if (!coords) return;
+        const key = a.destination;
+        if (!cityGroups[key]) cityGroups[key] = { coords, archives: [] };
+        cityGroups[key].archives.push(a);
+    });
 
-        let color = moodColors[a.mood] || '#FF764D';
+    Object.keys(cityGroups).forEach(cityName => {
+        const { coords, archives: list } = cityGroups[cityName];
+        const count = list.length;
+
+        // 计算标记主色（取第一项的规则）
+        let color = moodColors[list[0].mood] || '#FF764D';
         let dotCount = 1;
+        let isCommon = false;
 
-        // 季节模式
-        if (seasonMode && a.start) {
-            const month = parseInt(a.start.substring(5, 7));
+        if (seasonMode && list[0].start) {
+            const month = parseInt(list[0].start.substring(5, 7));
             color = getSeasonColor(month);
         }
 
-        // 对比模式
         if (compareMode && (compareMode.companionA || compareMode.companionB)) {
-            const comps = a.companions || '';
-            const hasA = compareMode.companionA && comps.includes(compareMode.companionA);
-            const hasB = compareMode.companionB && comps.includes(compareMode.companionB);
-            if (hasA && hasB) {
-                color = '#E74C3C';  // 共同：红
-                dotCount = 2;
-            } else if (hasA) {
-                color = '#3498DB';  // 仅A：蓝
-            } else if (hasB) {
-                color = '#F1C40F';  // 仅B：黄
+            // 共同：所有档案都同时含 A 和 B
+            const allCommon = list.every(a => {
+                const c = a.companions || '';
+                return (!compareMode.companionA || c.includes(compareMode.companionA)) &&
+                       (!compareMode.companionB || c.includes(compareMode.companionB));
+            });
+            const anyA = list.some(a => (a.companions || '').includes(compareMode.companionA || '###'));
+            const anyB = list.some(a => (a.companions || '').includes(compareMode.companionB || '###'));
+            if (allCommon && (compareMode.companionA && compareMode.companionB)) {
+                color = '#E74C3C'; dotCount = 2; isCommon = true;
+            } else if (anyA && !anyB) {
+                color = '#3498DB';
+            } else if (anyB && !anyA) {
+                color = '#F1C40F';
             } else {
-                color = '#BDC3C7';  // 未参与：灰
+                color = '#BDC3C7';
             }
         }
 
-        coordsList.push([coords.lat, coords.lng]);
-        segCoords.push([coords.lat, coords.lng]);
+        // 标记尺寸：多档案时更大
+        const size = count > 1 ? 40 : 32;
+        const fontSize = count > 1 ? 14 : 13;
 
-        const iconHtml = dotCount > 1
-            ? `<div style="background: ${color}; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">★</div>`
-            : `<div style="background: ${color}; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 13px; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">${idx + 1}</div>`;
+        const iconHtml = count > 1
+            ? `<div style="position: relative; background: ${color}; width: ${size}px; height: ${size}px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: ${fontSize}px; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+                ${dotCount > 1 ? '★' : count}
+                <div style="position: absolute; top: -4px; right: -4px; background: #FF3B30; color: white; font-size: 10px; font-weight: 700; min-width: 18px; height: 18px; border-radius: 9px; display: flex; align-items: center; justify-content: center; border: 2px solid white; padding: 0 4px;">${count}</div>
+               </div>`
+            : `<div style="background: ${color}; width: ${size}px; height: ${size}px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: ${fontSize}px; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">${dotCount > 1 ? '★' : ''}</div>`;
 
         const customIcon = L.divIcon({
             className: 'custom-marker',
             html: iconHtml,
-            iconSize: [36, 36],
-            iconAnchor: [18, 18]
+            iconSize: [size, size],
+            iconAnchor: [size / 2, size / 2]
         });
 
         const marker = L.marker([coords.lat, coords.lng], { icon: customIcon }).addTo(mapInstance);
-        marker.bindTooltip(`<b>${a.destination}</b>`, { permanent: true, direction: 'top', offset: [0, -18], className: 'city-tooltip' });
+        marker.bindTooltip(`<b>${cityName}</b>`, { permanent: true, direction: 'top', offset: [0, -18 - (size - 32) / 2], className: 'city-tooltip' });
 
-        const totalExpense = (a.expenses || []).reduce((sum, e) => sum + (e.amount || 0), 0);
-        const photoCount = (a.photos || []).length;
-        const ratingStars = '★'.repeat(a.rating || 0) + '☆'.repeat(5 - (a.rating || 0));
-        marker.bindPopup(`
-            <div style="min-width: 220px; padding: 4px;">
-                <h4 style="color: #FF764D; margin: 0 0 8px 0; font-size: 15px;">${a.title}</h4>
-                <div style="font-size: 12px; color: #666; line-height: 1.8;">
-                    <div>📍 ${a.destination}</div>
-                    <div>📅 ${a.start} ~ ${a.end}</div>
-                    <div>💰 ¥${totalExpense.toFixed(0)} · 📷 ${photoCount}张</div>
-                    ${a.rating ? `<div style="color: #FFD93D;">${ratingStars}</div>` : ''}
+        // 弹窗：列出所有档案
+        const tripListHtml = list.map(a => {
+            const totalExpense = (a.expenses || []).reduce((sum, e) => sum + (e.amount || 0), 0);
+            const photoCount = (a.photos || []).length;
+            const ratingStars = '★'.repeat(a.rating || 0) + '☆'.repeat(5 - (a.rating || 0));
+            const moodEmoji = { happy: '😊', excited: '🤩', peaceful: '😌', tired: '😓', nostalgic: '🥹' }[a.mood] || '✈️';
+            return `
+                <div style="padding: 10px 12px; margin: 6px 0; background: #FFF8F0; border-radius: 10px; border-left: 3px solid ${moodColors[a.mood] || '#FF764D'}; cursor: pointer; transition: all 0.2s;" onclick="viewArchiveDetail(${a.id})" onmouseover="this.style.background='#FFE4B5'" onmouseout="this.style.background='#FFF8F0'">
+                    <div style="font-size: 13px; font-weight: 600; color: #5D4037; margin-bottom: 4px;">${moodEmoji} ${a.title}</div>
+                    <div style="font-size: 11px; color: #8B6F47; line-height: 1.6;">
+                        📅 ${a.start || '?'} ~ ${a.end || '?'} · 💰¥${totalExpense.toFixed(0)} · 📷${photoCount}张
+                        ${a.rating ? `<span style="color:#FFD700"> ${ratingStars}</span>` : ''}
+                    </div>
                 </div>
-                <button onclick="viewArchiveDetail(${a.id})" style="margin-top: 10px; padding: 8px 16px; background: linear-gradient(135deg, #FF764D, #FDCB6E); border: none; border-radius: 16px; color: white; cursor: pointer; font-size: 12px; width: 100%;">查看详情</button>
-            </div>
-        `);
+            `;
+        }).join('');
+
+        const popupContent = count > 1
+            ? `<div style="min-width: 260px; max-width: 320px; max-height: 360px; overflow-y: auto;">
+                <h4 style="color: #FF764D; margin: 0 0 8px 0; font-size: 15px; display: flex; align-items: center; gap: 6px;">
+                    📍 ${cityName} <span style="background: #FF3B30; color: white; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 600;">${count} 次到访</span>
+                </h4>
+                ${tripListHtml}
+                <div style="font-size: 11px; color: #A89078; text-align: center; margin-top: 8px;">点击任意一次进入详情</div>
+               </div>`
+            : (() => {
+                const a = list[0];
+                const totalExpense = (a.expenses || []).reduce((sum, e) => sum + (e.amount || 0), 0);
+                const photoCount = (a.photos || []).length;
+                const ratingStars = '★'.repeat(a.rating || 0) + '☆'.repeat(5 - (a.rating || 0));
+                return `
+                <div style="min-width: 220px; padding: 4px;">
+                    <h4 style="color: #FF764D; margin: 0 0 8px 0; font-size: 15px;">${a.title}</h4>
+                    <div style="font-size: 12px; color: #666; line-height: 1.8;">
+                        <div>📍 ${a.destination}</div>
+                        <div>📅 ${a.start} ~ ${a.end}</div>
+                        <div>💰 ¥${totalExpense.toFixed(0)} · 📷 ${photoCount}张</div>
+                        ${a.rating ? `<div style="color: #FFD93D;">${ratingStars}</div>` : ''}
+                    </div>
+                    <button onclick="viewArchiveDetail(${a.id})" style="margin-top: 10px; padding: 8px 16px; background: linear-gradient(135deg, #FF764D, #FDCB6E); border: none; border-radius: 16px; color: white; cursor: pointer; font-size: 12px; width: 100%;">查看详情</button>
+                </div>`;
+            })();
+
+        marker.bindPopup(popupContent, { maxWidth: 320 });
         mapMarkers.push(marker);
+        coordsList.push([coords.lat, coords.lng]);
 
         if (animate) {
             const el = marker.getElement();
@@ -3104,14 +3154,27 @@ function renderFilteredMarkers(filtered, animate = false, compareMode = null) {
         }
     });
 
-    // 绘制连线
+    // 绘制连线（按原顺序遍历一次目的地首项）
     if (coordsList.length > 1) {
-        mapPolyline = L.polyline(coordsList, {
-            color: seasonMode ? '#95A5A6' : '#FF764D',
-            weight: 2.5,
-            opacity: 0.5,
-            dashArray: '8, 8'
-        }).addTo(mapInstance);
+        // 重新按 filtered 顺序生成连线（同一目的地只取第一个）
+        const seen = new Set();
+        const lineCoords = [];
+        filtered.forEach(a => {
+            if (seen.has(a.destination)) return;
+            const c = getCityCoords(a.destination);
+            if (c) {
+                seen.add(a.destination);
+                lineCoords.push([c.lat, c.lng]);
+            }
+        });
+        if (lineCoords.length > 1) {
+            mapPolyline = L.polyline(lineCoords, {
+                color: seasonMode ? '#95A5A6' : '#FF764D',
+                weight: 2.5,
+                opacity: 0.5,
+                dashArray: '8, 8'
+            }).addTo(mapInstance);
+        }
     }
 
     if (coordsList.length > 0 && !isTimeWarping) {
@@ -4025,7 +4088,7 @@ function renderPrepPage() {
                 <div style="text-align: center; padding: 20px 0;">
                     <div style="font-size: 48px; margin-bottom: 12px;">🗺️</div>
                     <p style="color: var(--text-light); margin-bottom: 12px;">还没有计划中的旅行</p>
-                    <button class="btn btn-primary btn-sm" onclick="openModal('add-archive')">开始规划</button>
+                    <button class="btn btn-primary btn-sm" onclick="newArchive()">开始规划</button>
                 </div>
             </div>
         `;
@@ -4464,7 +4527,7 @@ function renderUpcoming() {
                     <div class="icon">✈️</div>
                     <h3>还没有即将到来的旅行</h3>
                     <p>规划你的下一次冒险吧</p>
-                    <button class="btn btn-primary" onclick="openModal('add-archive')">➕ 新建旅行计划</button>
+                    <button class="btn btn-primary" onclick="newArchive()">➕ 新建旅行计划</button>
                 </div>
             </div>
         `;
@@ -4714,7 +4777,7 @@ function updateHomeUpcoming() {
                 <div style="text-align: center; padding: 20px 0;">
                     <div style="font-size: 48px; margin-bottom: 12px;">🗺️</div>
                     <p style="color: var(--text-light); margin-bottom: 12px;">还没有计划中的旅行</p>
-                    <button class="btn btn-primary btn-sm" onclick="openModal('add-archive')">开始规划</button>
+                    <button class="btn btn-primary btn-sm" onclick="newArchive()">开始规划</button>
                 </div>
             </div>
         `;
@@ -4752,7 +4815,7 @@ renderArchiveList = function() {
                 <div class="icon">📋</div>
                 <h3>暂无旅行档案</h3>
                 <p>点击"新建档案"开始记录你的第一次旅行吧</p>
-                <button class="btn btn-primary" onclick="openModal('add-archive')">➕ 新建档案</button>
+                <button class="btn btn-primary" onclick="newArchive()">➕ 新建档案</button>
             </div>
         `;
         return;
