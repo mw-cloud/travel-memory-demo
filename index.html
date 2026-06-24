@@ -64,6 +64,47 @@
         .nav-btn.primary { background: white; color: var(--primary); font-weight: 600; }
         .nav-btn.primary:hover { background: #FFF5F0; }
 
+        /* ===== 导航栏语言切换器 ===== */
+        .nav-lang-group {
+            display: inline-flex;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 3px;
+            gap: 2px;
+            backdrop-filter: blur(6px);
+            align-items: center;
+        }
+        .nav-lang-btn {
+            padding: 5px 10px;
+            background: transparent;
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            line-height: 1;
+        }
+        .nav-lang-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: none;
+        }
+        .nav-lang-btn:focus-visible {
+            outline: 2px solid #FFD700;
+            outline-offset: 2px;
+        }
+        .nav-lang-btn.active {
+            background: white;
+            color: var(--primary);
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .nav-lang-flag { font-size: 14px; line-height: 1; }
+
         /* ===== 主布局 ===== */
         .main-container { display: flex; min-height: calc(100vh - 70px); }
 
@@ -707,9 +748,988 @@
             animation: flyPlane 3s ease-in-out infinite;
         }
         @keyframes flyPlane { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(calc(100% - 40px)); } }
+
+        /* ===== 无障碍按钮（右上角固定悬浮，醒目）===== */
+        .a11y-launcher {
+            position: fixed;
+            top: 800px;
+            right: 20px;
+            z-index: 9999;
+        }
+        .a11y-launcher-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 18px 0 14px;
+            height: 44px;
+            border: none;
+            background: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 50%, #FF764D 100%);
+            background-size: 200% 200%;
+            border-radius: 24px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.5), 0 0 0 4px rgba(108, 92, 231, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+            font-weight: 600;
+            animation: a11yGradient 4s ease infinite;
+        }
+        @keyframes a11yGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .a11y-launcher-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.6), 0 0 0 6px rgba(108, 92, 231, 0.15);
+        }
+        .a11y-launcher-btn:focus-visible {
+            outline: 3px solid #FFD700;
+            outline-offset: 3px;
+        }
+        .a11y-launcher-icon {
+            font-size: 22px;
+            animation: a11yPulse 2s ease-in-out infinite;
+            display: inline-block;
+        }
+        @keyframes a11yPulse {
+            0%, 100% { transform: scale(1) rotate(0); }
+            50% { transform: scale(1.15) rotate(-8deg); }
+        }
+        .a11y-launcher-text {
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+        /* 面板打开时按钮高亮 */
+        .a11y-launcher-btn.active {
+            background: linear-gradient(135deg, #FF764D, #FDCB6E);
+            box-shadow: 0 6px 24px rgba(255, 118, 77, 0.6);
+        }
+
+        .a11y-panel {
+            position: fixed;
+            top: 166px; right: 20px;
+            width: 320px; max-height: 80vh; overflow-y: auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.18);
+            z-index: 9998;
+            padding: 0;
+            display: none;
+            border: 1px solid #eee;
+        }
+        .a11y-panel.show {
+            display: block;
+            animation: slideDown 0.25s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .a11y-panel-header {
+            background: linear-gradient(135deg, #6C5CE7, #A29BFE);
+            color: white;
+            padding: 14px 18px;
+            border-radius: 16px 16px 0 0;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .a11y-panel-header h3 { font-size: 15px; font-weight: 600; }
+        .a11y-panel-close {
+            background: rgba(255,255,255,0.2); color: white;
+            border: none; width: 26px; height: 26px; border-radius: 50%;
+            cursor: pointer; font-size: 14px;
+        }
+        .a11y-section {
+            padding: 14px 18px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .a11y-section:last-child { border-bottom: none; }
+        .a11y-section-title {
+            font-size: 12px; color: #888; font-weight: 600;
+            margin-bottom: 10px; letter-spacing: 0.5px;
+        }
+
+        /* 快捷操作网格（8 个）*/
+        .a11y-quick-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        /* 语言切换按钮（3 个） */
+        .a11y-lang-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .a11y-lang-btn {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 10px 4px;
+            border: 1.5px solid #e8e8e8;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 500;
+            color: #555;
+            gap: 4px;
+        }
+        .a11y-lang-btn:hover {
+            border-color: #6C5CE7;
+            background: #F8F6FF;
+            transform: translateY(-2px);
+        }
+        .a11y-lang-btn:focus-visible {
+            outline: 2px solid #6C5CE7;
+            outline-offset: 2px;
+        }
+        .a11y-lang-btn.active {
+            border-color: #6C5CE7;
+            background: linear-gradient(135deg, #F0EDFF, #E8E4FF);
+            color: #6C5CE7;
+            font-weight: 600;
+        }
+        .a11y-lang-flag {
+            font-size: 22px;
+            line-height: 1;
+        }
+        .a11y-quick-btn {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 10px 4px;
+            border: 1.5px solid #e8e8e8;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .a11y-quick-btn:hover {
+            border-color: #6C5CE7;
+            background: #F8F6FF;
+            transform: translateY(-2px);
+        }
+        .a11y-quick-btn:focus-visible {
+            outline: 2px solid #6C5CE7;
+            outline-offset: 2px;
+        }
+        .a11y-quick-btn.active {
+            border-color: #6C5CE7;
+            background: linear-gradient(135deg, #F0EDFF, #E8E4FF);
+        }
+        .a11y-quick-icon { font-size: 20px; margin-bottom: 4px; }
+        .a11y-quick-label { font-size: 11px; color: #555; font-weight: 500; }
+        .a11y-quick-btn.active .a11y-quick-label { color: #6C5CE7; font-weight: 600; }
+
+        /* 主题切换按钮（4 个） */
+        .a11y-options {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+        .a11y-options.cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .a11y-opt {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 10px 4px;
+            border: 1.5px solid #e8e8e8;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+            text-align: center;
+        }
+        .a11y-opt:hover { border-color: #6C5CE7; background: #F8F6FF; }
+        .a11y-opt.active { border-color: #6C5CE7; background: linear-gradient(135deg, #F0EDFF, #E8E4FF); }
+        .a11y-opt-icon { font-size: 20px; margin-bottom: 4px; }
+        .a11y-opt-label { font-size: 11px; color: #555; font-weight: 500; }
+        .a11y-opt.active .a11y-opt-label { color: #6C5CE7; font-weight: 600; }
+
+        /* 开关 */
+        .a11y-toggle-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 8px 0;
+        }
+        .a11y-toggle-row:not(:last-child) { border-bottom: 1px solid #f5f5f5; }
+        .a11y-toggle-label {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 13px; color: #333;
+        }
+        .a11y-switch {
+            position: relative;
+            width: 40px; height: 22px;
+            background: #ddd; border-radius: 11px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .a11y-switch::after {
+            content: '';
+            position: absolute; top: 2px; left: 2px;
+            width: 18px; height: 18px;
+            background: white; border-radius: 50%;
+            transition: transform 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .a11y-switch.on { background: #6C5CE7; }
+        .a11y-switch.on::after { transform: translateX(18px); }
+
+        /* 快捷键说明 */
+        .a11y-shortcut {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 12px; color: #666;
+            padding: 4px 0;
+        }
+        .a11y-kbd {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #F0F0F0; color: #333;
+            border-radius: 4px; font-size: 11px;
+            font-family: monospace;
+            border: 1px solid #ddd;
+            box-shadow: 0 1px 0 #ccc;
+        }
+
+        /* ===== 页面缩放 ===== */
+        body.a11y-zoom-small { font-size: 13px; }
+        body.a11y-zoom-default { font-size: 14px; }
+        body.a11y-zoom-large { font-size: 16px; }
+        body.a11y-zoom-xlarge { font-size: 19px; }
+
+        /* ===== 文字大小（独立于缩放）===== */
+        body.a11y-text-large {
+            font-size: 1.1em;
+        }
+        body.a11y-text-large .page-title,
+        body.a11y-text-large .archive-card-header h3,
+        body.a11y-text-large h1, body.a11y-text-large h2 { font-size: 1.3em !important; }
+        body.a11y-text-large .form-control,
+        body.a11y-text-large .btn { font-size: 1.1em !important; padding: 12px 18px; }
+
+        /* ===== 配色方案 ===== */
+        body.a11y-theme-bw {
+            --primary: #000000;
+            --secondary: #333333;
+            --bg: #FFFFFF;
+            --card: #FFFFFF;
+            --text: #000000;
+            --text-light: #333333;
+            background: #FFFFFF !important;
+        }
+        body.a11y-theme-bw * {
+            border-color: #000 !important;
+            color: #000 !important;
+            background: #FFF !important;
+        }
+        body.a11y-theme-bw button, body.a11y-theme-bw .btn {
+            border: 2px solid #000 !important;
+            font-weight: 700 !important;
+        }
+        body.a11y-theme-bw .sidebar,
+        body.a11y-theme-bw .top-nav,
+        body.a11y-theme-bw .modal {
+            background: #FFFFFF !important;
+            border: 2px solid #000 !important;
+        }
+
+        body.a11y-theme-blue {
+            --primary: #0066CC;
+            --secondary: #0099FF;
+            --bg: #E6F2FF;
+            --card: #F0F8FF;
+            --text: #000033;
+            background: #E6F2FF !important;
+        }
+
+        body.a11y-theme-yellow {
+            --primary: #8B6914;
+            --secondary: #B8860B;
+            --bg: #FFF8DC;
+            --card: #FFFACD;
+            --text: #3D2B00;
+            background: #FFF8DC !important;
+        }
+
+        /* ===== 减少动画 ===== */
+        body.a11y-no-motion *,
+        body.a11y-no-motion *::before,
+        body.a11y-no-motion *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+
+        /* ===== 增强焦点指示 ===== */
+        body.a11y-focus-strong *:focus-visible {
+            outline: 4px solid #6C5CE7 !important;
+            outline-offset: 3px !important;
+            background: rgba(108, 92, 231, 0.1) !important;
+        }
+
+        /* ===== 辅助线（阅读引导线）===== */
+        body.a11y-reading-line::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 80px;
+            background: rgba(255, 235, 59, 0.2);
+            border-bottom: 2px solid rgba(255, 152, 0, 0.6);
+            pointer-events: none;
+            z-index: 9997;
+            transform: translateY(var(--reading-line-y, 0px));
+            transition: transform 0.1s;
+            margin-top: 160px;  /* 避开顶部无障碍按钮 */
+        }
+        body.a11y-no-motion.a11y-reading-line::before {
+            transition: none;
+        }
+
+        /* ===== 跳过导航链接 ===== */
+        .skip-link {
+            position: fixed; top: -100px; left: 20px;
+            background: #6C5CE7; color: white;
+            padding: 12px 24px; border-radius: 0 0 8px 8px;
+            font-weight: 700; z-index: 99999;
+            text-decoration: none; transition: top 0.2s;
+        }
+        .skip-link:focus { top: 0; outline: 3px solid #FFD700; }
+
+        /* ===== TTS 指读模式 ===== */
+        body.a11y-tts-hover *:not(input):not(textarea):not(button):not([class*="a11y"]):not([id*="a11y"]):not([id*="toast"]):not([id*="splash"]) {
+            cursor: crosshair !important;
+        }
+        body.a11y-tts-hover [class*="opt"]:hover,
+        body.a11y-tts-hover [class*="opt"] {
+            cursor: pointer !important;
+        }
+        .a11y-tts-speaking {
+            background: linear-gradient(120deg, rgba(255,235,59,0.3), rgba(255,152,0,0.3)) !important;
+            box-shadow: 0 0 0 3px rgba(255,193,7,0.6) !important;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        body.a11y-no-motion .a11y-tts-speaking { transition: none; }
+
+        /* ============================================ */
+        /*   iOS 26 液态玻璃效果（高性能版）              */
+        /* ============================================ */
+
+        body.a11y-glass {
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-bg-deep: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.6);
+        }
+
+        /* 页面背景：彩色渐变（让玻璃效果可见）*/
+        body.a11y-glass {
+            background: linear-gradient(135deg, #FFE4E1 0%, #E6F3FF 35%, #F0E6FF 70%, #FFF4E6 100%) !important;
+            background-attachment: fixed;
+            position: relative;
+        }
+        body.a11y-glass::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(255, 118, 77, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(108, 92, 231, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(253, 203, 110, 0.12) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* 顶部导航：磨砂玻璃 */
+        body.a11y-glass .top-nav {
+            background: rgba(255, 255, 255, 0.55) !important;
+            backdrop-filter: saturate(180%) blur(24px);
+            -webkit-backdrop-filter: saturate(180%) blur(24px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 2px 16px rgba(0,0,0,0.04) !important;
+        }
+
+        /* 侧边栏：磨砂玻璃 */
+        body.a11y-glass .sidebar {
+            background: rgba(255, 255, 255, 0.55) !important;
+            backdrop-filter: saturate(180%) blur(24px);
+            -webkit-backdrop-filter: saturate(180%) blur(24px);
+            border-right: 1px solid rgba(255, 255, 255, 0.6) !important;
+        }
+
+        /* 卡片：液态玻璃效果 */
+        body.a11y-glass .card,
+        body.a11y-glass .archive-card,
+        body.a11y-glass .stat-card,
+        body.a11y-glass [class*="card"] {
+            background: rgba(255, 255, 255, 0.75) !important;
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.6) !important;
+            box-shadow:
+                0 8px 32px rgba(31, 38, 135, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.4) inset,
+                0 1px 0 rgba(255, 255, 255, 0.6) inset !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 卡片顶部高光（液态流动）*/
+        body.a11y-glass .card::before,
+        body.a11y-glass .archive-card::before,
+        body.a11y-glass .stat-card::before,
+        body.a11y-glass [class*="card"]::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+            border-radius: inherit;
+        }
+
+        /* 按钮：玻璃态 */
+        body.a11y-glass .btn,
+        body.a11y-glass .nav-btn,
+        body.a11y-glass button {
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
+            box-shadow:
+                0 4px 16px rgba(0, 0, 0, 0.08),
+                0 1px 0 rgba(255, 255, 255, 0.5) inset !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 主按钮：液态光泽 hover 流动 */
+        body.a11y-glass .btn-primary,
+        body.a11y-glass .nav-btn.primary {
+            background: linear-gradient(135deg, rgba(255,118,77,0.95), rgba(253,203,110,0.95)) !important;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        body.a11y-glass .btn-primary::after,
+        body.a11y-glass .nav-btn.primary::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.6s ease;
+            pointer-events: none;
+        }
+        body.a11y-glass .btn-primary:hover::after,
+        body.a11y-glass .nav-btn.primary:hover::after {
+            left: 150%;
+        }
+
+        /* 弹窗：重玻璃效果 */
+        body.a11y-glass .modal,
+        body.a11y-glass .modal-content {
+            background: rgba(255, 255, 255, 0.85) !important;
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.6) !important;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.4) inset !important;
+        }
+
+        /* 表单输入：玻璃态 */
+        body.a11y-glass .form-control,
+        body.a11y-glass input[type="text"],
+        body.a11y-glass input[type="date"],
+        body.a11y-glass input[type="number"],
+        body.a11y-glass input[type="email"],
+        body.a11y-glass select,
+        body.a11y-glass textarea {
+            background: rgba(255, 255, 255, 0.6) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6) !important;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset !important;
+        }
+        body.a11y-glass .form-control:focus,
+        body.a11y-glass input:focus,
+        body.a11y-glass select:focus,
+        body.a11y-glass textarea:focus {
+            background: rgba(255, 255, 255, 0.85) !important;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2) !important;
+        }
+
+        /* 模态遮罩：磨砂 */
+        body.a11y-glass .modal-overlay {
+            background: rgba(20, 20, 40, 0.4) !important;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* 无障碍面板：液态玻璃 */
+        body.a11y-glass .a11y-launcher-btn {
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+        }
+        body.a11y-glass .a11y-panel {
+            background: rgba(255, 255, 255, 0.75) !important;
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
+        }
+
+        /* 选项按钮：玻璃态 */
+        body.a11y-glass .a11y-opt,
+        body.a11y-glass .a11y-quick-btn {
+            background: rgba(255, 255, 255, 0.5) !important;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
+        }
+        body.a11y-glass .a11y-opt:hover,
+        body.a11y-glass .a11y-quick-btn:hover {
+            background: rgba(255, 255, 255, 0.85) !important;
+            transform: translateY(-2px);
+        }
+
+        /* 减少动画模式下关闭液态动效 */
+        body.a11y-no-motion.a11y-glass .btn-primary::after,
+        body.a11y-no-motion.a11y-glass .nav-btn.primary::after {
+            display: none;
+        }
+
+        /* ===== 旅行人格分析页 ===== */
+        .personality-main {
+            margin-bottom: 24px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+        }
+        .personality-hero {
+            position: relative;
+            padding: 48px 24px 32px;
+            background: linear-gradient(135deg, #FF764D 0%, #FDCB6E 50%, #6C5CE7 100%);
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+        .personality-emoji-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 280px;
+            opacity: 0.12;
+            pointer-events: none;
+            line-height: 1;
+        }
+        .personality-emoji {
+            position: relative;
+            font-size: 88px;
+            line-height: 1;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+            animation: emoji-float 3s ease-in-out infinite;
+        }
+        @keyframes emoji-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        body.a11y-no-motion .personality-emoji { animation: none; }
+        .personality-name {
+            position: relative;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .personality-tagline {
+            position: relative;
+            font-size: 15px;
+            opacity: 0.95;
+            margin-bottom: 20px;
+            padding: 0 16px;
+        }
+        .personality-score-ring {
+            position: relative;
+            display: inline-block;
+        }
+        .personality-score-ring svg {
+            display: block;
+        }
+        .personality-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .personality-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .personality-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        body.a11y-glass .personality-card {
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(20px) saturate(180%);
+        }
+        .personality-card.rank-1 { border-color: #FFD700; }
+        .personality-card.rank-2 { border-color: #C0C0C0; }
+        .personality-card.rank-3 { border-color: #CD7F32; }
+        .personality-card-emoji {
+            font-size: 48px;
+            margin-bottom: 8px;
+        }
+        .personality-card-rank {
+            display: inline-block;
+            background: rgba(0,0,0,0.06);
+            color: #555;
+            font-size: 12px;
+            padding: 2px 10px;
+            border-radius: 10px;
+            margin-bottom: 6px;
+        }
+        .personality-card-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .personality-card-desc {
+            font-size: 13px;
+            color: #777;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+        .personality-card-score-bar {
+            height: 6px;
+            background: rgba(0,0,0,0.06);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .personality-card-score-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.8s ease;
+        }
+
+        .radar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+        @media (min-width: 600px) {
+            .radar-container { flex-direction: row; justify-content: space-around; }
+        }
+        .dimension-list {
+            flex: 1;
+            width: 100%;
+        }
+        .dimension-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .dimension-label {
+            width: 70px;
+            font-size: 13px;
+            color: #555;
+            flex-shrink: 0;
+        }
+        .dimension-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(0,0,0,0.06);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .dimension-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+        .dimension-value {
+            width: 36px;
+            text-align: right;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .personality-declaration {
+            background: linear-gradient(135deg, #FFF5F0 0%, #FFF9E6 100%);
+            border-left: 4px solid #FF764D;
+        }
+        body.a11y-glass .personality-declaration {
+            background: linear-gradient(135deg, rgba(255,118,77,0.15) 0%, rgba(253,203,110,0.15) 100%);
+            backdrop-filter: blur(20px) saturate(180%);
+        }
+        .declaration-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
+            font-style: italic;
+            padding: 16px 0;
+            white-space: pre-line;
+        }
+        .declaration-sign {
+            text-align: right;
+            color: #999;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .personality-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+        .personality-actions .btn {
+            min-width: 140px;
+        }
+
+        /* 海报模态框 */
+        #personality-poster-img {
+            background: linear-gradient(135deg, #FF764D, #6C5CE7);
+            min-height: 400px;
+        }
+
+        /* ===== MBTI 区域 ===== */
+        .personality-mbti {
+            margin-bottom: 24px;
+        }
+        .mbti-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        body.a11y-glass .mbti-card {
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(20px) saturate(180%);
+        }
+        .mbti-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 60%;
+            height: 200%;
+            background: linear-gradient(135deg, rgba(255,118,77,0.06), rgba(108,92,231,0.06));
+            transform: rotate(15deg);
+            pointer-events: none;
+        }
+        .mbti-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .mbti-type {
+            font-size: 56px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FF764D, #6C5CE7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+        .mbti-info {
+            flex: 1;
+        }
+        .mbti-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .mbti-desc {
+            font-size: 13px;
+            color: #777;
+        }
+        .mbti-emoji {
+            font-size: 48px;
+            line-height: 1;
+        }
+        .mbti-strengths {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 16px 0;
+            position: relative;
+            z-index: 1;
+        }
+        .mbti-strength-item {
+            background: rgba(0,0,0,0.04);
+            padding: 10px 12px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        body.a11y-glass .mbti-strength-item {
+            background: rgba(255,255,255,0.4);
+        }
+        .mbti-strength-label {
+            font-size: 11px;
+            color: #888;
+            font-weight: 600;
+        }
+        .mbti-strength-value {
+            font-size: 13px;
+            color: #333;
+            font-weight: 500;
+        }
+        .mbti-dims {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .mbti-dim-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            align-items: center;
+        }
+        .mbti-dim-bar {
+            position: relative;
+            height: 28px;
+            background: rgba(0,0,0,0.06);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        body.a11y-glass .mbti-dim-bar {
+            background: rgba(255,255,255,0.4);
+        }
+        .mbti-dim-bar.active {
+            color: white;
+        }
+        .mbti-dim-bar.left {
+            background: linear-gradient(90deg, #74B9FF, #0984E3);
+            color: white;
+        }
+        .mbti-dim-bar.right {
+            background: linear-gradient(90deg, #FD79A8, #E84393);
+            color: white;
+        }
+        .mbti-dim-percent {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+            background: rgba(0,0,0,0.4);
+            padding: 2px 6px;
+            border-radius: 8px;
+        }
+
+        /* ===== AI 增强分析 ===== */
+        .personality-ai {
+            background: linear-gradient(135deg, #FFF5F0, #FFF9E6);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #FF764D;
+        }
+        body.a11y-glass .personality-ai {
+            background: linear-gradient(135deg, rgba(255,118,77,0.15), rgba(253,203,110,0.15));
+            backdrop-filter: blur(20px) saturate(180%);
+        }
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .ai-header h3 {
+            margin: 0;
+            font-size: 17px;
+            color: #333;
+        }
+        .ai-badge {
+            background: linear-gradient(135deg, #FF764D, #FDCB6E);
+            color: white;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .ai-content {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #444;
+            white-space: pre-line;
+            min-height: 60px;
+        }
+        .ai-loading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #888;
+        }
+        .ai-spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,118,77,0.2);
+            border-top-color: #FF764D;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        body.a11y-no-motion .ai-spinner { animation: none; }
+        .ai-section {
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px dashed rgba(0,0,0,0.08);
+        }
+        .ai-section:last-child { border-bottom: none; padding-bottom: 0; }
+        .ai-section-title {
+            font-weight: 700;
+            color: #FF764D;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+        .ai-footer {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(0,0,0,0.06);
+        }
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
+
+<!-- 跳过导航链接 -->
+<a href="#main-content" class="skip-link">跳到主要内容</a>
 
 <!-- 启动画面 -->
 <div class="splash-screen" id="splash" onclick="skipSplash()">
@@ -722,12 +1742,164 @@
 
 <!-- 顶部导航 -->
 <nav class="top-nav">
-    <h1><span class="icon">✈️</span> 旅途忆档</h1>
+    <h1><span class="icon">✈️</span> <span data-i18n="appName">旅途忆档</span></h1>
     <div class="nav-actions">
-        <button class="nav-btn" onclick="showPage('stats')">📊 统计</button>
-        <button class="nav-btn primary" onclick="newArchive()">➕ 新建档案</button>
+        <button class="nav-btn" onclick="showPage('stats')" data-i18n="statistics">📊 统计</button>
+        <div class="nav-lang-group" role="group" aria-label="语言切换">
+            <button class="nav-lang-btn active" data-lang="zh" onclick="setLanguage('zh')" aria-label="切换到中文" title="中文">
+                <span class="nav-lang-flag">🇨🇳</span><span>中文</span>
+            </button>
+            <button class="nav-lang-btn" data-lang="en" onclick="setLanguage('en')" aria-label="Switch to English" title="English">
+                <span class="nav-lang-flag">🇺🇸</span><span>EN</span>
+            </button>
+        </div>
+        <button class="nav-btn primary" onclick="newArchive()">➕ <span data-i18n="newArchive">新建档案</span></button>
     </div>
 </nav>
+
+<!-- 无障碍按钮（右上角固定悬浮）-->
+<div class="a11y-launcher">
+    <button class="a11y-launcher-btn" onclick="toggleA11yPanel()" title="无障碍设置（Alt + A）" aria-label="打开无障碍设置" aria-expanded="false" aria-controls="a11y-panel">
+        <span class="a11y-launcher-icon">♿</span>
+        <span class="a11y-launcher-text">无障碍</span>
+    </button>
+</div>
+
+<!-- 无障碍设置面板 -->
+<div id="a11y-panel" class="a11y-panel" role="dialog" aria-label="无障碍详细设置">
+    <div class="a11y-panel-header">
+        <h3 data-i18n="a11yTitle">🌈 无障碍设置</h3>
+        <button class="a11y-panel-close" onclick="toggleA11yPanel()" aria-label="关闭设置面板">✕</button>
+    </div>
+
+    <!-- 快捷操作 -->
+    <div class="a11y-section">
+        <div class="a11y-section-title" data-i18n="a11yShortcut">⚡ 快捷操作</div>
+        <div class="a11y-quick-grid">
+            <button class="a11y-quick-btn" onclick="cycleA11yZoom()" title="缩放">
+                <span class="a11y-quick-icon">🔍</span>
+                <span class="a11y-quick-label" data-i18n="a11yZoom">缩放</span>
+            </button>
+            <button class="a11y-quick-btn" data-key="a11y-text" onclick="toggleA11yText()" title="大字体">
+                <span class="a11y-quick-icon">🔠</span>
+                <span class="a11y-quick-label" data-i18n="a11yText">大字体</span>
+            </button>
+            <button class="a11y-quick-btn" onclick="cycleA11yTheme()" title="主题">
+                <span class="a11y-quick-icon" id="a11y-quick-theme-icon">🎨</span>
+                <span class="a11y-quick-label" data-i18n="a11yTheme">主题</span>
+            </button>
+            <button class="a11y-quick-btn" data-key="a11y-motion" onclick="toggleA11yMotion()" title="减少动画">
+                <span class="a11y-quick-icon">🚫</span>
+                <span class="a11y-quick-label" data-i18n="a11yMotion">动画</span>
+            </button>
+            <button class="a11y-quick-btn" data-key="a11y-read" onclick="toggleA11yReading()" title="阅读辅助线">
+                <span class="a11y-quick-icon">📖</span>
+                <span class="a11y-quick-label" data-i18n="a11yReading">辅助线</span>
+            </button>
+            <button class="a11y-quick-btn" onclick="toggleA11yTTS()" title="朗读">
+                <span class="a11y-quick-icon">🔊</span>
+                <span class="a11y-quick-label" data-i18n="a11yTTS">朗读</span>
+            </button>
+            <button class="a11y-quick-btn" data-key="a11y-focus" onclick="toggleA11yFocus()" title="焦点指示">
+                <span class="a11y-quick-icon">🎯</span>
+                <span class="a11y-quick-label" data-i18n="a11yFocus">焦点</span>
+            </button>
+            <button class="a11y-quick-btn" data-key="a11y-glass" onclick="toggleA11yGlass()" title="液态玻璃">
+                <span class="a11y-quick-icon">✨</span>
+                <span class="a11y-quick-label" data-i18n="a11yGlass">玻璃</span>
+            </button>
+            <button class="a11y-quick-btn" onclick="resetA11y()" title="重置">
+                <span class="a11y-quick-icon">🔄</span>
+                <span class="a11y-quick-label" data-i18n="a11yReset">重置</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="a11y-section">
+        <div class="a11y-section-title" data-i18n="a11yZoomTitle">📏 页面缩放</div>
+        <div class="a11y-options cols-3">
+            <div class="a11y-opt" id="a11y-opt-zoom-small" onclick="setA11yZoom('small')" tabindex="0">
+                <div class="a11y-opt-icon">🔍</div>
+                <div class="a11y-opt-label" data-i18n="zoomSmall">较小</div>
+            </div>
+            <div class="a11y-opt active" id="a11y-opt-zoom-default" onclick="setA11yZoom('default')" tabindex="0">
+                <div class="a11y-opt-icon">🔍</div>
+                <div class="a11y-opt-label" data-i18n="zoomDefault">默认</div>
+            </div>
+            <div class="a11y-opt" id="a11y-opt-zoom-large" onclick="setA11yZoom('large')" tabindex="0">
+                <div class="a11y-opt-icon">🔍</div>
+                <div class="a11y-opt-label" data-i18n="zoomLarge">较大</div>
+            </div>
+            <div class="a11y-opt" id="a11y-opt-zoom-xlarge" onclick="setA11yZoom('xlarge')" tabindex="0">
+                <div class="a11y-opt-icon">🔍</div>
+                <div class="a11y-opt-label" data-i18n="zoomXlarge">超大</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="a11y-section">
+        <div class="a11y-section-title" data-i18n="a11yThemeTitle">🎨 配色方案</div>
+        <div class="a11y-options">
+            <div class="a11y-opt active" id="a11y-opt-theme-default" onclick="setA11yTheme('default')" tabindex="0">
+                <div class="a11y-opt-icon">🌞</div>
+                <div class="a11y-opt-label" data-i18n="themeDefault">默认</div>
+            </div>
+            <div class="a11y-opt" id="a11y-opt-theme-bw" onclick="setA11yTheme('bw')" tabindex="0">
+                <div class="a11y-opt-icon">⬛</div>
+                <div class="a11y-opt-label" data-i18n="themeBW">黑白</div>
+            </div>
+            <div class="a11y-opt" id="a11y-opt-theme-blue" onclick="setA11yTheme('blue')" tabindex="0">
+                <div class="a11y-opt-icon">🔵</div>
+                <div class="a11y-opt-label" data-i18n="themeBlue">蓝底</div>
+            </div>
+            <div class="a11y-opt" id="a11y-opt-theme-yellow" onclick="setA11yTheme('yellow')" tabindex="0">
+                <div class="a11y-opt-icon">🟡</div>
+                <div class="a11y-opt-label" data-i18n="themeYellow">黄底</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="a11y-section">
+        <div class="a11y-section-title">⚙️ 功能开关</div>
+        <div class="a11y-toggle-row">
+            <div class="a11y-toggle-label">🔠 大字体模式</div>
+            <div class="a11y-switch" id="a11y-sw-text" onclick="toggleA11yText()" role="switch" aria-checked="false" tabindex="0"></div>
+        </div>
+        <div class="a11y-toggle-row">
+            <div class="a11y-toggle-label">🚫 减少动画</div>
+            <div class="a11y-switch" id="a11y-sw-motion" onclick="toggleA11yMotion()" role="switch" aria-checked="false" tabindex="0"></div>
+        </div>
+        <div class="a11y-toggle-row">
+            <div class="a11y-toggle-label">📖 阅读辅助线</div>
+            <div class="a11y-switch" id="a11y-sw-read" onclick="toggleA11yReading()" role="switch" aria-checked="false" tabindex="0"></div>
+        </div>
+        <div class="a11y-toggle-row">
+            <div class="a11y-toggle-label">🔍 增强焦点指示</div>
+            <div class="a11y-switch" id="a11y-sw-focus" onclick="toggleA11yFocus()" role="switch" aria-checked="false" tabindex="0"></div>
+        </div>
+        <div class="a11y-toggle-row">
+            <div class="a11y-toggle-label">✨ iOS 26 液态玻璃</div>
+            <div class="a11y-switch" id="a11y-sw-glass" onclick="toggleA11yGlass()" role="switch" aria-checked="false" tabindex="0"></div>
+        </div>
+    </div>
+
+    <div class="a11y-section">
+        <div class="a11y-section-title">⌨️ 快捷键</div>
+        <div class="a11y-shortcut"><span class="a11y-kbd">Alt + A</span> 打开/关闭面板</div>
+        <div class="a11y-shortcut"><span class="a11y-kbd">Alt + +/-</span> 缩放</div>
+        <div class="a11y-shortcut"><span class="a11y-kbd">Alt + T</span> 大字体</div>
+        <div class="a11y-shortcut"><span class="a11y-kbd">Alt + M</span> 动画</div>
+        <div class="a11y-shortcut"><span class="a11y-kbd">Alt + R</span> 辅助线</div>
+        <div class="a11y-shortcut"><span class="a11y-kbd">Alt + J</span> 语音朗读</div>
+        <div class="a11y-shortcut"><span class="a11y-kbd">Esc</span> 关闭弹窗</div>
+    </div>
+
+    <div class="a11y-section" style="background: #F8F6FF;">
+        <div style="font-size: 11px; color: #6C5CE7; line-height: 1.6;">
+            💡 偏好自动保存 ♿ WCAG 2.1 AA
+        </div>
+    </div>
+</div>
 
 <!-- 主容器 -->
 <div class="main-container">
@@ -761,6 +1933,10 @@
             </div>
             <div class="sidebar-item" data-page="dataview" onclick="showPage('dataview')">
                 <span class="icon">📊</span> 数据整理
+            </div>
+            <div class="sidebar-item" data-page="personality" onclick="showPage('personality')">
+                <span class="icon">🧬</span> 旅行人格
+                <span class="badge" style="background: linear-gradient(135deg, #FF764D, #FDCB6E);">AI</span>
             </div>
         </div>
 
@@ -1108,6 +2284,130 @@
             </div>
         </div>
 
+        <!-- ===== 旅行人格分析页（AI 本地算法） ===== -->
+        <div id="page-personality" class="page">
+            <div class="page-header">
+                <div class="page-title">🧬 我的旅行人格</div>
+                <p class="page-subtitle">基于你 <span id="personality-trip-count">0</span> 次旅行的 AI 本地分析</p>
+            </div>
+
+            <div id="personality-content">
+                <!-- 空状态 -->
+                <div id="personality-empty" class="empty-state" style="display: none;">
+                    <div class="icon">🌱</div>
+                    <h3>还没有旅行数据</h3>
+                    <p>先创建几个旅行档案，让我给你分析专属人格！</p>
+                </div>
+
+                <!-- 人格主卡片 -->
+                <div id="personality-main" class="personality-main" style="display: none;">
+                    <div class="personality-hero">
+                        <div class="personality-emoji-bg" id="personality-emoji-bg"></div>
+                        <div class="personality-emoji" id="personality-main-emoji">🌍</div>
+                        <div class="personality-name" id="personality-main-name">探索者</div>
+                        <div class="personality-tagline" id="personality-main-tagline">世界很大，你的脚步从未停下</div>
+                        <div class="personality-score-ring">
+                            <svg width="100" height="100" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="6"/>
+                                <circle id="personality-score-arc" cx="50" cy="50" r="44" fill="none" stroke="white" stroke-width="6" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+                                <text id="personality-score-text" x="50" y="58" text-anchor="middle" fill="white" font-size="22" font-weight="700">85</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MBTI 16 型人格 -->
+                <div id="personality-mbti" class="personality-mbti" style="display: none;">
+                    <div class="mbti-card">
+                        <div class="mbti-header">
+                            <div class="mbti-type" id="mbti-type">ENTJ</div>
+                            <div class="mbti-info">
+                                <div class="mbti-name" id="mbti-name">统帅指挥官</div>
+                                <div class="mbti-desc" id="mbti-desc">高效征服每个目的地</div>
+                            </div>
+                            <div class="mbti-emoji" id="mbti-emoji">👑</div>
+                        </div>
+                        <div class="mbti-strengths">
+                            <div class="mbti-strength-item">
+                                <span class="mbti-strength-label">💪 优势</span>
+                                <span class="mbti-strength-value" id="mbti-strength">组织力强、目标导向</span>
+                            </div>
+                            <div class="mbti-strength-item">
+                                <span class="mbti-strength-label">⚠️ 挑战</span>
+                                <span class="mbti-strength-value" id="mbti-weakness">可能忽视过程享受</span>
+                            </div>
+                        </div>
+                        <div class="mbti-dims" id="mbti-dims"></div>
+                    </div>
+                </div>
+
+                <!-- AI 增强分析（需 API Key） -->
+                <div id="personality-ai-wrap" class="personality-ai" style="display: none;">
+                    <div class="ai-header">
+                        <h3>🤖 AI 深度解读</h3>
+                        <span class="ai-badge">由大模型生成</span>
+                    </div>
+                    <div class="ai-content" id="ai-personality-content">
+                        <div class="ai-loading">
+                            <div class="ai-spinner"></div>
+                            <span>AI 正在分析你的旅行人格...</span>
+                        </div>
+                    </div>
+                    <div class="ai-footer">
+                        <button class="btn btn-secondary btn-sm" onclick="openAISettingsModal()">⚙️ API 设置</button>
+                        <button class="btn btn-secondary btn-sm" onclick="refreshAIPersonality()">🔄 重新生成</button>
+                    </div>
+                </div>
+
+                <!-- 人格卡组（前三）-->
+                <div id="personality-cards" class="personality-cards" style="display: none;"></div>
+
+                <!-- 维度雷达图 -->
+                <div id="personality-dimensions-wrap" class="card" style="display: none;">
+                    <div class="card-title">📊 六维人格雷达</div>
+                    <div class="radar-container">
+                        <canvas id="personality-radar" width="320" height="320"></canvas>
+                        <div id="personality-dimension-list" class="dimension-list"></div>
+                    </div>
+                </div>
+
+                <!-- 详细统计 -->
+                <div id="personality-stats-wrap" class="card" style="display: none;">
+                    <div class="card-title">📈 你的旅行数据</div>
+                    <div id="personality-stats-grid" class="stat-cards" style="margin-bottom: 0;"></div>
+                </div>
+
+                <!-- 心情分布 -->
+                <div id="personality-mood-wrap" class="card" style="display: none;">
+                    <div class="card-title">😊 心情分布</div>
+                    <div id="personality-mood-bars"></div>
+                </div>
+
+                <!-- 性格宣言 -->
+                <div id="personality-declaration-wrap" class="card personality-declaration" style="display: none;">
+                    <div class="card-title">📜 性格宣言</div>
+                    <div class="declaration-text" id="personality-declaration"></div>
+                    <div class="declaration-sign">— 来自 AI 旅行分析师 · 旅途忆档</div>
+                </div>
+
+                <!-- 操作按钮 -->
+                <div id="personality-actions" class="personality-actions" style="display: none;">
+                    <button class="btn btn-primary" onclick="openPersonalityPosterModal()" style="flex: 1;">
+                        🎨 生成分享海报
+                    </button>
+                    <button class="btn btn-secondary" onclick="openPersonalityReportModal()" style="flex: 1;">
+                        📄 查看完整报告
+                    </button>
+                    <button class="btn btn-secondary" onclick="openAISettingsModal()" style="flex: 1;">
+                        🤖 AI 增强
+                    </button>
+                    <button class="btn btn-secondary" onclick="reAnalyzePersonality()" style="flex: 1;">
+                        🔄 重新分析
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </main>
 </div>
 
@@ -1324,6 +2624,93 @@
             <button class="modal-close" onclick="closeModal('archive-detail')">✕</button>
         </div>
         <div id="detail-content"></div>
+    </div>
+</div>
+
+<!-- 模态框：旅行人格海报 -->
+<div id="modal-personality-poster" class="modal-overlay">
+    <div class="modal" style="max-width: 480px; padding: 20px;">
+        <div class="modal-header">
+            <h3>🎨 我的旅行人格海报</h3>
+            <button class="modal-close" onclick="closeModal('personality-poster')">✕</button>
+        </div>
+        <div id="personality-poster-wrap" style="text-align: center; margin: 12px 0;">
+            <img id="personality-poster-img" style="width: 100%; max-width: 420px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.15);" alt="旅行人格海报"/>
+            <div style="margin-top: 8px; color: #888; font-size: 12px;">长按图片保存到相册 · 或点击下方按钮</div>
+        </div>
+        <div class="modal-actions" style="display: flex; gap: 8px; margin-top: 12px;">
+            <button class="btn btn-primary" onclick="downloadPersonalityPoster()" style="flex: 1;">📥 下载海报</button>
+            <button class="btn btn-secondary" onclick="copyPersonalityPoster()" style="flex: 1;">📋 复制图片</button>
+            <button class="btn btn-secondary" onclick="regeneratePersonalityPoster()" style="flex: 1;">🔄 换配色</button>
+        </div>
+    </div>
+</div>
+
+<!-- 模态框：旅行人格报告 -->
+<div id="modal-personality-report" class="modal-overlay">
+    <div class="modal" style="max-width: 720px;">
+        <div class="modal-header">
+            <h3>📄 旅行人格分析报告</h3>
+            <button class="modal-close" onclick="closeModal('personality-report')">✕</button>
+        </div>
+        <div id="personality-report-content" style="max-height: 70vh; overflow-y: auto;"></div>
+        <div class="modal-actions" style="display: flex; gap: 8px; margin-top: 12px;">
+            <button class="btn btn-primary" onclick="downloadPersonalityReport()" style="flex: 1;">📥 下载报告</button>
+            <button class="btn btn-secondary" onclick="copyPersonalityReport()" style="flex: 1;">📋 复制文本</button>
+        </div>
+    </div>
+</div>
+
+<!-- 隐藏的海报 Canvas -->
+<canvas id="personality-poster-canvas" width="750" height="1334" style="display: none;"></canvas>
+
+<!-- 模态框：AI 设置 -->
+<div id="modal-ai-settings" class="modal-overlay">
+    <div class="modal" style="max-width: 560px;">
+        <div class="modal-header">
+            <h3>🤖 AI 增强分析设置</h3>
+            <button class="modal-close" onclick="closeModal('ai-settings')">✕</button>
+        </div>
+        <div style="padding: 8px 0;">
+            <div style="background: linear-gradient(135deg, #FFF5F0, #FFF9E6); padding: 14px; border-radius: 12px; margin-bottom: 16px; font-size: 13px; line-height: 1.6;">
+                <strong>💡 这是什么：</strong>配置真实 AI API 后，旅行人格分析将调用大模型生成<strong>更深入、更有诗意</strong>的性格解读、专属旅行建议和下一站预测。<br>
+                <strong>🔒 隐私：</strong>API Key 仅存储在本地浏览器（localStorage），不会上传任何服务器。<br>
+                <strong>💰 推荐：</strong>硅基流动（SiliconFlow）注册即送<strong>免费额度</strong>，无需信用卡。
+            </div>
+
+            <div style="margin-bottom: 14px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 6px;">服务商</label>
+                <select id="ai-provider" onchange="onAIProviderChange()" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+                    <option value="siliconflow">硅基流动 SiliconFlow（推荐·免费）</option>
+                    <option value="deepseek">DeepSeek（便宜·需充值）</option>
+                    <option value="zhipu">智谱 AI GLM（有免费额度）</option>
+                    <option value="custom">自定义 OpenAI 兼容接口</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 14px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 6px;">API Key</label>
+                <input type="password" id="ai-api-key" placeholder="sk-xxxxxxxxxxxxxxxx" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; font-family: monospace;">
+                <div style="margin-top: 4px; font-size: 12px; color: #888;">
+                    <a href="https://cloud.siliconflow.cn/account/ak" target="_blank" style="color: #FF764D;">👉 硅基流动 API Key 申请</a>
+                    ·
+                    <a href="https://platform.deepseek.com/api_keys" target="_blank" style="color: #FF764D;">👉 DeepSeek 申请</a>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 14px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 6px;">模型</label>
+                <input type="text" id="ai-model" placeholder="Qwen/Qwen2.5-7B-Instruct" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="saveAISettings()" style="flex: 1;">💾 保存设置</button>
+                <button class="btn btn-secondary" onclick="testAIConnection()" style="flex: 1;">🔌 测试连接</button>
+                <button class="btn btn-secondary" onclick="clearAISettings()" style="flex: 1;">🗑️ 清除</button>
+            </div>
+
+            <div id="ai-test-result" style="margin-top: 12px; display: none;"></div>
+        </div>
     </div>
 </div>
 
@@ -2055,6 +3442,1384 @@ function showToast(message, type = 'success') {
         setTimeout(() => toast.remove(), 300);
     }, 3000);
 }
+
+// ====================================================
+//  多语言切换（i18n）
+// ====================================================
+const i18n = {
+    zh: {
+        // 顶部
+        appName: '旅途忆档',
+        newArchive: '新建档案',
+        statistics: '统计',
+        // 侧边栏
+        pageHome: '首页',
+        pageArchives: '我的旅行',
+        pageMap: '旅行地图',
+        pageData: '数据整理',
+        pageAchievements: '成就中心',
+        pagePrep: '出行准备',
+        // 无障碍
+        a11yTitle: '🌈 无障碍设置',
+        a11yShortcut: '快捷操作',
+        a11yZoom: '缩放',
+        a11yText: '大字体',
+        a11yTheme: '主题',
+        a11yMotion: '动画',
+        a11yReading: '辅助线',
+        a11yTTS: '朗读',
+        a11yFocus: '焦点',
+        a11yGlass: '玻璃',
+        a11yReset: '重置',
+        a11yZoomTitle: '页面缩放',
+        a11yThemeTitle: '配色方案',
+        a11yFuncTitle: '功能开关',
+        a11yKeyTitle: '快捷键',
+        a11yLangTitle: '🌐 语言',
+        zoomSmall: '较小',
+        zoomDefault: '默认',
+        zoomLarge: '较大',
+        zoomXlarge: '超大',
+        themeDefault: '默认',
+        themeBW: '黑白',
+        themeBlue: '蓝底',
+        themeYellow: '黄底',
+        // 操作
+        save: '保存',
+        cancel: '取消',
+        delete: '删除',
+        edit: '编辑',
+        confirm: '确定',
+        add: '添加',
+        // 通用
+        welcome: '欢迎',
+        loading: '加载中...',
+        // Toast
+        glassOn: '✨ 已开启液态玻璃',
+        glassOff: '✨ 已关闭液态玻璃',
+        textOn: '🔠 大字体已开启',
+        textOff: '🔠 大字体已关闭',
+        motionOn: '🚫 动画已减少',
+        motionOff: '🚫 动画已恢复',
+        readOn: '📖 阅读辅助线已开启',
+        readOff: '📖 阅读辅助线已关闭',
+        focusOn: '🔍 焦点指示已增强',
+        focusOff: '🔍 焦点指示已恢复',
+        ttsOn: '🔊 已开启指读模式',
+        ttsOff: '🔇 已关闭指读模式',
+        resetAll: '🔄 已重置为默认设置'
+    },
+    en: {
+        appName: 'TravelMemoir',
+        newArchive: 'New',
+        statistics: 'Stats',
+        pageHome: 'Home',
+        pageArchives: 'My Trips',
+        pageMap: 'Travel Map',
+        pageData: 'Data',
+        pageAchievements: 'Achievements',
+        pagePrep: 'Preparation',
+        a11yTitle: '🌈 Accessibility',
+        a11yShortcut: 'Quick Actions',
+        a11yZoom: 'Zoom',
+        a11yText: 'Text',
+        a11yTheme: 'Theme',
+        a11yMotion: 'Motion',
+        a11yReading: 'Guide',
+        a11yTTS: 'Speech',
+        a11yFocus: 'Focus',
+        a11yGlass: 'Glass',
+        a11yReset: 'Reset',
+        a11yZoomTitle: 'Page Zoom',
+        a11yThemeTitle: 'Color Scheme',
+        a11yFuncTitle: 'Functions',
+        a11yKeyTitle: 'Shortcuts',
+        a11yLangTitle: '🌐 Language',
+        zoomSmall: 'Small',
+        zoomDefault: 'Default',
+        zoomLarge: 'Large',
+        zoomXlarge: 'X-Large',
+        themeDefault: 'Default',
+        themeBW: 'B&W',
+        themeBlue: 'Blue',
+        themeYellow: 'Yellow',
+        save: 'Save',
+        cancel: 'Cancel',
+        delete: 'Delete',
+        edit: 'Edit',
+        confirm: 'OK',
+        add: 'Add',
+        welcome: 'Welcome',
+        loading: 'Loading...',
+        glassOn: '✨ Liquid Glass On',
+        glassOff: '✨ Liquid Glass Off',
+        textOn: '🔠 Large Text On',
+        textOff: '🔠 Large Text Off',
+        motionOn: '🚫 Motion Reduced',
+        motionOff: '🚫 Motion Restored',
+        readOn: '📖 Reading Guide On',
+        readOff: '📖 Reading Guide Off',
+        focusOn: '🔍 Focus Enhanced',
+        focusOff: '🔍 Focus Restored',
+        ttsOn: '🔊 Speech Mode On',
+        ttsOff: '🔇 Speech Mode Off',
+        resetAll: '🔄 Reset to Default'
+    },
+    ja: {
+        appName: '旅の記憶',
+        newArchive: '新規',
+        statistics: '統計',
+        pageHome: 'ホーム',
+        pageArchives: '私の旅',
+        pageMap: '旅行地図',
+        pageData: 'データ',
+        pageAchievements: '実績',
+        pagePrep: '準備',
+        a11yTitle: '🌈 アクセシビリティ',
+        a11yShortcut: 'クイック操作',
+        a11yZoom: 'ズーム',
+        a11yText: '文字',
+        a11yTheme: 'テーマ',
+        a11yMotion: 'アニメ',
+        a11yReading: 'ガイド',
+        a11yTTS: '読み上げ',
+        a11yFocus: '焦点',
+        a11yGlass: 'ガラス',
+        a11yReset: 'リセット',
+        a11yZoomTitle: 'ページズーム',
+        a11yThemeTitle: 'カラースキーム',
+        a11yFuncTitle: '機能',
+        a11yKeyTitle: 'ショートカット',
+        a11yLangTitle: '🌐 言語',
+        zoomSmall: '小',
+        zoomDefault: '標準',
+        zoomLarge: '大',
+        zoomXlarge: '特大',
+        themeDefault: '標準',
+        themeBW: '白黒',
+        themeBlue: '青',
+        themeYellow: '黄',
+        save: '保存',
+        cancel: 'キャンセル',
+        delete: '削除',
+        edit: '編集',
+        confirm: '確認',
+        add: '追加',
+        welcome: 'ようこそ',
+        loading: '読み込み中...',
+        glassOn: '✨ 液态ガラスON',
+        glassOff: '✨ 液态ガラスOFF',
+        textOn: '🔠 大きい文字ON',
+        textOff: '🔠 大きい文字OFF',
+        motionOn: '🚫 アニメ削減',
+        motionOff: '🚫 アニメ復元',
+        readOn: '📖 読みガイドON',
+        readOff: '📖 読みガイドOFF',
+        focusOn: '🔍 焦点強化',
+        focusOff: '🔍 焦点復元',
+        ttsOn: '🔊 読み上げON',
+        ttsOff: '🔇 読み上げOFF',
+        resetAll: '🔄 デフォルトに復元'
+    }
+};
+
+let currentLang = 'zh';
+
+// ===== 短语字典：用于自动翻译未标记 data-i18n 的中文文本 =====
+// 结构：{ 中文短语: { en: '英文', ja: '日本語' } }
+const i18nPhrases = {
+    // 顶部 / 通用
+    '旅途忆档': { en: 'TravelMemoir', ja: '旅の記憶' },
+    '记录每一段美好旅程': { en: 'Record every beautiful journey', ja: 'すべての美しい旅を記録' },
+    '点击任意处跳过': { en: 'Click anywhere to skip', ja: 'クリックでスキップ' },
+    '跳到主要内容': { en: 'Skip to main content', ja: 'メインコンテンツへスキップ' },
+
+    // 侧边栏
+    '导航': { en: 'Nav', ja: 'ナビ' },
+    '首页': { en: 'Home', ja: 'ホーム' },
+    '出行准备': { en: 'Prep', ja: '準備' },
+    '旅行档案': { en: 'Trips', ja: '旅行' },
+    '我的收藏': { en: 'Favorites', ja: 'お気に入り' },
+    '时间轴': { en: 'Timeline', ja: 'タイムライン' },
+    '旅行地图': { en: 'Map', ja: '地図' },
+    '我的故事': { en: 'Stories', ja: '物語' },
+    '数据整理': { en: 'Data', ja: 'データ' },
+    '成就': { en: 'Awards', ja: '実績' },
+    '成就中心': { en: 'Awards', ja: '実績' },
+    '快速统计': { en: 'Quick Stats', ja: 'クイック統計' },
+    '总旅行次数': { en: 'Total Trips', ja: '総旅行回数' },
+    '去过城市': { en: 'Cities', ja: '行った都市' },
+    '总消费': { en: 'Total Spent', ja: '総消費' },
+
+    // 页面标题 / 副标题
+    '欢迎回来，旅行者': { en: 'Welcome back, traveler', ja: 'おかえりなさい、旅人' },
+    '记录你的每一次冒险，发现旅行的美好': { en: 'Record every adventure, discover travel beauty', ja: '冒険を記録し、旅的美しさを発見' },
+    '欢迎回来': { en: 'Welcome back', ja: 'おかえりなさい' },
+    '管理你的每一次旅行记忆': { en: 'Manage every travel memory', ja: 'すべての旅行の思い出を管理' },
+    '按时间顺序回顾你的旅行足迹': { en: 'Review your journey in order', ja: '時系列で旅の足跡を振り返る' },
+    '在地图上展示你的旅行足迹': { en: 'Show your travels on the map', ja: '地図で旅の足跡を表示' },
+    '用照片和文字记录你的精彩瞬间': { en: 'Capture wonderful moments in photos & words', ja: '写真と文章で素敵な瞬間を記録' },
+    '下一次旅行的倒计时和打包清单': { en: 'Countdown & packing list for next trip', ja: '次の旅行のカウントダウンとパッキングリスト' },
+    '珍藏最爱的旅行记忆': { en: 'Treasure your favorite memories', ja: 'お気に入りの旅行の思い出を珍藏' },
+    '解锁你的旅行成就，记录每一个里程碑': { en: 'Unlock achievements, record every milestone', ja: '実績を解除し、すべてのマイルストーンを記録' },
+    '一目了然的旅行消费分析': { en: 'Clear travel expense analysis', ja: '一目瞭然の旅行消費分析' },
+    '全面分析你的旅行数据': { en: 'Comprehensive travel data analysis', ja: '旅行データを包括的に分析' },
+
+    // 卡片标题
+    '最近旅行': { en: 'Recent Trips', ja: '最近の旅行' },
+    '旅行建议': { en: 'Travel Tips', ja: '旅行のヒント' },
+    '编辑': { en: 'Edit', ja: '編集' },
+    '点击"新建档案"开始记录你的第一次旅行吧！': { en: 'Click "New" to start your first trip!', ja: '「新規」をクリックして最初の旅行を記録しましょう！' },
+    '故事时间线': { en: 'Story Timeline', ja: '物語タイムライン' },
+    '打包清单': { en: 'Packing List', ja: 'パッキングリスト' },
+    '新建分类': { en: 'New Category', ja: '新規カテゴリ' },
+    '选择模板...': { en: 'Select template...', ja: 'テンプレートを選択...' },
+    '周末短途': { en: 'Weekend', ja: '週末' },
+    '一周旅行': { en: 'Week Trip', ja: '週間旅行' },
+    '商务出行': { en: 'Business', ja: 'ビジネス' },
+    '户外徒步': { en: 'Hiking', ja: 'ハイキング' },
+    '消费分布': { en: 'Expense Breakdown', ja: '消費分布' },
+    '热门目的地': { en: 'Top Destinations', ja: '人気の目的地' },
+    '年度旅行分布': { en: 'Yearly Trips', ja: '年度旅行分布' },
+    '旅行标签统计': { en: 'Tag Stats', ja: 'タグ統計' },
+    '城市足迹排行': { en: 'City Rankings', ja: '都市足跡ランキング' },
+    '消费趋势': { en: 'Expense Trend', ja: '消費趨勢' },
+    '心情分布': { en: 'Mood Distribution', ja: '気分分布' },
+    '交通方式统计': { en: 'Transport Stats', ja: '交通手段統計' },
+    '同行人统计': { en: 'Companion Stats', ja: '同行者統計' },
+
+    // 统计卡片
+    '旅行档案': { en: 'Trips', ja: '旅行' },
+    '探索城市': { en: 'Cities', ja: '都市' },
+    '旅行照片': { en: 'Photos', ja: '写真' },
+    '旅行次数': { en: 'Trips', ja: '旅行回数' },
+    '目的地数': { en: 'Destinations', ja: '目的地数' },
+    '旅行天数': { en: 'Days', ja: '旅行日数' },
+    '总天数': { en: 'Total Days', ja: '総日数' },
+    '平均评分': { en: 'Avg Rating', ja: '平均評価' },
+    '照片总数': { en: 'Total Photos', ja: '写真総数' },
+
+    // 搜索 / 筛选
+    '搜索旅行档案...': { en: 'Search trips...', ja: '旅行を検索...' },
+    '搜索': { en: 'Search', ja: '検索' },
+    '筛选：': { en: 'Filter:', ja: 'フィルター:' },
+    '全部': { en: 'All', ja: '全て' },
+    '收藏': { en: 'Favorites', ja: 'お気に入り' },
+    '即将出发': { en: 'Upcoming', ja: '出発予定' },
+    '已完成': { en: 'Completed', ja: '完了' },
+    '导出报告': { en: 'Export Report', ja: 'レポート出力' },
+    '数据备份': { en: 'Backup Data', ja: 'データバックアップ' },
+    '导入数据': { en: 'Import Data', ja: 'データ取込' },
+    '导出': { en: 'Export', ja: 'エクスポート' },
+    '导入': { en: 'Import', ja: 'インポート' },
+
+    // 地图工具
+    '时光漫游': { en: 'Time Warp', ja: 'タイムワープ' },
+    '四季分色': { en: 'Four Seasons', ja: '四季分色' },
+    '选择同行人 A': { en: 'Pick Companion A', ja: '同行者Aを選択' },
+    '选择同行人 B': { en: 'Pick Companion B', ja: '同行者Bを選択' },
+    '清除对比': { en: 'Clear', ja: 'クリア' },
+    '中国': { en: 'China', ja: '中国' },
+    '世界': { en: 'World', ja: '世界' },
+
+    // 年轮
+    '年度时间年轮': { en: 'Annual Time Wheel', ja: '年度タイムホイール' },
+    '全选': { en: 'All', ja: '全て' },
+    '清空': { en: 'Clear', ja: 'クリア' },
+    '点击年份筛选该年行程': { en: 'Click year to filter trips', ja: '年をクリックして筛选' },
+
+    // 无障碍面板（剩余未翻译部分）
+    '功能开关': { en: 'Toggles', ja: '機能切替' },
+    '大字体模式': { en: 'Large Text', ja: '大きい文字' },
+    '减少动画': { en: 'Reduce Motion', ja: 'アニメ削減' },
+    '阅读辅助线': { en: 'Reading Guide', ja: '読みガイド' },
+    '增强焦点指示': { en: 'Focus Indicator', ja: '焦点表示' },
+    'iOS 26 液态玻璃': { en: 'iOS 26 Liquid Glass', ja: 'iOS 26 液态ガラス' },
+    '快捷键': { en: 'Shortcuts', ja: 'ショートカット' },
+    '打开/关闭面板': { en: 'Open/Close panel', ja: 'パネル開閉' },
+    '缩放': { en: 'Zoom', ja: 'ズーム' },
+    '大字体': { en: 'Large Text', ja: '大文字' },
+    '动画': { en: 'Motion', ja: 'アニメ' },
+    '辅助线': { en: 'Guide', ja: 'ガイド' },
+    '语音朗读': { en: 'Speech', ja: '読み上げ' },
+    '关闭弹窗': { en: 'Close dialog', ja: 'ダイアログを閉じる' },
+    '偏好自动保存 ♿ WCAG 2.1 AA': { en: 'Preferences auto-saved ♿ WCAG 2.1 AA', ja: '設定は自動保存 ♿ WCAG 2.1 AA' },
+
+    // 无障碍按钮
+    '无障碍': { en: 'Accessibility', ja: 'アクセシビリティ' },
+    '无障碍设置': { en: 'Accessibility', ja: 'アクセシビリティ設定' },
+    '打开无障碍设置': { en: 'Open accessibility settings', ja: 'アクセシビリティ設定を開く' },
+    '关闭设置面板': { en: 'Close panel', ja: 'パネルを閉じる' },
+    '快捷操作': { en: 'Quick Actions', ja: 'クイック操作' },
+    '主题': { en: 'Theme', ja: 'テーマ' },
+    '朗读': { en: 'Speech', ja: '読み上げ' },
+    '焦点': { en: 'Focus', ja: '焦点' },
+    '玻璃': { en: 'Glass', ja: 'ガラス' },
+    '重置': { en: 'Reset', ja: 'リセット' },
+    '页面缩放': { en: 'Page Zoom', ja: 'ページズーム' },
+    '配色方案': { en: 'Color Scheme', ja: 'カラースキーム' },
+    '较小': { en: 'Small', ja: '小' },
+    '默认': { en: 'Default', ja: '標準' },
+    '较大': { en: 'Large', ja: '大' },
+    '超大': { en: 'X-Large', ja: '特大' },
+    '黑白': { en: 'B&W', ja: '白黒' },
+    '蓝底': { en: 'Blue', ja: '青' },
+    '黄底': { en: 'Yellow', ja: '黄' },
+
+    // 弹窗 / 表单通用
+    '标题': { en: 'Title', ja: 'タイトル' },
+    '目的地': { en: 'Destination', ja: '目的地' },
+    '开始日期': { en: 'Start Date', ja: '開始日' },
+    '结束日期': { en: 'End Date', ja: '終了日' },
+    '日期': { en: 'Date', ja: '日付' },
+    '预算': { en: 'Budget', ja: '予算' },
+    '实际花费': { en: 'Actual', ja: '実際' },
+    '花费': { en: 'Cost', ja: '費用' },
+    '评分': { en: 'Rating', ja: '評価' },
+    '心情': { en: 'Mood', ja: '気分' },
+    '交通方式': { en: 'Transport', ja: '交通手段' },
+    '同行人': { en: 'Companions', ja: '同行者' },
+    '标签': { en: 'Tags', ja: 'タグ' },
+    '备注': { en: 'Notes', ja: 'メモ' },
+    '保存': { en: 'Save', ja: '保存' },
+    '取消': { en: 'Cancel', ja: 'キャンセル' },
+    '删除': { en: 'Delete', ja: '削除' },
+    '确认': { en: 'OK', ja: '確認' },
+    '确定': { en: 'OK', ja: '確認' },
+    '添加': { en: 'Add', ja: '追加' },
+    '新建': { en: 'New', ja: '新規' },
+    '新建档案': { en: 'New', ja: '新規' },
+    '统计': { en: 'Stats', ja: '統計' },
+    '数据统计': { en: 'Statistics', ja: 'データ統計' },
+    '我的旅行故事': { en: 'My Travel Stories', ja: '私の旅行物語' },
+    '重置': { en: 'Reset', ja: 'リセット' },
+
+    // 提示
+    '请输入': { en: 'Please enter', ja: '入力してください' },
+    '已保存': { en: 'Saved', ja: '保存しました' },
+    '已删除': { en: 'Deleted', ja: '削除しました' },
+    '加载中...': { en: 'Loading...', ja: '読み込み中...' },
+    '暂无数据': { en: 'No data', ja: 'データなし' },
+    '暂无旅行记录': { en: 'No trips yet', ja: '旅行記録なし' },
+    '暂无收藏': { en: 'No favorites', ja: 'お気に入りなし' },
+    '点击 + 号新建你的第一个旅行档案': { en: 'Click + to create your first trip', ja: '+をクリックして最初の旅行を作成' },
+    '未命名旅行': { en: 'Untitled Trip', ja: '無題の旅行' },
+    '天后出发': { en: ' days to go', ja: '日後に出発' },
+    '已出发': { en: 'Departed', ja: '出発済' },
+    '进行中': { en: 'In Progress', ja: '進行中' },
+    '天': { en: ' days', ja: '日間' },
+    '小时': { en: ' hr', ja: '時間' },
+    '分钟': { en: ' min', ja: '分' },
+    '秒': { en: ' sec', ja: '秒' },
+    '人民币': { en: 'CNY', ja: '人民元' },
+    '元': { en: '', ja: '' },
+    '共': { en: 'Total', ja: '合計' },
+    '个': { en: '', ja: '個' },
+    '次': { en: '', ja: '回' },
+    '人': { en: '', ja: '人' },
+    '张': { en: '', ja: '枚' },
+    '张照片': { en: ' photos', ja: '枚の写真' },
+    '搜索景点...': { en: 'Search attractions...', ja: 'スポットを検索...' },
+    '搜索地点': { en: 'Search place', ja: '場所を検索' },
+    '添加景点': { en: 'Add Attraction', ja: 'スポット追加' },
+    '景点名称': { en: 'Attraction Name', ja: 'スポット名' },
+    '景点描述': { en: 'Description', ja: '説明' },
+    '游玩时长': { en: 'Duration', ja: '游玩時間' },
+    '门票价格': { en: 'Ticket', ja: 'チケット' },
+    '交通费': { en: 'Transport', ja: '交通費' },
+    '餐饮费': { en: 'Food', ja: '食事' },
+    '住宿费': { en: 'Hotel', ja: '宿泊費' },
+    '购物费': { en: 'Shopping', ja: ' shopping' },
+    '其他': { en: 'Other', ja: 'その他' },
+    '景点': { en: 'Attractions', ja: 'スポット' },
+    '添加照片': { en: 'Add Photo', ja: '写真追加' },
+    '上传': { en: 'Upload', ja: 'アップロード' },
+    '图片': { en: 'Image', ja: '画像' },
+    '已选择': { en: 'Selected', ja: '選択済' },
+    '张照片': { en: ' photos', ja: '枚' },
+    '关闭': { en: 'Close', ja: '閉じる' },
+    '查看详情': { en: 'View Details', ja: '詳細を見る' },
+    '更多': { en: 'More', ja: '更多' },
+    '收起': { en: 'Collapse', ja: '收起' },
+    '展开': { en: 'Expand', ja: '展开' },
+    '确认删除': { en: 'Confirm Delete', ja: '削除確認' },
+    '确定要删除这个档案吗？': { en: 'Delete this trip?', ja: 'この旅行を削除しますか？' },
+    '此操作不可恢复': { en: 'This cannot be undone', ja: 'この操作は元に戻せません' },
+    '此操作不可撤销': { en: 'This cannot be undone', ja: 'この操作は取り消せません' },
+    '操作成功': { en: 'Success', ja: '成功' },
+    '操作失败': { en: 'Failed', ja: '失敗' },
+    '请检查输入': { en: 'Please check input', ja: '入力を確認してください' },
+    '正在加载': { en: 'Loading', ja: '読み込み中' },
+    '保存中...': { en: 'Saving...', ja: '保存中...' },
+    '删除中...': { en: 'Deleting...', ja: '削除中...' },
+    '分享': { en: 'Share', ja: '共有' },
+    '复制链接': { en: 'Copy Link', ja: 'リンクをコピー' },
+    '已复制': { en: 'Copied', ja: 'コピーしました' },
+    '打包': { en: 'Pack', ja: 'パッキング' },
+    '行李': { en: 'Luggage', ja: '荷物' },
+    '已打包': { en: 'Packed', ja: 'パッキング済' },
+    '未打包': { en: 'Unpacked', ja: '未パッキング' },
+    '加': { en: '+', ja: '+' },
+    '减': { en: '-', ja: '-' },
+    '搜索结果': { en: 'Results', ja: '検索結果' },
+    '没有找到': { en: 'Not found', ja: '見つかりません' },
+    '相关推荐': { en: 'Related', ja: '関連' },
+    '热门': { en: 'Popular', ja: '人気' },
+    '最新': { en: 'Latest', ja: '最新' },
+    '推荐': { en: 'Recommended', ja: 'おすすめ' },
+    '按': { en: 'By', ja: 'で' },
+    '排序': { en: 'Sort', ja: '並び替え' },
+    '发布时间': { en: 'Date', ja: '发布时间' },
+    '名称': { en: 'Name', ja: '名前' },
+    '价格': { en: 'Price', ja: '価格' },
+    '距离': { en: 'Distance', ja: '距離' },
+    '最近': { en: 'Nearest', ja: '最近' },
+    '最远': { en: 'Farthest', ja: '最遠' },
+    '从高到低': { en: 'High to Low', ja: '高い順' },
+    '从低到高': { en: 'Low to High', ja: '安い順' },
+    '升序': { en: 'Ascending', ja: '昇順' },
+    '降序': { en: 'Descending', ja: '降順' },
+    '我': { en: 'Me', ja: '私' },
+    '独自': { en: 'Solo', ja: '一人' },
+    '家庭': { en: 'Family', ja: '家族' },
+    '朋友': { en: 'Friends', ja: '友達' },
+    '情侣': { en: 'Couple', ja: 'カップル' },
+    '商务': { en: 'Business', ja: 'ビジネス' },
+    '飞机': { en: 'Flight', ja: '飛行機' },
+    '火车': { en: 'Train', ja: '電車' },
+    '高铁': { en: 'HSR', ja: '新幹線' },
+    '汽车': { en: 'Car', ja: '車' },
+    '自驾': { en: 'Drive', ja: 'ドライブ' },
+    '大巴': { en: 'Bus', ja: 'バス' },
+    '地铁': { en: 'Subway', ja: '地下鉄' },
+    '轮船': { en: 'Ship', ja: '船' },
+    '徒步': { en: 'Walk', ja: '徒歩' },
+    '骑行': { en: 'Bike', ja: '自転車' },
+    '其他': { en: 'Other', ja: 'その他' },
+    '查看': { en: 'View', ja: '表示' },
+    '编辑档案': { en: 'Edit Trip', ja: '旅行編集' },
+    '保存修改': { en: 'Save Changes', ja: '変更保存' },
+    '取消编辑': { en: 'Cancel Edit', ja: '編集取消' },
+    '开始': { en: 'Start', ja: '開始' },
+    '结束': { en: 'End', ja: '終了' },
+    '正在': { en: 'In', ja: '' },
+    '请选择': { en: 'Please select', ja: '選択してください' },
+    '请选择日期': { en: 'Pick a date', ja: '日付を選択' },
+    '请填写标题': { en: 'Title required', ja: 'タイトル必須' },
+    '请填写目的地': { en: 'Destination required', ja: '目的地必須' },
+    '请填写日期': { en: 'Date required', ja: '日付必須' },
+    '请填写预算': { en: 'Budget required', ja: '予算必須' },
+    '请填写': { en: 'Required', ja: '必須' },
+    '至少': { en: 'At least', ja: '少なくとも' },
+    '最多': { en: 'At most', ja: '最大' },
+    '个字符': { en: ' chars', ja: '文字' },
+    '正在编辑': { en: 'Editing', ja: '編集中' },
+    '新建档案': { en: 'New Trip', ja: '新規旅行' },
+    '编辑档案': { en: 'Edit Trip', ja: '旅行編集' },
+    '已收藏': { en: 'Favorited', ja: 'お気に入り済' },
+    '收藏': { en: 'Favorite', ja: 'お気に入り' },
+    '取消收藏': { en: 'Unfavorite', ja: 'お気に入り解除' },
+    '分享档案': { en: 'Share Trip', ja: '旅行共有' },
+    '分享我的旅行档案': { en: 'Share my trip', ja: '私の旅行を共有' },
+    '分享我的旅行故事': { en: 'Share my story', ja: '私の物語を共有' },
+    '点击右上角分享': { en: 'Click share button', ja: '共有ボタンをクリック' },
+    '链接已复制到剪贴板': { en: 'Link copied to clipboard', ja: 'リンクをコピーしました' },
+    '数据已导出': { en: 'Data exported', ja: 'データ出力済' },
+    '数据已导入': { en: 'Data imported', ja: 'データ取込済' },
+    '导入失败': { en: 'Import failed', ja: '取込失敗' },
+    '文件格式错误': { en: 'Invalid format', ja: 'ファイル形式エラー' },
+    '请上传 JSON 文件': { en: 'Please upload JSON', ja: 'JSONファイルをアップロード' },
+    '没有可导出的数据': { en: 'No data to export', ja: '出力データなし' },
+    '导出成功': { en: 'Export success', ja: '出力成功' },
+    '共': { en: 'Total', ja: '合計' },
+    '条记录': { en: ' records', ja: '件' },
+    '搜索结果': { en: 'Search Results', ja: '検索結果' },
+    '您还没有': { en: 'You have no', ja: 'まだありません' },
+    '，去创建一个吧': { en: '. Create one!', ja: '。作成しましょう！' },
+    '已加载所有数据': { en: 'All data loaded', ja: '全データ読込済' },
+    '正在加载更多': { en: 'Loading more', ja: '更多読み込み中' },
+    '没有更多了': { en: 'No more', ja: 'これ以上なし' },
+    '刷新': { en: 'Refresh', ja: '更新' },
+    '自动保存': { en: 'Auto-saved', ja: '自動保存' },
+    '手动保存': { en: 'Manual save', ja: '手動保存' },
+    '上次编辑': { en: 'Last edit', ja: '最終編集' },
+    '上次修改': { en: 'Modified', ja: '最終変更' },
+    '创建于': { en: 'Created', ja: '作成' },
+    '完成于': { en: 'Completed', ja: '完了' },
+    '编辑时间': { en: 'Edit time', ja: '編集時間' },
+    '照片数': { en: 'Photos', ja: '写真数' },
+    '景点数': { en: 'Spots', ja: 'スポット数' },
+    '已记录': { en: 'Logged', ja: '記録済' },
+    '游玩': { en: 'Visit', ja: '游玩' },
+    '日游': { en: '-day trip', ja: '日游' },
+    '人均': { en: 'Per person', ja: '一人当たり' },
+    '总人天': { en: 'person-days', ja: '人日' },
+    '旅游': { en: 'travel', ja: '旅行' },
+    '目的地城市': { en: 'City', ja: '都市' },
+    '目的地': { en: 'Place', ja: '場所' },
+    '时区': { en: 'Timezone', ja: '時間帯' },
+    '夏令时': { en: 'DST', ja: 'サマータイム' },
+    '当前时间': { en: 'Local time', ja: '現地時間' },
+    '出发时间': { en: 'Departure', ja: '出発時間' },
+    '到达时间': { en: 'Arrival', ja: '到着時間' },
+    '停留时间': { en: 'Stay', ja: '滞在時間' },
+    '足迹': { en: 'Footprints', ja: '足跡' },
+    '国家': { en: 'Country', ja: '国' },
+    '地区': { en: 'Region', ja: '地域' },
+    '查看更多': { en: 'See more', ja: '更多表示' },
+    '收起详情': { en: 'Less', ja: '收起' },
+    '查看全部': { en: 'View all', ja: '全て表示' },
+    '筛选条件': { en: 'Filters', ja: '筛选条件' },
+    '清除筛选': { en: 'Clear', ja: '筛选解除' },
+    '应用': { en: 'Apply', ja: '適用' },
+    '重置筛选': { en: 'Reset', ja: '筛选リセット' },
+    '排序方式': { en: 'Sort by', ja: '並び順' },
+    '时间排序': { en: 'By time', ja: '時間順' },
+    '人气排序': { en: 'By popularity', ja: '人気順' },
+    '我的': { en: 'My', ja: '私の' },
+    '公开': { en: 'Public', ja: '公開' },
+    '私密': { en: 'Private', ja: '非公開' },
+    '仅自己可见': { en: 'Only me', ja: '自分のみ' },
+    '所有人可见': { en: 'Everyone', ja: '全員' },
+    '朋友可见': { en: 'Friends', ja: '友達' },
+    '设置': { en: 'Settings', ja: '設定' },
+    '个人资料': { en: 'Profile', ja: 'プロフィール' },
+    '账号': { en: 'Account', ja: 'アカウント' },
+    '退出': { en: 'Logout', ja: 'ログアウト' },
+    '登录': { en: 'Login', ja: 'ログイン' },
+    '注册': { en: 'Sign up', ja: '登録' },
+    '关于': { en: 'About', ja: 'について' },
+    '帮助': { en: 'Help', ja: 'ヘルプ' },
+    '反馈': { en: 'Feedback', ja: 'フィードバック' },
+    '联系我们': { en: 'Contact', ja: 'お問い合わせ' },
+    '欢迎': { en: 'Welcome', ja: 'ようこそ' },
+    '再见': { en: 'Goodbye', ja: 'さようなら' },
+    '你好': { en: 'Hello', ja: 'こんにちは' },
+    '感谢使用': { en: 'Thanks for using', ja: 'ご利用ありがとうございます' },
+    '旅途愉快': { en: 'Have a nice trip', ja: '良い旅を' },
+    '欢迎使用无障碍语音模式': { en: 'Speech mode on. Press Alt+J to exit', ja: '読み上げモード開始。Alt+Jで終了' },
+    '按 Alt 加 J 可以关闭语音': { en: 'Press Alt+J to exit speech', ja: 'Alt+Jで読み上げ終了' },
+    '按 Alt 加 A 打开无障碍面板': { en: 'Press Alt+A for accessibility', ja: 'Alt+Aでアクセシビリティ' },
+    '已开启液态玻璃': { en: 'Liquid Glass On', ja: '液态ガラスON' },
+    '已关闭液态玻璃': { en: 'Liquid Glass Off', ja: '液态ガラスOFF' },
+    '大字体已开启': { en: 'Large Text On', ja: '大きい文字ON' },
+    '大字体已关闭': { en: 'Large Text Off', ja: '大きい文字OFF' },
+    '动画已减少': { en: 'Motion Reduced', ja: 'アニメ削減' },
+    '动画已恢复': { en: 'Motion Restored', ja: 'アニメ復元' },
+    '阅读辅助线已开启': { en: 'Reading Guide On', ja: '読みガイドON' },
+    '阅读辅助线已关闭': { en: 'Reading Guide Off', ja: '読みガイドOFF' },
+    '焦点指示已增强': { en: 'Focus Enhanced', ja: '焦点強化' },
+    '焦点指示已恢复': { en: 'Focus Restored', ja: '焦点復元' },
+    '已开启指读模式': { en: 'Speech Mode On', ja: '読み上げON' },
+    '已关闭指读模式': { en: 'Speech Mode Off', ja: '読み上げOFF' },
+    '已重置为默认设置': { en: 'Reset to Default', ja: 'デフォルトに復元' },
+    '已开启': { en: 'On', ja: 'ON' },
+    '已关闭': { en: 'Off', ja: 'OFF' },
+    '点我新建档案': { en: 'Click to create', ja: 'クリックで作成' },
+    '已加载': { en: 'Loaded', ja: '読込済' },
+    '新': { en: 'NEW', ja: '新' },
+    '新功能': { en: 'New', ja: '新機能' },
+    '点我试试': { en: 'Try it', ja: '試してみる' },
+    '更多功能': { en: 'More', ja: '更多機能' },
+    '高级功能': { en: 'Pro', ja: 'プロ' },
+    '解锁更多': { en: 'Unlock more', ja: '更多解除' },
+    '已解锁': { en: 'Unlocked', ja: '解除済' },
+    '未解锁': { en: 'Locked', ja: '未解除' },
+    '进度': { en: 'Progress', ja: '進捗' },
+    '完成': { en: 'Done', ja: '完了' },
+    '已完成': { en: 'Completed', ja: '完了' },
+    '未完成': { en: 'Incomplete', ja: '未完了' },
+    '进行中': { en: 'In Progress', ja: '進行中' },
+    '等待中': { en: 'Pending', ja: '待機中' },
+    '已取消': { en: 'Cancelled', ja: 'キャンセル' },
+    '已过期': { en: 'Expired', ja: '期限切れ' },
+    '已发布': { en: 'Published', ja: '公開済' },
+    '草稿': { en: 'Draft', ja: '下書き' },
+    '已审核': { en: 'Approved', ja: '承認済' },
+    '待审核': { en: 'Pending Review', ja: '審査待ち' },
+    '已拒绝': { en: 'Rejected', ja: '拒否' },
+    '已归档': { en: 'Archived', ja: 'アーカイブ' },
+    '已置顶': { en: 'Pinned', ja: 'ピン留め' },
+    '已隐藏': { en: 'Hidden', ja: '非表示' },
+    '可见': { en: 'Visible', ja: '表示' },
+    '不可见': { en: 'Hidden', ja: '非表示' },
+    '启用': { en: 'Enable', ja: '有効' },
+    '禁用': { en: 'Disable', ja: '無効' },
+    '开启': { en: 'On', ja: 'ON' },
+    '关闭': { en: 'Off', ja: 'OFF' },
+    '通知': { en: 'Notifications', ja: '通知' },
+    '消息': { en: 'Messages', ja: 'メッセージ' },
+    '提醒': { en: 'Reminders', ja: 'リマインダー' },
+    '日程': { en: 'Schedule', ja: 'スケジュール' },
+    '日历': { en: 'Calendar', ja: 'カレンダー' },
+    '时钟': { en: 'Clock', ja: '時計' },
+    '时间': { en: 'Time', ja: '時間' },
+    '星期': { en: 'Week', ja: '週' },
+    '月份': { en: 'Month', ja: '月' },
+    '年份': { en: 'Year', ja: '年' },
+    '今日': { en: 'Today', ja: '今日' },
+    '昨天': { en: 'Yesterday', ja: '昨日' },
+    '明天': { en: 'Tomorrow', ja: '明日' },
+    '本周': { en: 'This week', ja: '今週' },
+    '上周': { en: 'Last week', ja: '先週' },
+    '下周': { en: 'Next week', ja: '来週' },
+    '本月': { en: 'This month', ja: '今月' },
+    '上月': { en: 'Last month', ja: '先月' },
+    '下月': { en: 'Next month', ja: '来月' },
+    '今年': { en: 'This year', ja: '今年' },
+    '去年': { en: 'Last year', ja: '去年' },
+    '明年': { en: 'Next year', ja: '来年' },
+    '春节': { en: 'Spring Festival', ja: '春節' },
+    '国庆': { en: 'National Day', ja: '国慶節' },
+    '元旦': { en: "New Year", ja: '元日' },
+    '中秋': { en: 'Mid-Autumn', ja: '中秋節' },
+    '端午': { en: 'Dragon Boat', ja: '端午節' },
+    '清明': { en: 'Qingming', ja: '清明節' },
+    '假期': { en: 'Holiday', ja: '祝日' },
+    '周末': { en: 'Weekend', ja: '週末' },
+    '工作日': { en: 'Weekday', ja: '平日' },
+    '请假': { en: 'Day off', ja: '休暇' },
+    '加班': { en: 'Overtime', ja: '残業' },
+    '出差': { en: 'Business Trip', ja: '出張' },
+    '会议': { en: 'Meeting', ja: '会議' },
+    '活动': { en: 'Event', ja: 'イベント' },
+    '聚会': { en: 'Gathering', ja: '集まり' },
+    '派对': { en: 'Party', ja: 'パーティー' },
+    '婚礼': { en: 'Wedding', ja: '結婚式' },
+    '生日': { en: 'Birthday', ja: '誕生日' },
+    '纪念日': { en: 'Anniversary', ja: '記念日' },
+    '工作': { en: 'Work', ja: '仕事' },
+    '学习': { en: 'Study', ja: '勉強' },
+    '休息': { en: 'Rest', ja: '休憩' },
+    '运动': { en: 'Exercise', ja: '運動' },
+    '娱乐': { en: 'Fun', ja: '娯楽' },
+    '购物': { en: 'Shopping', ja: 'ショッピング' },
+    '美食': { en: 'Food', ja: 'グルメ' },
+    '美妆': { en: 'Beauty', ja: '美容' },
+    '健身': { en: 'Fitness', ja: 'フィットネス' },
+    '阅读': { en: 'Reading', ja: '読書' },
+    '电影': { en: 'Movie', ja: '映画' },
+    '音乐': { en: 'Music', ja: '音楽' },
+    '游戏': { en: 'Game', ja: 'ゲーム' },
+    '旅行': { en: 'Travel', ja: '旅行' },
+    '美食': { en: 'Food', ja: 'グルメ' },
+    '咖啡': { en: 'Coffee', ja: 'コーヒー' },
+    '茶': { en: 'Tea', ja: 'お茶' },
+    '早餐': { en: 'Breakfast', ja: '朝食' },
+    '午餐': { en: 'Lunch', ja: '昼食' },
+    '晚餐': { en: 'Dinner', ja: '夕食' },
+    '夜宵': { en: 'Supper', ja: '夜食' },
+    '甜品': { en: 'Dessert', ja: 'デザート' },
+    '水果': { en: 'Fruit', ja: '果物' },
+    '饮料': { en: 'Drink', ja: '飲み物' },
+    '酒水': { en: 'Alcohol', ja: '酒' },
+    '素食': { en: 'Vegetarian', ja: 'ベジタリアン' },
+    '海鲜': { en: 'Seafood', ja: 'シーフード' },
+    '肉类': { en: 'Meat', ja: '肉' },
+    '蔬菜': { en: 'Vegetable', ja: '野菜' },
+    '米饭': { en: 'Rice', ja: 'ご飯' },
+    '面条': { en: 'Noodles', ja: '麺' },
+    '面包': { en: 'Bread', ja: 'パン' },
+    '小吃': { en: 'Snack', ja: 'スナック' },
+    '餐厅': { en: 'Restaurant', ja: 'レストラン' },
+    '酒店': { en: 'Hotel', ja: 'ホテル' },
+    '民宿': { en: 'B&B', ja: '民宿' },
+    '青年旅舍': { en: 'Hostel', ja: 'ホステル' },
+    '度假村': { en: 'Resort', ja: 'リゾート' },
+    '公寓': { en: 'Apartment', ja: 'アパート' },
+    '别墅': { en: 'Villa', ja: 'ヴィラ' },
+    '客栈': { en: 'Inn', ja: '旅館' },
+    '五星': { en: '5-Star', ja: '5つ星' },
+    '四星': { en: '4-Star', ja: '4つ星' },
+    '三星': { en: '3-Star', ja: '3つ星' },
+    '经济型': { en: 'Budget', ja: 'エコノミー' },
+    '豪华': { en: 'Luxury', ja: 'ラグジュアリー' },
+    '普通': { en: 'Standard', ja: '標準' },
+    '入住': { en: 'Check-in', ja: 'チェックイン' },
+    '退房': { en: 'Check-out', ja: 'チェックアウト' },
+    '晚': { en: ' nights', ja: '泊' },
+    '晚': { en: ' nights', ja: '泊' },
+    '单人间': { en: 'Single', ja: 'シングル' },
+    '双人间': { en: 'Double', ja: 'ダブル' },
+    '大床房': { en: 'King', ja: 'キング' },
+    '标准间': { en: 'Standard', ja: 'スタンダード' },
+    '套房': { en: 'Suite', ja: 'スイート' },
+    '家庭房': { en: 'Family', ja: 'ファミリー' },
+    '海景房': { en: 'Sea View', ja: 'オーシャンビュー' },
+    '山景房': { en: 'Mountain View', ja: 'マウンテンビュー' },
+    '机场': { en: 'Airport', ja: '空港' },
+    '火车站': { en: 'Train Station', ja: '駅' },
+    '汽车站': { en: 'Bus Station', ja: 'バスターミナル' },
+    '地铁站': { en: 'Subway', ja: '地下鉄' },
+    '港口': { en: 'Port', ja: '港' },
+    '码头': { en: 'Dock', ja: '码头' },
+    '景点': { en: 'Attraction', ja: 'スポット' },
+    '博物馆': { en: 'Museum', ja: '博物館' },
+    '公园': { en: 'Park', ja: '公園' },
+    '寺庙': { en: 'Temple', ja: '寺' },
+    '教堂': { en: 'Church', ja: '教会' },
+    '古建筑': { en: 'Historic Site', ja: '古建築' },
+    '现代建筑': { en: 'Modern', ja: '現代建築' },
+    '自然风光': { en: 'Nature', ja: '自然风光' },
+    '海滩': { en: 'Beach', ja: 'ビーチ' },
+    '山川': { en: 'Mountains', ja: '山川' },
+    '湖泊': { en: 'Lake', ja: '湖' },
+    '森林': { en: 'Forest', ja: '森' },
+    '沙漠': { en: 'Desert', ja: '砂漠' },
+    '草原': { en: 'Grassland', ja: '草原' },
+    '海岛': { en: 'Island', ja: '島' },
+    '夜景': { en: 'Night View', ja: '夜景' },
+    '日出': { en: 'Sunrise', ja: '日の出' },
+    '日落': { en: 'Sunset', ja: '日の入り' },
+    '春天': { en: 'Spring', ja: '春' },
+    '夏天': { en: 'Summer', ja: '夏' },
+    '秋天': { en: 'Autumn', ja: '秋' },
+    '冬天': { en: 'Winter', ja: '冬' },
+    '旺季': { en: 'Peak', ja: '繁忙期' },
+    '淡季': { en: 'Off-Peak', ja: '閑散期' },
+    '自由行': { en: 'Self-guided', ja: 'フリーツアー' },
+    '跟团游': { en: 'Group Tour', ja: 'グループツアー' },
+    '半自助': { en: 'Semi-self', ja: 'セミセルフ' },
+    '定制游': { en: 'Custom', ja: 'カスタム' },
+    '周边游': { en: 'Nearby', ja: '周辺旅行' },
+    '国内游': { en: 'Domestic', ja: '国内旅行' },
+    '出境游': { en: 'Outbound', ja: '海外旅行' },
+    '亲子游': { en: 'Family', ja: '家族旅行' },
+    '蜜月游': { en: 'Honeymoon', ja: 'ハネムーン' },
+    '毕业游': { en: 'Graduation', ja: '卒業旅行' },
+    '春节游': { en: 'Spring Festival Trip', ja: '春節旅行' },
+    '国庆游': { en: 'National Day Trip', ja: '国慶節旅行' }
+};
+
+function t(key) {
+    return (i18n[currentLang] && i18n[currentLang][key]) || i18n.zh[key] || key;
+}
+
+// 智能翻译任意文本：先按短语字典尝试
+function translateText(text) {
+    if (currentLang === 'zh') return null;
+    if (!text || typeof text !== 'string') return null;
+
+    // 1) 完整匹配（最高优先级）
+    if (i18nPhrases[text] && i18nPhrases[text][currentLang]) {
+        return i18nPhrases[text][currentLang];
+    }
+
+    // 2) 尝试短语替换：按字典中短语长度从长到短匹配
+    const phrases = Object.keys(i18nPhrases).sort((a, b) => b.length - a.length);
+    let result = text;
+    let changed = false;
+    for (const phrase of phrases) {
+        if (result.includes(phrase)) {
+            const translated = i18nPhrases[phrase][currentLang];
+            if (translated !== undefined) {
+                result = result.split(phrase).join(translated);
+                changed = true;
+            }
+        }
+    }
+    return changed ? result : null; // 返回 null 表示没有匹配
+}
+
+// 保存原始中文文本，切回中文时恢复
+const originalTexts = new WeakMap();
+
+// 应用翻译到元素（处理文本节点、属性）
+function translateElement(el) {
+    if (!el || el.nodeType !== 1) return;
+    if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE' || el.tagName === 'NOSCRIPT') return;
+    if (el.dataset && el.dataset.i18nNoAuto === 'true') return;
+
+    for (const node of el.childNodes) {
+        if (node.nodeType === 3) {
+            const original = node.nodeValue;
+            const trimmed = original.trim();
+            if (!trimmed || !/[\u4e00-\u9fff]/.test(trimmed)) continue;
+            // 首次翻译时保存原文
+            if (!originalTexts.has(node)) {
+                originalTexts.set(node, original);
+            }
+            const translated = translateText(trimmed);
+            if (translated !== null && translated !== trimmed) {
+                const leading = original.match(/^\s*/)[0];
+                const trailing = original.match(/\s*$/)[0];
+                node.nodeValue = leading + translated + trailing;
+            }
+        }
+    }
+}
+
+// 恢复所有文本为原始中文
+function restoreChineseText() {
+    document.querySelectorAll('body *').forEach(el => {
+        for (const node of el.childNodes) {
+            if (node.nodeType === 3 && originalTexts.has(node)) {
+                node.nodeValue = originalTexts.get(node);
+            }
+        }
+    });
+}
+
+let autoTranslateObserver = null;
+function setupAutoTranslate() {
+    if (autoTranslateObserver) autoTranslateObserver.disconnect();
+    if (currentLang === 'zh') return;
+
+    autoTranslateObserver = new MutationObserver(mutations => {
+        if (currentLang === 'zh') return;
+        for (const m of mutations) {
+            for (const node of m.addedNodes) {
+                if (node.nodeType === 1) {
+                    translateElement(node);
+                    // 递归翻译子元素
+                    node.querySelectorAll && node.querySelectorAll('*').forEach(translateElement);
+                } else if (node.nodeType === 3 && node.parentElement) {
+                    const original = node.nodeValue;
+                    if (!/[\u4e00-\u9fff]/.test(original)) continue;
+                    const translated = translateText(original.trim());
+                    if (translated !== null) {
+                        node.nodeValue = translated;
+                    }
+                }
+            }
+        }
+    });
+    autoTranslateObserver.observe(document.body, { childList: true, subtree: true });
+}
+
+function applyLanguage(lang) {
+    if (!i18n[lang]) lang = 'zh';
+    currentLang = lang;
+    try { localStorage.setItem('app_lang', lang); } catch (e) {}
+
+    // 0) 切回中文时恢复原文
+    if (currentLang === 'zh') {
+        restoreChineseText();
+        if (autoTranslateObserver) {
+            autoTranslateObserver.disconnect();
+            autoTranslateObserver = null;
+        }
+    }
+
+    // 1) 翻译所有 data-i18n 元素
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const text = t(key);
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            el.placeholder = text;
+        } else {
+            const oldText = el.textContent.trim();
+            const emojiMatch = oldText.match(/^([\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]+)/u);
+            if (emojiMatch) {
+                el.textContent = emojiMatch[0] + ' ' + text;
+            } else {
+                el.textContent = text;
+            }
+        }
+    });
+
+    // 2) 翻译 title 属性
+    document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        el.title = t(el.getAttribute('data-i18n-title'));
+    });
+
+    // 3) 智能翻译静态中文（用短语字典）
+    if (currentLang !== 'zh') {
+        const all = document.querySelectorAll('body *');
+        all.forEach(translateElement);
+    }
+
+    // 4) 高亮当前语言按钮
+    document.querySelectorAll('.nav-lang-btn, .a11y-lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+    });
+
+    // 5) 更新 html lang 属性
+    document.documentElement.lang = (lang === 'zh') ? 'zh-CN' : (lang === 'ja' ? 'ja-JP' : 'en');
+
+    // 6) 监听动态内容
+    setupAutoTranslate();
+
+    // 7) 立即重新渲染（让动态生成的文案也跟上语言切换）
+    reRenderCurrentView();
+    reRenderAllViews();
+
+    // 8) 立即扫描新生成的 DOM 节点
+    if (currentLang !== 'zh') {
+        document.querySelectorAll('body *').forEach(translateElement);
+    }
+
+    // 9) 多次延迟扫描 + 重渲染（处理 setTimeout/requestAnimationFrame/异步图表）
+    const delayed = [50, 200, 500, 1000, 2000];
+    delayed.forEach((delay, idx) => {
+        setTimeout(() => {
+            try {
+                // 再扫一遍 DOM（包括所有页面，包括未显示的）
+                if (currentLang !== 'zh') {
+                    document.querySelectorAll('body *').forEach(translateElement);
+                }
+                // 重渲染（处理异步渲染的内容）
+                if (idx >= 1) {
+                    reRenderCurrentView();
+                    reRenderAllViews();
+                }
+            } catch (e) {
+                console.error('延迟重渲染失败:', e);
+            }
+        }, delay);
+    });
+}
+
+function getCurrentPageName() {
+    const active = document.querySelector('.page.active');
+    if (!active) return 'home';
+    return active.id.replace(/^page-/, '');
+}
+
+// 重新渲染当前激活的页面
+function reRenderCurrentView() {
+    try {
+        if (typeof updateSidebarStats === 'function') updateSidebarStats();
+        if (typeof updateDashboard === 'function') updateDashboard();
+        if (typeof renderPrepPage === 'function') renderPrepPage();
+        if (typeof updateHomeUpcoming === 'function') updateHomeUpcoming();
+
+        // 用 showPage 强制重新触发当前页面的渲染（确保完整刷新）
+        const pageName = getCurrentPageName();
+        if (typeof showPage === 'function' && pageName) {
+            showPage(pageName);
+        }
+    } catch (e) {
+        console.error('重渲染当前页面失败:', e);
+    }
+}
+
+// 重新渲染所有页面（让用户切换标签时也能看到正确语言）
+function reRenderAllViews() {
+    try {
+        if (typeof renderTimeline === 'function') renderTimeline();
+        if (typeof renderStories === 'function') renderStories();
+        if (typeof updateAchievements === 'function') updateAchievements();
+        if (typeof renderAchievements === 'function') renderAchievements();
+        if (typeof renderStats === 'function') renderStats();
+        if (typeof renderFavorites === 'function') renderFavorites();
+        if (typeof renderDataView === 'function') renderDataView();
+        if (typeof filterArchives === 'function') filterArchives();
+        if (typeof renderPrepPage === 'function') renderPrepPage();
+        if (typeof renderYearWheel === 'function') renderYearWheel();
+        if (typeof refreshCompanionSelects === 'function') refreshCompanionSelects();
+        if (typeof renderFilteredMarkers === 'function' && typeof archives !== 'undefined') {
+            renderFilteredMarkers(archives, false, null);
+        }
+        if (typeof renderPersonalityPage === 'function') renderPersonalityPage();
+    } catch (e) {
+        console.error('全量重渲染失败:', e);
+    }
+}
+
+function setLanguage(lang) {
+    applyLanguage(lang);
+    const langName = { zh: '中文', en: 'English', ja: '日本語' }[lang];
+    showToast('🌐 ' + langName, 'info');
+    console.log(`[i18n] Switched to ${lang}, re-rendered all pages`);
+}
+
+// 调试工具：手动重新应用当前语言（控制台调用 reapplyLang()）
+window.reapplyLang = function() {
+    console.log('[i18n] Re-applying current language:', currentLang);
+    applyLanguage(currentLang);
+    console.log('[i18n] Done. Check if all content is translated.');
+};
+
+// ====================================================
+//  无障碍模式（政府网站风格，遵循 WCAG 2.1 AA）
+// ====================================================
+const a11ySettings = {
+    zoom: 'default',     // small / default / large / xlarge
+    theme: 'default',    // default / bw / blue / yellow
+    textLarge: false,
+    noMotion: false,
+    readingLine: false,
+    focusStrong: false,
+    glass: false
+};
+
+const a11yZoomOrder = ['small', 'default', 'large', 'xlarge'];
+const a11yThemeOrder = ['default', 'bw', 'blue', 'yellow'];
+const a11yThemeIcons = { default: '🎨', bw: '⬛', blue: '🔵', yellow: '🟡' };
+const a11yThemeNames = { default: '默认', bw: '黑白', blue: '蓝底', yellow: '黄底' };
+
+function saveA11y() {
+    try {
+        localStorage.setItem('a11y_settings', JSON.stringify(a11ySettings));
+    } catch (e) { console.error('保存无障碍设置失败', e); }
+}
+
+function loadA11y() {
+    try {
+        const saved = localStorage.getItem('a11y_settings');
+        if (saved) Object.assign(a11ySettings, JSON.parse(saved));
+    } catch (e) { console.error('加载无障碍设置失败', e); }
+}
+
+function applyA11y() {
+    const body = document.body;
+
+    // 缩放
+    body.classList.remove('a11y-zoom-small', 'a11y-zoom-default', 'a11y-zoom-large', 'a11y-zoom-xlarge');
+    body.classList.add('a11y-zoom-' + a11ySettings.zoom);
+
+    // 主题
+    body.classList.remove('a11y-theme-default', 'a11y-theme-bw', 'a11y-theme-blue', 'a11y-theme-yellow');
+    body.classList.add('a11y-theme-' + a11ySettings.theme);
+
+    // 文字大小
+    body.classList.toggle('a11y-text-large', a11ySettings.textLarge);
+
+    // 减少动画
+    body.classList.toggle('a11y-no-motion', a11ySettings.noMotion);
+
+    // 阅读辅助线
+    body.classList.toggle('a11y-reading-line', a11ySettings.readingLine);
+
+    // 增强焦点
+    body.classList.toggle('a11y-focus-strong', a11ySettings.focusStrong);
+
+    // iOS 26 液态玻璃
+    body.classList.toggle('a11y-glass', a11ySettings.glass);
+
+    // 主题按钮图标（快捷操作区）
+    const quickIcon = document.getElementById('a11y-quick-theme-icon');
+    if (quickIcon) quickIcon.textContent = a11yThemeIcons[a11ySettings.theme];
+
+    // 快捷按钮 active 态
+    const quickActiveMap = {
+        'a11y-text': a11ySettings.textLarge,
+        'a11y-motion': a11ySettings.noMotion,
+        'a11y-read': a11ySettings.readingLine,
+        'a11y-focus': a11ySettings.focusStrong,
+        'a11y-glass': a11ySettings.glass
+    };
+    document.querySelectorAll('.a11y-quick-btn').forEach(btn => {
+        const key = btn.getAttribute('data-key');
+        if (key && key in quickActiveMap) {
+            btn.classList.toggle('active', quickActiveMap[key]);
+        }
+    });
+
+    // 开关状态
+    const swMap = {
+        'a11y-sw-text': a11ySettings.textLarge,
+        'a11y-sw-motion': a11ySettings.noMotion,
+        'a11y-sw-read': a11ySettings.readingLine,
+        'a11y-sw-focus': a11ySettings.focusStrong,
+        'a11y-sw-glass': a11ySettings.glass
+    };
+    Object.entries(swMap).forEach(([id, on]) => {
+        const sw = document.getElementById(id);
+        if (sw) {
+            sw.classList.toggle('on', on);
+            sw.setAttribute('aria-checked', on);
+        }
+    });
+
+    // 选项高亮
+    document.querySelectorAll('.a11y-opt').forEach(el => el.classList.remove('active'));
+    const zOpt = document.getElementById('a11y-opt-zoom-' + a11ySettings.zoom);
+    if (zOpt) zOpt.classList.add('active');
+    const tOpt = document.getElementById('a11y-opt-theme-' + a11ySettings.theme);
+    if (tOpt) tOpt.classList.add('active');
+}
+
+function toggleA11yPanel() {
+    const panel = document.getElementById('a11y-panel');
+    const btn = document.querySelector('.a11y-launcher-btn');
+    if (!panel) return;
+    panel.classList.toggle('show');
+    if (btn) {
+        btn.classList.toggle('active', panel.classList.contains('show'));
+        btn.setAttribute('aria-expanded', panel.classList.contains('show'));
+    }
+}
+
+function resetA11y() {
+    a11ySettings.zoom = 'default';
+    a11ySettings.theme = 'default';
+    a11ySettings.textLarge = false;
+    a11ySettings.noMotion = false;
+    a11ySettings.readingLine = false;
+    a11ySettings.focusStrong = false;
+    a11ySettings.glass = false;
+    if (window.speechSynthesis && window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+    }
+    if (ttsHoverMode) {
+        ttsHoverMode = false;
+        ttsLockedEl = null;
+        document.body.classList.remove('a11y-tts-hover', 'a11y-tts-locked');
+        hideTtsHint();
+    }
+    saveA11y();
+    applyA11y();
+    showToast('🔄 已重置为默认设置', 'info');
+}
+
+function setA11yZoom(level) {
+    if (!a11yZoomOrder.includes(level)) return;
+    a11ySettings.zoom = level;
+    saveA11y();
+    applyA11y();
+    showToast(`缩放：${level === 'default' ? '默认' : level === 'small' ? '较小' : level === 'large' ? '较大' : '超大'}`, 'info');
+}
+
+function cycleA11yZoom() {
+    const idx = a11yZoomOrder.indexOf(a11ySettings.zoom);
+    a11ySettings.zoom = a11yZoomOrder[(idx + 1) % a11yZoomOrder.length];
+    saveA11y();
+    applyA11y();
+    showToast(`🔍 缩放：${a11yThemeNames[''] || ''}${{small: '较小', default: '默认', large: '较大', xlarge: '超大'}[a11ySettings.zoom]}`, 'info');
+}
+
+function setA11yTheme(theme) {
+    if (!a11yThemeOrder.includes(theme)) return;
+    a11ySettings.theme = theme;
+    saveA11y();
+    applyA11y();
+    showToast(`主题：${a11yThemeNames[theme]}`, 'info');
+}
+
+function cycleA11yTheme() {
+    const idx = a11yThemeOrder.indexOf(a11ySettings.theme);
+    a11ySettings.theme = a11yThemeOrder[(idx + 1) % a11yThemeOrder.length];
+    saveA11y();
+    applyA11y();
+    showToast(`🎨 主题：${a11yThemeNames[a11ySettings.theme]}`, 'info');
+}
+
+function toggleA11yText() {
+    a11ySettings.textLarge = !a11ySettings.textLarge;
+    saveA11y();
+    applyA11y();
+    showToast(a11ySettings.textLarge ? '🔠 大字体已开启' : '🔠 大字体已关闭', 'info');
+}
+
+function toggleA11yMotion() {
+    a11ySettings.noMotion = !a11ySettings.noMotion;
+    saveA11y();
+    applyA11y();
+    showToast(a11ySettings.noMotion ? '🚫 动画已减少' : '🚫 动画已恢复', 'info');
+}
+
+function toggleA11yReading() {
+    a11ySettings.readingLine = !a11ySettings.readingLine;
+    saveA11y();
+    applyA11y();
+    showToast(a11ySettings.readingLine ? '📖 阅读辅助线已开启' : '📖 阅读辅助线已关闭', 'info');
+}
+
+function toggleA11yFocus() {
+    a11ySettings.focusStrong = !a11ySettings.focusStrong;
+    saveA11y();
+    applyA11y();
+    showToast(a11ySettings.focusStrong ? '🔍 焦点指示已增强' : '🔍 焦点指示已恢复', 'info');
+}
+
+function toggleA11yGlass() {
+    a11ySettings.glass = !a11ySettings.glass;
+    saveA11y();
+    applyA11y();
+    showToast(a11ySettings.glass ? '✨ 已开启液态玻璃' : '✨ 已关闭液态玻璃', 'info');
+}
+
+let ttsHoverMode = false;
+let ttsLockedEl = null;
+let ttsHoverTimer = null;
+
+function toggleA11yTTS() {
+    if (!('speechSynthesis' in window)) {
+        showToast('您的浏览器不支持语音合成', 'error');
+        return;
+    }
+    window.speechSynthesis.cancel();
+    ttsHoverMode = !ttsHoverMode;
+    ttsLockedEl = null;
+
+    if (ttsHoverMode) {
+        // 启用"指哪读哪"模式
+        showToast('🔊 已开启指读模式', 'info');
+        document.body.classList.add('a11y-tts-hover');
+        showTtsHint();
+
+        // 播放语音欢迎语
+        const welcomeText = '欢迎使用无障碍语音模式。现在您可以将鼠标移动到页面的任意文字上，语音会自动朗读该段内容。再次点击朗读按钮，或按 Alt 加 J 键，可以关闭语音模式。';
+        const utter = new SpeechSynthesisUtterance(welcomeText);
+        utter.lang = 'zh-CN';
+        utter.rate = 1.0;
+        utter.pitch = 1.0;
+        utter.volume = 1.0;
+        window.speechSynthesis.speak(utter);
+    } else {
+        document.body.classList.remove('a11y-tts-hover', 'a11y-tts-locked');
+        document.querySelectorAll('.a11y-tts-speaking').forEach(e => e.classList.remove('a11y-tts-speaking'));
+        hideTtsHint();
+        showToast('🔇 已关闭指读模式', 'info');
+
+        // 关闭时也播报一句
+        const utter = new SpeechSynthesisUtterance('语音模式已关闭。');
+        utter.lang = 'zh-CN';
+        utter.rate = 1.0;
+        window.speechSynthesis.speak(utter);
+    }
+}
+
+function showTtsHint() {
+    let hint = document.getElementById('tts-hint');
+    if (hint) return;
+    hint = document.createElement('div');
+    hint.id = 'tts-hint';
+    hint.style.cssText = 'position:fixed;top:130px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#6C5CE7,#A29BFE);color:white;padding:10px 20px;border-radius:24px;box-shadow:0 4px 20px rgba(108,92,231,0.4);z-index:10000;font-size:13px;display:flex;align-items:center;gap:8px;animation:slideDown 0.3s;';
+    hint.innerHTML = '<span style="font-size:18px;">👆</span> 鼠标移到文字上即可朗读 · 点击文字锁定 · <kbd style="background:rgba(255,255,255,0.2);padding:2px 6px;border-radius:4px;font-family:monospace;">Alt+J</kbd> 关闭 · <a href="javascript:void(0)" onclick="toggleA11yTTS()" style="color:#FFD700;text-decoration:underline;">立即关闭</a>';
+    document.body.appendChild(hint);
+}
+
+function hideTtsHint() {
+    const hint = document.getElementById('tts-hint');
+    if (hint) hint.remove();
+}
+
+// 朗读指定元素
+function speakElement(el) {
+    if (!el || !ttsHoverMode) return;
+    const text = (el.textContent || '').trim();
+    if (!text || text.length < 2) return;
+    const cleanText = text.substring(0, 500);
+
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(cleanText);
+    utter.lang = 'zh-CN';
+    utter.rate = 1.0;
+    utter.pitch = 1.0;
+    utter.volume = 1.0;
+    window.speechSynthesis.speak(utter);
+
+    // 高亮当前朗读元素
+    document.querySelectorAll('.a11y-tts-speaking').forEach(e => e.classList.remove('a11y-tts-speaking'));
+    el.classList.add('a11y-tts-speaking');
+}
+
+// 鼠标移动：悬停朗读（节流）
+document.addEventListener('mousemove', (e) => {
+    if (!ttsHoverMode || ttsLockedEl) return;
+    if (ttsHoverTimer) clearTimeout(ttsHoverTimer);
+    ttsHoverTimer = setTimeout(() => {
+        const el = e.target;
+        if (!el || el.closest('.a11y-panel') || el.closest('.a11y-launcher') ||
+            el.closest('.modal-overlay') || el.closest('#splash') || el.closest('#tts-hint')) return;
+        // 排除太短或没有文字的元素
+        if (el.children.length > 5) return;  // 容器
+        const text = (el.textContent || '').trim();
+        if (text.length < 2 || text.length > 800) return;
+        speakElement(el);
+    }, 250);
+});
+
+// 点击：锁定/解锁朗读
+document.addEventListener('click', (e) => {
+    if (!ttsHoverMode) return;
+    if (e.target.closest('.a11y-panel') || e.target.closest('.a11y-launcher')) return;
+
+    // 切换锁定
+    if (ttsLockedEl) {
+        ttsLockedEl = null;
+        document.body.classList.remove('a11y-tts-locked');
+        showToast('🔓 已取消锁定', 'info');
+        return;
+    }
+
+    const el = e.target;
+    if (el.closest('.modal-overlay') || el.closest('#splash') || el.closest('#tts-hint')) return;
+    const text = (el.textContent || '').trim();
+    if (text.length < 2) return;
+
+    ttsLockedEl = el;
+    document.body.classList.add('a11y-tts-locked');
+    showToast('🔒 已锁定朗读：' + text.substring(0, 20) + (text.length > 20 ? '...' : ''), 'info');
+    speakElement(el);
+}, true);
+
+// 初始化时加载无障碍设置
+(function initA11y() {
+    loadA11y();
+    // 加载保存的语言
+    try {
+        const savedLang = localStorage.getItem('app_lang');
+        if (savedLang && i18n[savedLang]) {
+            currentLang = savedLang;
+        }
+    } catch (e) {}
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            applyA11y();
+            applyLanguage(currentLang);
+        });
+    } else {
+        applyA11y();
+        applyLanguage(currentLang);
+    }
+})();
+
+// 关闭其他面板时自动关闭无障碍面板
+document.addEventListener('click', (e) => {
+    const panel = document.getElementById('a11y-panel');
+    if (!panel || !panel.classList.contains('show')) return;
+    if (e.target.closest('.a11y-panel') || e.target.closest('.a11y-launcher')) return;
+    panel.classList.remove('show');
+    const btn = document.querySelector('.a11y-launcher-btn');
+    if (btn) {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-expanded', 'false');
+    }
+});
+
+// 全局快捷键
+document.addEventListener('keydown', (e) => {
+    if (e.altKey) {
+        if (e.key === 'a' || e.key === 'A') {
+            e.preventDefault();
+            document.getElementById('a11y-panel').classList.toggle('show');
+        } else if (e.key === '+' || e.key === '=') {
+            e.preventDefault();
+            const idx = a11yZoomOrder.indexOf(a11ySettings.zoom);
+            if (idx < a11yZoomOrder.length - 1) setA11yZoom(a11yZoomOrder[idx + 1]);
+        } else if (e.key === '-' || e.key === '_') {
+            e.preventDefault();
+            const idx = a11yZoomOrder.indexOf(a11ySettings.zoom);
+            if (idx > 0) setA11yZoom(a11yZoomOrder[idx - 1]);
+        } else if (e.key === 't' || e.key === 'T') {
+            e.preventDefault();
+            toggleA11yText();
+        } else if (e.key === 'm' || e.key === 'M') {
+            e.preventDefault();
+            toggleA11yMotion();
+        } else if (e.key === 'r' || e.key === 'R') {
+            e.preventDefault();
+            toggleA11yReading();
+        } else if (e.key === 'j' || e.key === 'J') {
+            e.preventDefault();
+            toggleA11yTTS();
+        }
+    }
+    if (e.key === 'Escape') {
+        const panel = document.getElementById('a11y-panel');
+        if (panel) panel.classList.remove('show');
+    }
+});
+
+// 阅读辅助线：跟随鼠标
+document.addEventListener('mousemove', (e) => {
+    if (!a11ySettings.readingLine) return;
+    document.body.style.setProperty('--reading-line-y', (e.clientY - 40) + 'px');
+});
 
 // 自定义输入弹窗（替代浏览器原生 prompt）
 function showPrompt(title, placeholder = '请输入', defaultValue = '') {
@@ -5565,6 +8330,1991 @@ window.addEventListener('load', () => {
         loadTravelTip();
     }, 1000);
 });
+
+// ============================================================
+// ===== 旅行人格分析（AI 本地算法，零 API KEY） =====
+// ============================================================
+
+// 人格原型库
+const PERSONALITY_ARCHETYPES = [
+    { id: 'explorer', name: '极限探索者', emoji: '🌍', desc: '世界很大，你的脚步从未停下', color: '#FF764D' },
+    { id: 'literary', name: '文艺漫游者', emoji: '🎭', desc: '用脚步丈量世界，用文字记录美好', color: '#6C5CE7' },
+    { id: 'healing', name: '治愈系旅人', emoji: '🌸', desc: '在旅途中寻找内心的平静', color: '#00B894' },
+    { id: 'photographer', name: '摄影大师', emoji: '📸', desc: '用镜头定格每一个难忘瞬间', color: '#74B9FF' },
+    { id: 'foodie', name: '美食猎人', emoji: '🍜', desc: '胃在哪里，旅行就在哪里', color: '#FDCB6E' },
+    { id: 'socialite', name: '派对动物', emoji: '🎉', desc: '旅行就是要和有趣的人一起', color: '#FD79A8' },
+    { id: 'solo', name: '独行侠', emoji: '🎒', desc: '一个人也能拥有整个世界', color: '#636E72' },
+    { id: 'adventurer', name: '户外冒险家', emoji: '⛰️', desc: '挑战极限，拥抱未知', color: '#00CEC9' },
+    { id: 'seasons', name: '季节追随者', emoji: '🍂', desc: '四季轮回，每一次都是新的开始', color: '#A29BFE' },
+    { id: 'romantic', name: '浪漫双鱼', emoji: '💑', desc: '和爱人在路上，是最好的浪漫', color: '#FF7675' },
+    { id: 'family', name: '家庭至上', emoji: '👨‍👩‍👧', desc: '和家人一起看世界，是最幸福的事', color: '#55EFC4' },
+    { id: 'cultural', name: '文化沉浸者', emoji: '🏛️', desc: '每一座城都有自己的灵魂', color: '#5F27CD' },
+    { id: 'luxury', name: '轻奢玩家', emoji: '💎', desc: '旅行是一种生活美学', color: '#D4AF37' },
+    { id: 'budget', name: '穷游达人', emoji: '🪙', desc: '用最少的钱，看最多的风景', color: '#26DE81' },
+    { id: 'rookie', name: '旅行新手', emoji: '🌱', desc: '世界在等你开启更多故事', color: '#74B9FF' }
+];
+
+// MBTI 16 型人格（旅行定制版）
+const MBTI_TYPES = {
+    'INTJ': { name: '战略规划师', en: 'The Architect', emoji: '🏛️', desc: '用精密计划丈量世界', strength: '深度规划、文化探索', weakness: '可能错过即兴惊喜', color: '#5F27CD', bg: 'linear-gradient(135deg, #5F27CD, #341E97)' },
+    'INTP': { name: '思想漫游者', en: 'The Logician', emoji: '🧠', desc: '在旅途中寻找意义', strength: '独立思考、独特视角', weakness: '可能过于内省', color: '#A29BFE', bg: 'linear-gradient(135deg, #A29BFE, #6C5CE7)' },
+    'ENTJ': { name: '统帅指挥官', en: 'The Commander', emoji: '👑', desc: '高效征服每个目的地', strength: '组织力强、目标导向', weakness: '可能忽视过程享受', color: '#FF764D', bg: 'linear-gradient(135deg, #FF764D, #EE5A24)' },
+    'ENTP': { name: '创意辩论家', en: 'The Debater', emoji: '💡', desc: '在未知中寻找灵感', strength: '灵活应变、创新体验', weakness: '可能规划不足', color: '#FDCB6E', bg: 'linear-gradient(135deg, #FDCB6E, #F39C12)' },
+    'INFJ': { name: '精神倡导者', en: 'The Advocate', emoji: '🌙', desc: '追求有意义的旅行', strength: '深度共情、精神共鸣', weakness: '可能过度理想化', color: '#6C5CE7', bg: 'linear-gradient(135deg, #6C5CE7, #5F27CD)' },
+    'INFP': { name: '治愈调停者', en: 'The Mediator', emoji: '🌸', desc: '在风景中安放灵魂', strength: '治愈自我、感受美好', weakness: '可能过于感性', color: '#FD79A8', bg: 'linear-gradient(135deg, #FD79A8, #E84393)' },
+    'ENFJ': { name: '温暖主人公', en: 'The Protagonist', emoji: '🤗', desc: '用旅行连接你我', strength: '善于组织、关怀同伴', weakness: '可能忽略自己', color: '#00B894', bg: 'linear-gradient(135deg, #00B894, #00917C)' },
+    'ENFP': { name: '自由竞选者', en: 'The Campaigner', emoji: '🦋', desc: '让每次旅行都是冒险', strength: '热情洋溢、感染力强', weakness: '可能难以坚持', color: '#FF7675', bg: 'linear-gradient(135deg, #FF7675, #D63031)' },
+    'ISTJ': { name: '稳重物流师', en: 'The Logistician', emoji: '📋', desc: '细节决定旅行品质', strength: '严谨可靠、不出差错', weakness: '可能缺乏弹性', color: '#636E72', bg: 'linear-gradient(135deg, #636E72, #2D3436)' },
+    'ISFJ': { name: '温暖守卫者', en: 'The Defender', emoji: '🛡️', desc: '守护每一段温馨旅程', strength: '细致体贴、回忆收藏', weakness: '可能委屈自己', color: '#55EFC4', bg: 'linear-gradient(135deg, #55EFC4, #00B894)' },
+    'ESTJ': { name: '务实总经理', en: 'The Executive', emoji: '💼', desc: '高效执行每一站', strength: '执行力强、可靠务实', weakness: '可能忽视感受', color: '#74B9FF', bg: 'linear-gradient(135deg, #74B9FF, #0984E3)' },
+    'ESFJ': { name: '热心执政官', en: 'The Consul', emoji: '💝', desc: '和所爱之人共创回忆', strength: '重视关系、营造氛围', weakness: '可能过度在意他人', color: '#FF7675', bg: 'linear-gradient(135deg, #FF7675, #E17055)' },
+    'ISTP': { name: '冷静鉴赏家', en: 'The Virtuoso', emoji: '🔧', desc: '用理性解读风景', strength: '动手能力强、爱探索', weakness: '可能不善表达', color: '#00CEC9', bg: 'linear-gradient(135deg, #00CEC9, #00917C)' },
+    'ISFP': { name: '自由探险家', en: 'The Adventurer', emoji: '🎨', desc: '用感官记录世界', strength: '审美独到、活在当下', weakness: '可能抗拒计划', color: '#26DE81', bg: 'linear-gradient(135deg, #26DE81, #20BF6B)' },
+    'ESTP': { name: '冒险企业家', en: 'The Entrepreneur', emoji: '⚡', desc: '行动派的旅行王者', strength: '果断行动、临场发挥', weakness: '可能忽略细节', color: '#FDCB6E', bg: 'linear-gradient(135deg, #FDCB6E, #E67E22)' },
+    'ESFP': { name: '活力表演者', en: 'The Entertainer', emoji: '🎉', desc: '让旅程充满欢声笑语', strength: '热情开朗、感染力强', weakness: '可能缺乏深度', color: '#FD79A8', bg: 'linear-gradient(135deg, #FD79A8, #E84393)' }
+};
+
+// MBTI 四维名称
+const MBTI_DIMS = [
+    { code: 'EI', left: { code: 'E', label: '外向', desc: '从外界获取能量' }, right: { code: 'I', label: '内向', desc: '从内心获取能量' } },
+    { code: 'SN', left: { code: 'S', label: '感觉', desc: '关注具体事实' }, right: { code: 'N', label: '直觉', desc: '关注抽象可能' } },
+    { code: 'TF', left: { code: 'T', label: '思考', desc: '逻辑决策' }, right: { code: 'F', label: '情感', desc: '价值决策' } },
+    { code: 'JP', left: { code: 'J', label: '判断', desc: '计划有序' }, right: { code: 'P', label: '感知', desc: '灵活随性' } }
+];
+
+// 六大人格维度配置
+const PERSONALITY_DIMENSIONS = [
+    { key: 'explorer', label: '探索指数', emoji: '🗺️', color: '#FF764D' },
+    { key: 'culture', label: '文化深度', emoji: '🏛️', color: '#6C5CE7' },
+    { key: 'healing', label: '治愈指数', emoji: '🌸', color: '#00B894' },
+    { key: 'adventure', label: '冒险指数', emoji: '⛰️', color: '#00CEC9' },
+    { key: 'literary', label: '文艺指数', emoji: '✍️', color: '#A29BFE' },
+    { key: 'social', label: '社交指数', emoji: '👥', color: '#FD79A8' }
+];
+
+// 缓存最近一次分析结果
+let _personalityCache = null;
+let _posterPaletteIndex = 0;
+
+const POSTER_PALETTES = [
+    ['#FF764D', '#FDCB6E', '#6C5CE7'],  // 橙→黄→紫
+    ['#00B894', '#74B9FF', '#A29BFE'],  // 绿→蓝→紫
+    ['#FD79A8', '#FDCB6E', '#FF7675'],  // 粉→黄→红
+    ['#5F27CD', '#00CEC9', '#74B9FF'],  // 紫→青→蓝
+    ['#26DE81', '#FDCB6E', '#FF764D']   // 绿→黄→橙
+];
+
+// 主分析函数（纯本地，无需网络）
+function analyzePersonality() {
+    if (!archives || archives.length === 0) {
+        return null;
+    }
+
+    const data = {
+        totalTrips: archives.length,
+        totalDays: 0,
+        totalCities: new Set(),
+        totalPhotos: 0,
+        totalExpense: 0,
+        totalSpots: 0,
+        moodCount: { happy: 0, excited: 0, peaceful: 0, tired: 0, nostalgic: 0 },
+        tagsCount: {},
+        seasonCount: { spring: 0, summer: 0, autumn: 0, winter: 0 },
+        ratingSum: 0,
+        ratingCount: 0,
+        culturalSpots: 0,
+        naturalSpots: 0,
+        foodExpense: 0,
+        hotelExpense: 0,
+        transportExpense: 0,
+        longTrips: 0,
+        shortTrips: 0,
+        soloTrips: 0,
+        groupTrips: 0,
+        reflectionLengths: [],
+        allTextLength: 0,
+        companionSet: new Set(),
+        destinations: []
+    };
+
+    archives.forEach(a => {
+        if (!a) return;
+        const startDate = a.start ? new Date(a.start) : null;
+        const endDate = a.end ? new Date(a.end) : null;
+        let days = 1;
+        if (startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) {
+            days = Math.max(1, Math.ceil((endDate - startDate) / 86400000) + 1);
+        }
+        data.totalDays += days;
+        if (days > 7) data.longTrips++;
+        if (days < 3) data.shortTrips++;
+        if (a.destination) {
+            data.totalCities.add(a.destination);
+            data.destinations.push(a.destination);
+        }
+        data.totalPhotos += (a.photos && a.photos.length) || 0;
+        data.totalSpots += (a.spots && a.spots.length) || 0;
+        if (a.mood && data.moodCount[a.mood] !== undefined) {
+            data.moodCount[a.mood]++;
+        }
+        if (a.rating) {
+            data.ratingSum += parseFloat(a.rating);
+            data.ratingCount++;
+        }
+        if (startDate && !isNaN(startDate.getMonth)) {
+            const month = startDate.getMonth() + 1;
+            if ([3, 4, 5].includes(month)) data.seasonCount.spring++;
+            else if ([6, 7, 8].includes(month)) data.seasonCount.summer++;
+            else if ([9, 10, 11].includes(month)) data.seasonCount.autumn++;
+            else data.seasonCount.winter++;
+        }
+        const companions = (a.companions || '').split(/[,，、\s]+/).filter(s => s.trim());
+        const isSolo = companions.length === 0 ||
+            companions.every(c => /独自|一个人|自己/.test(c));
+        if (isSolo) data.soloTrips++;
+        else data.groupTrips++;
+        companions.forEach(c => { if (c) data.companionSet.add(c); });
+
+        if (a.reflection) {
+            data.reflectionLengths.push(a.reflection.length);
+            data.allTextLength += a.reflection.length;
+        }
+        (a.expenses || []).forEach(e => {
+            const amount = parseFloat(e.amount) || 0;
+            data.totalExpense += amount;
+            const cat = (e.category || '').toLowerCase();
+            if (/餐|食|饮|吃|喝|酒|咖啡|下午茶/.test(cat)) data.foodExpense += amount;
+            if (/住|酒|民|宿|房|酒店|民宿/.test(cat)) data.hotelExpense += amount;
+            if (/机|火|车|船|地|交|高|航/.test(cat)) data.transportExpense += amount;
+        });
+        (a.spots || []).forEach(s => {
+            const name = (s.name || '').toLowerCase();
+            if (/博物馆|寺庙|教堂|古建|文化|古迹|遗址|故居|纪念馆|书院|陵墓|佛|道|宫|寺|塔|城|镇|古村|古镇/.test(name)) {
+                data.culturalSpots++;
+            }
+            if (/公园|海滩|山川|森林|湖泊|草原|海岛|雪山|峡|瀑|湿地|温泉|自然|田园|山|水/.test(name)) {
+                data.naturalSpots++;
+            }
+        });
+        (a.tags || []).forEach(t => {
+            if (t) data.tagsCount[t] = (data.tagsCount[t] || 0) + 1;
+        });
+    });
+
+    // 计算六维得分 (0-100)
+    const dimensions = {};
+    // 1. 探索指数
+    dimensions.explorer = Math.min(100, data.totalCities.size * 18 + data.totalTrips * 2);
+    // 2. 文化深度
+    dimensions.culture = data.totalSpots > 0
+        ? Math.min(100, (data.culturalSpots / data.totalSpots) * 100 * 1.3)
+        : (data.totalTrips > 0 ? 30 : 0);
+    // 3. 治愈指数
+    const peacefulRatio = (data.moodCount.peaceful + data.moodCount.nostalgic) / Math.max(1, data.totalTrips);
+    dimensions.healing = Math.min(100, peacefulRatio * 100 + (data.naturalSpots > 0 ? 20 : 0));
+    // 4. 冒险指数
+    const excitedRatio = (data.moodCount.excited + data.moodCount.happy) / Math.max(1, data.totalTrips);
+    const longRatio = data.longTrips / Math.max(1, data.totalTrips);
+    dimensions.adventure = Math.min(100, longRatio * 50 + excitedRatio * 50 + (data.totalCities.size * 3));
+    // 5. 文艺指数
+    const avgReflection = data.reflectionLengths.length > 0
+        ? data.reflectionLengths.reduce((s, n) => s + n, 0) / data.reflectionLengths.length
+        : 0;
+    dimensions.literary = Math.min(100, avgReflection / 4 + (data.totalPhotos > 0 ? 10 : 0));
+    // 6. 社交指数
+    const groupRatio = data.groupTrips / Math.max(1, data.totalTrips);
+    dimensions.social = Math.min(100, groupRatio * 80 + (data.companionSet.size * 5));
+
+    // 衍生指数（用于匹配原型）
+    const extra = {
+        photography: Math.min(100, (data.totalPhotos / Math.max(1, data.totalTrips)) * 6),
+        foodie: data.totalExpense > 0
+            ? Math.min(100, (data.foodExpense / data.totalExpense) * 200)
+            : 0,
+        luxury: data.totalTrips > 0
+            ? Math.min(100, (data.hotelExpense / Math.max(1, data.totalExpense)) * 250)
+            : 0,
+        budget: data.totalExpense > 0
+            ? Math.min(100, 100 - (data.hotelExpense / Math.max(1, data.totalExpense)) * 200)
+            : 0
+    };
+
+    // 心情分布
+    const moodTotal = Object.values(data.moodCount).reduce((s, n) => s + n, 0) || 1;
+    const moodDistribution = {};
+    Object.keys(data.moodCount).forEach(k => {
+        moodDistribution[k] = Math.round((data.moodCount[k] / moodTotal) * 100);
+    });
+
+    return {
+        stats: {
+            totalTrips: data.totalTrips,
+            totalDays: data.totalDays,
+            totalCities: data.totalCities.size,
+            totalPhotos: data.totalPhotos,
+            totalSpots: data.totalSpots,
+            totalExpense: data.totalExpense,
+            avgRating: data.ratingCount > 0 ? (data.ratingSum / data.ratingCount).toFixed(1) : 0,
+            topDestination: modeOf(data.destinations) || '—',
+            reflectionCount: data.reflectionLengths.length,
+            tagCount: Object.keys(data.tagsCount).length,
+            ratingCount: data.ratingCount
+        },
+        dimensions,
+        extra,
+        moodDistribution,
+        moodCount: data.moodCount,
+        topTags: Object.entries(data.tagsCount).sort((a, b) => b[1] - a[1]).slice(0, 6),
+        seasons: data.seasonCount,
+        companionCount: data.companionSet.size,
+        culturalSpots: data.culturalSpots,
+        naturalSpots: data.naturalSpots,
+        longTrips: data.longTrips,
+        shortTrips: data.shortTrips
+    };
+}
+
+// 计算 MBTI 4 维得分（每维 0-100，>50 为右极）
+function calculateMBTIScores(analysis) {
+    if (!analysis) return null;
+
+    // E/I: 社交指数 + 同行人多样度
+    const groupRatio = analysis.stats.totalTrips > 0
+        ? (analysis.companionCount / analysis.stats.totalTrips) : 0;
+    const socialScore = analysis.dimensions.social;
+    const EI = Math.min(100, socialScore * 0.7 + groupRatio * 30);
+
+    // S/N: 实务 vs 文化（自然+具体 vs 抽象+文化）
+    const naturalRatio = analysis.stats.totalSpots > 0
+        ? analysis.naturalSpots / analysis.stats.totalSpots : 0;
+    const culturalRatio = analysis.stats.totalSpots > 0
+        ? analysis.culturalSpots / analysis.stats.totalSpots : 0;
+    // S 倾向自然+评分详细（重事实），N 倾向文化+反思详细
+    const reflectionAvg = analysis.stats.reflectionCount > 0
+        ? (analysis.extra.literary || 0) : 0;
+    const SN = Math.min(100, culturalRatio * 100 * 0.6 + reflectionAvg * 0.4 + 30);
+
+    // T/F: 思考型（平静+疲惫=理性）vs 情感型（开心+兴奋+怀念=情感）
+    const tMood = (analysis.moodCount.peaceful || 0) + (analysis.moodCount.tired || 0);
+    const fMood = (analysis.moodCount.happy || 0) + (analysis.moodCount.excited || 0) + (analysis.moodCount.nostalgic || 0);
+    const totalMood = tMood + fMood || 1;
+    const TF = (fMood / totalMood) * 100;
+
+    // J/P: 结构化 vs 随性（标签+评分+反思的填充率）
+    const tagRate = analysis.stats.totalTrips > 0
+        ? Math.min(1, analysis.stats.tagCount / analysis.stats.totalTrips) : 0;
+    const ratingRate = analysis.stats.totalTrips > 0
+        ? Math.min(1, analysis.stats.ratingCount / analysis.stats.totalTrips) : 0;
+    const reflectRate = analysis.stats.totalTrips > 0
+        ? Math.min(1, analysis.stats.reflectionCount / analysis.stats.totalTrips) : 0;
+    const JPScore = tagRate * 0.3 + ratingRate * 0.4 + reflectRate * 0.3;
+    const JP = JPScore * 100;
+
+    return {
+        EI: Math.round(EI),
+        SN: Math.round(SN),
+        TF: Math.round(TF),
+        JP: Math.round(JP),
+        type: (EI >= 50 ? 'E' : 'I') + (SN >= 50 ? 'N' : 'S') + (TF >= 50 ? 'F' : 'T') + (JP >= 50 ? 'J' : 'P'),
+        raw: { EI, SN, TF, JP }
+    };
+}
+
+function modeOf(arr) {
+    if (!arr.length) return null;
+    const cnt = {};
+    arr.forEach(v => { cnt[v] = (cnt[v] || 0) + 1; });
+    return Object.entries(cnt).sort((a, b) => b[1] - a[1])[0][0];
+}
+
+// 根据分析结果匹配人格原型
+function determineArchetypes(analysis) {
+    if (!analysis) return [];
+    const d = analysis.dimensions;
+    const e = analysis.extra;
+    const s = analysis.stats;
+    const scores = [];
+
+    // 极限探索者
+    if (s.totalCities >= 3) {
+        scores.push({ ...PERSONALITY_ARCHETYPES[0], score: d.explorer });
+    }
+    // 文艺漫游者
+    if (d.literary >= 25 || d.culture >= 30) {
+        scores.push({ ...PERSONALITY_ARCHETYPES[1], score: (d.literary + d.culture) / 2 + 10 });
+    }
+    // 治愈系旅人
+    if (d.healing >= 30) {
+        scores.push({ ...PERSONALITY_ARCHETYPES[2], score: d.healing });
+    }
+    // 摄影大师
+    if (e.photography >= 35) {
+        scores.push({ ...PERSONALITY_ARCHETYPES[3], score: e.photography });
+    }
+    // 美食猎人
+    if (e.foodie >= 35) {
+        scores.push({ ...PERSONALITY_ARCHETYPES[4], score: e.foodie });
+    }
+    // 派对动物
+    if (d.social >= 60 && d.adventure >= 30) {
+        scores.push({ ...PERSONALITY_ARCHETYPES[5], score: (d.social + d.adventure) / 2 });
+    }
+    // 独行侠
+    if (d.social < 35) {
+        scores.push({ ...PERSONALITY_ARCHETYPES[6], score: 100 - d.social });
+    }
+    // 户外冒险家
+    if (d.adventure >= 50 || analysis.stats.totalCities >= 5) {
+        scores.push({ ...PERSONALITY_ARCHETYPES[7], score: Math.max(d.adventure, 60) });
+    }
+    // 季节追随者
+    const seasonVals = Object.values(analysis.seasons);
+    const seasonHas = seasonVals.filter(v => v > 0).length;
+    if (s.totalTrips >= 4 && seasonHas >= 3) {
+        scores.push({ ...PERSONALITY_ARCHETYPES[8], score: 70 });
+    }
+    // 浪漫双鱼
+    if (analysis.companionCount >= 1 && analysis.companionCount <= 3 && d.social >= 35 && d.social < 60) {
+        scores.push({ ...PERSONALITY_ARCHETYPES[9], score: 65 });
+    }
+    // 家庭至上
+    if (analysis.companionCount >= 2) {
+        scores.push({ ...PERSONALITY_ARCHETYPES[10], score: 60 });
+    }
+    // 文化沉浸者
+    if (d.culture >= 50) {
+        scores.push({ ...PERSONALITY_ARCHETYPES[11], score: d.culture + 5 });
+    }
+    // 轻奢玩家
+    if (e.luxury >= 45) {
+        scores.push({ ...PERSONALITY_ARCHETYPES[12], score: e.luxury });
+    }
+    // 穷游达人
+    if (e.budget >= 60 && s.totalTrips >= 3) {
+        scores.push({ ...PERSONALITY_ARCHETYPES[13], score: e.budget });
+    }
+    // 旅行新手
+    if (s.totalTrips <= 2) {
+        scores.push({ ...PERSONALITY_ARCHETYPES[14], score: 50 });
+    }
+
+    // 去重（同 id 只留最高分）
+    const dedup = {};
+    scores.forEach(s => {
+        if (!dedup[s.id] || dedup[s.id].score < s.score) {
+            dedup[s.id] = s;
+        }
+    });
+    const result = Object.values(dedup).sort((a, b) => b.score - a.score);
+
+    // 至少返回 1 个
+    if (result.length === 0) {
+        return [{ ...PERSONALITY_ARCHETYPES[14], score: 50 }];
+    }
+    return result.slice(0, 3);
+}
+
+// 生成性格宣言
+function generateDeclaration(archetypes, analysis) {
+    if (!archetypes.length) return '';
+    const main = archetypes[0];
+    const others = archetypes.slice(1).map(a => a.name).join('、');
+    const top = analysis.stats.topDestination;
+    const moodList = Object.entries(analysis.moodDistribution)
+        .filter(([k, v]) => v > 15)
+        .sort((a, b) => b[1] - a[1])
+        .map(([k]) => ({ happy: '开心', excited: '兴奋', peaceful: '平静', tired: '疲惫', nostalgic: '怀念' }[k]));
+
+    const moodText = moodList.length > 0
+        ? `路上大部分时候是${moodList[0]}的`
+        : '用心感受每一刻的';
+
+    const otherText = others ? `，骨子里又藏着${others}的影子` : '';
+
+    return `我是一位${main.name}${otherText}。\n\n${moodText}时候，我总在${top || '远方'}寻找自己。\n\n` +
+        `过去的 ${analysis.stats.totalTrips} 次旅行，${analysis.stats.totalDays} 天，${analysis.stats.totalCities} 座城市 —— ` +
+        `每一次出发都是一次重新认识自己的过程。\n\n` +
+        `下一站？也许在地图上还没标出来的地方。`;
+}
+
+// 渲染人格分析页
+function renderPersonalityPage() {
+    if (!archives) archives = [];
+    const content = document.getElementById('personality-content');
+    const empty = document.getElementById('personality-empty');
+    const main = document.getElementById('personality-main');
+    const mbtiWrap = document.getElementById('personality-mbti');
+    const aiWrap = document.getElementById('personality-ai-wrap');
+    const cards = document.getElementById('personality-cards');
+    const dimWrap = document.getElementById('personality-dimensions-wrap');
+    const statsWrap = document.getElementById('personality-stats-wrap');
+    const moodWrap = document.getElementById('personality-mood-wrap');
+    const declWrap = document.getElementById('personality-declaration-wrap');
+    const actions = document.getElementById('personality-actions');
+    const tripCountEl = document.getElementById('personality-trip-count');
+
+    tripCountEl.textContent = archives.length;
+
+    if (archives.length === 0) {
+        empty.style.display = 'block';
+        [main, mbtiWrap, aiWrap, cards, dimWrap, statsWrap, moodWrap, declWrap, actions].forEach(el => {
+            if (el) el.style.display = 'none';
+        });
+        return;
+    }
+
+    const analysis = analyzePersonality();
+    if (!analysis) return;
+    _personalityCache = analysis;
+
+    const archetypes = determineArchetypes(analysis);
+    const mbtiScores = calculateMBTIScores(analysis);
+    const mainArchetype = archetypes[0];
+    const mbtiType = MBTI_TYPES[mbtiScores.type] || MBTI_TYPES['ISTJ'];
+
+    empty.style.display = 'none';
+
+    // 渲染主卡片
+    main.style.display = 'block';
+    document.getElementById('personality-main-emoji').textContent = mainArchetype.emoji;
+    document.getElementById('personality-main-name').textContent = mainArchetype.name;
+    document.getElementById('personality-main-tagline').textContent = mainArchetype.desc;
+    document.getElementById('personality-emoji-bg').textContent = mainArchetype.emoji;
+    const hero = main.querySelector('.personality-hero');
+    hero.style.background = `linear-gradient(135deg, ${mainArchetype.color} 0%, #FDCB6E 50%, #6C5CE7 100%)`;
+    const scoreVal = Math.round(mainArchetype.score);
+    const arc = document.getElementById('personality-score-arc');
+    const text = document.getElementById('personality-score-text');
+    if (arc && text) {
+        const circumference = 2 * Math.PI * 44;
+        const offset = circumference * (1 - scoreVal / 100);
+        setTimeout(() => {
+            arc.style.transition = 'stroke-dashoffset 1s ease';
+            arc.style.strokeDasharray = circumference;
+            arc.style.strokeDashoffset = offset;
+            text.textContent = scoreVal;
+        }, 100);
+    }
+
+    // 渲染 MBTI
+    mbtiWrap.style.display = 'block';
+    document.getElementById('mbti-type').textContent = mbtiScores.type;
+    document.getElementById('mbti-name').textContent = mbtiType.name;
+    document.getElementById('mbti-desc').textContent = mbtiType.desc;
+    document.getElementById('mbti-emoji').textContent = mbtiType.emoji;
+    document.getElementById('mbti-strength').textContent = mbtiType.strength;
+    document.getElementById('mbti-weakness').textContent = mbtiType.weakness;
+
+    // MBTI 四维进度条
+    const dimData = [
+        { key: 'EI', left: mbtiScores.EI, right: 100 - mbtiScores.EI, leftLabel: 'E 外向', rightLabel: 'I 内向', leftScore: 100 - mbtiScores.EI, rightScore: mbtiScores.EI, side: mbtiScores.EI >= 50 ? 'right' : 'left' },
+        { key: 'SN', left: 100 - mbtiScores.SN, right: mbtiScores.SN, leftLabel: 'S 感觉', rightLabel: 'N 直觉', leftScore: 100 - mbtiScores.SN, rightScore: mbtiScores.SN, side: mbtiScores.SN >= 50 ? 'right' : 'left' },
+        { key: 'TF', left: 100 - mbtiScores.TF, right: mbtiScores.TF, leftLabel: 'T 思考', rightLabel: 'F 情感', leftScore: 100 - mbtiScores.TF, rightScore: mbtiScores.TF, side: mbtiScores.TF >= 50 ? 'right' : 'left' },
+        { key: 'JP', left: 100 - mbtiScores.JP, right: mbtiScores.JP, leftLabel: 'J 判断', rightLabel: 'P 感知', leftScore: 100 - mbtiScores.JP, rightScore: mbtiScores.JP, side: mbtiScores.JP >= 50 ? 'right' : 'left' }
+    ];
+    document.getElementById('mbti-dims').innerHTML = dimData.map(d => {
+        const dominant = d.side === 'right' ? d.rightLabel : d.leftLabel;
+        const dominantVal = d.side === 'right' ? d.rightScore : d.leftScore;
+        return `
+            <div class="mbti-dim-row">
+                <div class="mbti-dim-bar ${d.side === 'left' ? 'left active' : ''}">${d.leftLabel}</div>
+                <div class="mbti-dim-bar ${d.side === 'right' ? 'right active' : ''}">${d.rightLabel}</div>
+            </div>
+            <div style="text-align: center; font-size: 11px; color: #888; margin: -4px 0 4px;">
+                倾向 <strong style="color: ${mbtiType.color};">${dominant}</strong> (${dominantVal}%)
+            </div>
+        `;
+    }).join('');
+
+    // 渲染人格卡片
+    cards.style.display = 'grid';
+    cards.innerHTML = archetypes.map((a, i) => `
+        <div class="personality-card rank-${i + 1}">
+            <div class="personality-card-rank">${['🥇', '🥈', '🥉'][i] || '⭐'} ${i + 1}号人格</div>
+            <div class="personality-card-emoji">${a.emoji}</div>
+            <div class="personality-card-name" style="color: ${a.color};">${a.name}</div>
+            <div class="personality-card-desc">${a.desc}</div>
+            <div class="personality-card-score-bar">
+                <div class="personality-card-score-fill" style="width: ${Math.round(a.score)}%; background: ${a.color};"></div>
+            </div>
+            <div style="font-size: 12px; color: #999; margin-top: 4px;">匹配度 ${Math.round(a.score)}%</div>
+        </div>
+    `).join('');
+
+    // 渲染六维雷达
+    dimWrap.style.display = 'block';
+    drawRadarChart('personality-radar', analysis.dimensions);
+    document.getElementById('personality-dimension-list').innerHTML = PERSONALITY_DIMENSIONS.map(d => {
+        const v = Math.round(analysis.dimensions[d.key] || 0);
+        return `
+            <div class="dimension-row">
+                <span class="dimension-label">${d.emoji} ${d.label}</span>
+                <div class="dimension-bar">
+                    <div class="dimension-fill" style="width: ${v}%; background: ${d.color};"></div>
+                </div>
+                <span class="dimension-value">${v}</span>
+            </div>
+        `;
+    }).join('');
+
+    // 渲染详细统计
+    statsWrap.style.display = 'block';
+    document.getElementById('personality-stats-grid').innerHTML = `
+        <div class="stat-card">
+            <div class="stat-value">${analysis.stats.totalTrips}</div>
+            <div class="stat-label">次旅行</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">${analysis.stats.totalDays}</div>
+            <div class="stat-label">天在路上</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">${analysis.stats.totalCities}</div>
+            <div class="stat-label">座城市</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">${analysis.stats.totalPhotos}</div>
+            <div class="stat-label">张照片</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">${analysis.stats.avgRating || '—'}</div>
+            <div class="stat-label">平均评分</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">${analysis.stats.totalSpots}</div>
+            <div class="stat-label">个景点</div>
+        </div>
+    `;
+
+    // 渲染心情分布
+    moodWrap.style.display = 'block';
+    const moodLabels = {
+        happy: { emoji: '😊', label: '开心' },
+        excited: { emoji: '🤩', label: '兴奋' },
+        peaceful: { emoji: '😌', label: '平静' },
+        tired: { emoji: '😓', label: '疲惫' },
+        nostalgic: { emoji: '🥹', label: '怀念' }
+    };
+    const moodColors = {
+        happy: '#FDCB6E', excited: '#FF7675', peaceful: '#74B9FF', tired: '#B2BEC3', nostalgic: '#A29BFE'
+    };
+    document.getElementById('personality-mood-bars').innerHTML = Object.keys(moodLabels).map(k => {
+        const v = analysis.moodDistribution[k] || 0;
+        return `
+            <div class="dimension-row" style="margin-bottom: 10px;">
+                <span class="dimension-label">${moodLabels[k].emoji} ${moodLabels[k].label}</span>
+                <div class="dimension-bar">
+                    <div class="dimension-fill" style="width: ${v}%; background: ${moodColors[k]};"></div>
+                </div>
+                <span class="dimension-value">${v}%</span>
+            </div>
+        `;
+    }).join('');
+
+    // 渲染性格宣言
+    declWrap.style.display = 'block';
+    document.getElementById('personality-declaration').textContent = generateDeclaration(archetypes, analysis);
+
+    // 显示按钮
+    actions.style.display = 'flex';
+
+    // 显示 AI 区域（如果已配置 API Key）
+    if (hasAIConfig()) {
+        aiWrap.style.display = 'block';
+        loadCachedAIPersonality() || requestAIPersonality(analysis);
+    } else {
+        aiWrap.style.display = 'none';
+    }
+}
+
+// 绘制六维雷达图
+function drawRadarChart(canvasId, dimensions) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const size = canvas.width;
+    const cx = size / 2;
+    const cy = size / 2;
+    const radius = size * 0.36;
+    const N = PERSONALITY_DIMENSIONS.length;
+
+    ctx.clearRect(0, 0, size, size);
+
+    // 绘制网格层
+    for (let layer = 1; layer <= 5; layer++) {
+        const r = radius * (layer / 5);
+        ctx.beginPath();
+        for (let i = 0; i < N; i++) {
+            const angle = (Math.PI * 2 * i) / N - Math.PI / 2;
+            const x = cx + Math.cos(angle) * r;
+            const y = cy + Math.sin(angle) * r;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = layer === 5 ? 'rgba(0,0,0,0.15)' : 'rgba(0,0,0,0.06)';
+        ctx.lineWidth = layer === 5 ? 1.5 : 1;
+        ctx.stroke();
+    }
+
+    // 绘制轴线
+    for (let i = 0; i < N; i++) {
+        const angle = (Math.PI * 2 * i) / N - Math.PI / 2;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + Math.cos(angle) * radius, cy + Math.sin(angle) * radius);
+        ctx.strokeStyle = 'rgba(0,0,0,0.1)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
+
+    // 绘制数据多边形
+    ctx.beginPath();
+    for (let i = 0; i < N; i++) {
+        const d = PERSONALITY_DIMENSIONS[i];
+        const val = (dimensions[d.key] || 0) / 100;
+        const angle = (Math.PI * 2 * i) / N - Math.PI / 2;
+        const r = radius * val;
+        const x = cx + Math.cos(angle) * r;
+        const y = cy + Math.sin(angle) * r;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    const mainColor = (_personalityCache && determineArchetypes(_personalityCache)[0]?.color) || '#FF764D';
+    ctx.fillStyle = mainColor + '40';  // 25% 透明度
+    ctx.fill();
+    ctx.strokeStyle = mainColor;
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    // 绘制顶点和标签
+    for (let i = 0; i < N; i++) {
+        const d = PERSONALITY_DIMENSIONS[i];
+        const val = (dimensions[d.key] || 0) / 100;
+        const angle = (Math.PI * 2 * i) / N - Math.PI / 2;
+        const r = radius * val;
+        const x = cx + Math.cos(angle) * r;
+        const y = cy + Math.sin(angle) * r;
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = d.color;
+        ctx.fill();
+
+        // 标签
+        const labelAngle = angle;
+        const labelR = radius + 20;
+        const lx = cx + Math.cos(labelAngle) * labelR;
+        const ly = cy + Math.sin(labelAngle) * labelR;
+        ctx.fillStyle = '#333';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(d.emoji + d.label, lx, ly);
+    }
+}
+
+// 重新分析
+function reAnalyzePersonality() {
+    _personalityCache = null;
+    renderPersonalityPage();
+    showToast('🔄 已重新分析', 'success');
+}
+
+// 打开海报模态框
+function openPersonalityPosterModal() {
+    if (!_personalityCache) {
+        showToast('请先生成分析结果', 'error');
+        return;
+    }
+    _posterPaletteIndex = Math.floor(Math.random() * POSTER_PALETTES.length);
+    renderPersonalityPoster();
+    openModal('personality-poster');
+}
+
+function regeneratePersonalityPoster() {
+    _posterPaletteIndex = (_posterPaletteIndex + 1) % POSTER_PALETTES.length;
+    renderPersonalityPoster();
+}
+
+// 多套海报模板
+const POSTER_TEMPLATES = [
+    { id: 'classic', name: '经典橙', draw: drawPosterClassic },
+    { id: 'mbti', name: 'MBTI 渐变', draw: drawPosterMBTI },
+    { id: 'magazine', name: '杂志风', draw: drawPosterMagazine },
+    { id: 'polaroid', name: '拍立得', draw: drawPosterPolaroid },
+    { id: 'dark', name: '暗夜黑', draw: drawPosterDark }
+];
+
+let _posterTemplateIndex = 0;
+
+// 渲染海报（Canvas）
+function renderPersonalityPoster() {
+    if (!_personalityCache) return;
+    const tmpl = POSTER_TEMPLATES[_posterTemplateIndex];
+    if (tmpl && typeof tmpl.draw === 'function') {
+        tmpl.draw();
+    } else {
+        drawPosterClassic();
+    }
+    // 海报模态框中加模板切换按钮
+    updatePosterTemplateButtons();
+}
+
+function updatePosterTemplateButtons() {
+    const wrap = document.querySelector('#modal-personality-poster .modal-actions');
+    if (!wrap) return;
+    let tmplBar = document.getElementById('poster-template-bar');
+    if (!tmplBar) {
+        tmplBar = document.createElement('div');
+        tmplBar.id = 'poster-template-bar';
+        tmplBar.style.cssText = 'display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; justify-content: center;';
+        wrap.parentNode.insertBefore(tmplBar, wrap);
+    }
+    tmplBar.innerHTML = POSTER_TEMPLATES.map((t, i) => `
+        <button onclick="setPosterTemplate(${i})"
+            style="padding: 4px 10px; border-radius: 12px; border: 1px solid ${i === _posterTemplateIndex ? '#FF764D' : '#ddd'};
+            background: ${i === _posterTemplateIndex ? '#FF764D' : 'white'};
+            color: ${i === _posterTemplateIndex ? 'white' : '#555'};
+            font-size: 11px; cursor: pointer; transition: all 0.2s;">
+            ${t.name}
+        </button>
+    `).join('');
+}
+
+function setPosterTemplate(i) {
+    _posterTemplateIndex = i;
+    renderPersonalityPoster();
+}
+
+function regeneratePersonalityPoster() {
+    // 循环切换模板
+    _posterTemplateIndex = (_posterTemplateIndex + 1) % POSTER_TEMPLATES.length;
+    renderPersonalityPoster();
+}
+
+// ============== 海报模板 1：经典橙 ==============
+function drawPosterClassic() {
+    if (!_personalityCache) return;
+    const canvas = document.getElementById('personality-poster-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+    const palette = POSTER_PALETTES[_posterPaletteIndex];
+    const [c1, c2, c3] = palette;
+
+    // 背景渐变
+    const bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, c1);
+    bg.addColorStop(0.5, c2);
+    bg.addColorStop(1, c3);
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.beginPath();
+    ctx.arc(W * 0.85, H * 0.15, 240, 0, Math.PI * 2);
+    ctx.fill();
+
+    const archetypes = determineArchetypes(_personalityCache);
+    const main = archetypes[0];
+    const mbtiScores = calculateMBTIScores(_personalityCache);
+    const mbtiType = MBTI_TYPES[mbtiScores.type];
+
+    // 顶部
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 36px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('🧬 旅途忆档', 60, 90);
+    ctx.font = '20px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText('我的旅行人格报告', W - 60, 90);
+
+    // MBTI 标识
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    roundRect(ctx, W / 2 - 110, 140, 220, 70, 35, true, false);
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 36px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(mbtiScores.type, W / 2, 175);
+    ctx.font = '14px sans-serif';
+    ctx.fillText(mbtiType.emoji + ' ' + mbtiType.name, W / 2, 200);
+
+    // 主卡片
+    const cardY = 240;
+    const cardH = 320;
+    const cardGrad = ctx.createLinearGradient(60, cardY, 60, cardY + cardH);
+    cardGrad.addColorStop(0, 'rgba(255,255,255,0.95)');
+    cardGrad.addColorStop(1, 'rgba(255,255,255,0.85)');
+    ctx.fillStyle = cardGrad;
+    roundRect(ctx, 60, cardY, W - 120, cardH, 32, true, false);
+
+    // 主人格 emoji
+    ctx.font = '160px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(main.emoji, W / 2, cardY + 100);
+
+    // 主人格名字
+    ctx.fillStyle = '#333';
+    ctx.font = 'bold 48px sans-serif';
+    ctx.fillText(main.name, W / 2, cardY + 215);
+
+    // 主人格描述
+    ctx.fillStyle = '#666';
+    ctx.font = '20px sans-serif';
+    ctx.fillText(main.desc, W / 2, cardY + 255);
+
+    // 匹配度
+    ctx.fillStyle = main.color;
+    ctx.font = 'bold 18px sans-serif';
+    ctx.fillText('匹配度 ' + Math.round(main.score) + '%', W / 2, cardY + 290);
+
+    // 数据区
+    const stats = _personalityCache.stats;
+    const dataY = cardY + cardH + 40;
+    const cellW = (W - 120) / 3;
+    const cellH = 130;
+    const dataItems = [
+        { num: stats.totalTrips, label: '次旅行' },
+        { num: stats.totalCities, label: '座城市' },
+        { num: stats.totalDays, label: '天在路上' }
+    ];
+    dataItems.forEach((d, i) => {
+        const x = 60 + i * (cellW + 15);
+        ctx.fillStyle = 'rgba(255,255,255,0.25)';
+        roundRect(ctx, x, dataY, cellW - 15, cellH, 16, true, false);
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 56px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(d.num, x + (cellW - 15) / 2, dataY + 55);
+        ctx.font = '22px sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        ctx.fillText(d.label, x + (cellW - 15) / 2, dataY + 100);
+    });
+
+    // 辅助人格
+    const subY = dataY + cellH + 30;
+    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    roundRect(ctx, 60, subY, W - 120, 90, 16, true, false);
+    ctx.fillStyle = '#333';
+    ctx.font = '20px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('辅助人格', 90, subY + 36);
+    ctx.fillStyle = '#666';
+    ctx.font = '18px sans-serif';
+    const subText = archetypes.slice(1).map(a => a.emoji + ' ' + a.name).join('   ');
+    ctx.fillText(subText, 90, subY + 68);
+
+    // 六维条
+    const dimY = subY + 110;
+    const dimData = PERSONALITY_DIMENSIONS.map(d => ({
+        label: d.label,
+        value: Math.round(_personalityCache.dimensions[d.key] || 0),
+        color: d.color
+    }));
+    const barW = (W - 120) / 6 - 6;
+    dimData.forEach((d, i) => {
+        const x = 60 + i * (barW + 6);
+        ctx.fillStyle = 'rgba(255,255,255,0.15)';
+        roundRect(ctx, x, dimY, barW, 130, 10, true, false);
+        const fillH = (d.value / 100) * 80;
+        const grad = ctx.createLinearGradient(0, dimY + 130, 0, dimY + 130 - fillH);
+        grad.addColorStop(0, d.color + 'CC');
+        grad.addColorStop(1, d.color);
+        ctx.fillStyle = grad;
+        roundRect(ctx, x, dimY + 130 - fillH, barW, fillH, 8, true, false);
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 20px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(d.value, x + barW / 2, dimY + 30);
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        ctx.font = '13px sans-serif';
+        ctx.fillText(d.label, x + barW / 2, dimY + 115);
+    });
+
+    // 底部
+    const footY = H - 60;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.fillRect(0, footY, W, 60);
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.font = '20px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('📖 旅途忆档 · 记录每一段美好旅程', 40, footY + 36);
+    ctx.textAlign = 'right';
+    ctx.font = '16px sans-serif';
+    ctx.fillText(new Date().toLocaleDateString('zh-CN'), W - 40, footY + 36);
+
+    // 输出
+    const dataUrl = canvas.toDataURL('image/png');
+    const img = document.getElementById('personality-poster-img');
+    if (img) img.src = dataUrl;
+}
+
+// ============== 海报模板 2：MBTI 渐变 ==============
+function drawPosterMBTI() {
+    if (!_personalityCache) return;
+    const canvas = document.getElementById('personality-poster-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+
+    const mbtiScores = calculateMBTIScores(_personalityCache);
+    const mbtiType = MBTI_TYPES[mbtiScores.type];
+
+    // MBTI 主题色渐变
+    ctx.fillStyle = mbtiType.bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // 装饰圆
+    ctx.fillStyle = 'rgba(255,255,255,0.05)';
+    for (let i = 0; i < 5; i++) {
+        ctx.beginPath();
+        ctx.arc(W * Math.random(), H * Math.random(), 200, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    ctx.beginPath();
+    ctx.arc(W * 0.9, H * 0.1, 280, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 大型 MBTI
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 280px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(mbtiScores.type, W / 2, 320);
+
+    // 名字
+    ctx.font = 'bold 56px sans-serif';
+    ctx.fillText(mbtiType.emoji + '  ' + mbtiType.name, W / 2, 500);
+
+    // 描述
+    ctx.font = '28px sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.fillText(mbtiType.desc, W / 2, 560);
+
+    // 优势/挑战卡
+    const cardY = 640;
+    const cardH = 200;
+    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    roundRect(ctx, 60, cardY, W - 120, cardH, 20, true, false);
+    ctx.fillStyle = '#333';
+    ctx.font = 'bold 24px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('💪 优势', 100, cardY + 50);
+    ctx.fillText('⚠️ 挑战', 100, cardY + 120);
+    ctx.font = '20px sans-serif';
+    ctx.fillStyle = '#555';
+    ctx.fillText(mbtiType.strength, 220, cardY + 50);
+    ctx.fillText(mbtiType.weakness, 220, cardY + 120);
+
+    // 四维条
+    const dimY = cardY + cardH + 40;
+    const dims = [
+        { name: 'E/I', left: 'E', right: 'I', v: mbtiScores.EI },
+        { name: 'S/N', left: 'S', right: 'N', v: mbtiScores.SN },
+        { name: 'T/F', left: 'T', right: 'F', v: mbtiScores.TF },
+        { name: 'J/P', left: 'J', right: 'P', v: mbtiScores.JP }
+    ];
+    dims.forEach((d, i) => {
+        const y = dimY + i * 60;
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 22px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(d.name, 80, y + 22);
+        // 进度条
+        ctx.fillStyle = 'rgba(255,255,255,0.2)';
+        roundRect(ctx, 180, y + 10, W - 320, 28, 14, true, false);
+        // 填充
+        const isRight = d.v >= 50;
+        const fillW = (W - 320) * (d.v / 100);
+        const grad = ctx.createLinearGradient(180, 0, 180 + fillW, 0);
+        grad.addColorStop(0, '#FFD700');
+        grad.addColorStop(1, '#FF764D');
+        ctx.fillStyle = grad;
+        if (isRight) {
+            roundRect(ctx, 180 + (W - 320) - fillW, y + 10, fillW, 28, 14, true, false);
+        } else {
+            roundRect(ctx, 180, y + 10, fillW, 28, 14, true, false);
+        }
+        // 标签
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 20px sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText((isRight ? d.right : d.left) + ' ' + Math.round(d.v) + '%', W - 80, y + 22);
+    });
+
+    // 数据条
+    const dataY = dimY + 4 * 60 + 20;
+    const stats = _personalityCache.stats;
+    const items = [
+        { num: stats.totalTrips, label: '旅行' },
+        { num: stats.totalCities, label: '城市' },
+        { num: stats.totalDays, label: '天数' },
+        { num: stats.totalPhotos, label: '照片' }
+    ];
+    const cellW = (W - 120) / 4;
+    items.forEach((d, i) => {
+        const x = 60 + i * (cellW + 5);
+        ctx.fillStyle = 'rgba(255,255,255,0.15)';
+        roundRect(ctx, x, dataY, cellW - 5, 100, 14, true, false);
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 40px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(d.num, x + (cellW - 5) / 2, dataY + 50);
+        ctx.font = '16px sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.85)';
+        ctx.fillText(d.label, x + (cellW - 5) / 2, dataY + 80);
+    });
+
+    // 底部
+    const footY = H - 60;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.fillRect(0, footY, W, 60);
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.font = '20px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('🧬 旅途忆档 · MBTI 旅行人格分析', 40, footY + 36);
+    ctx.textAlign = 'right';
+    ctx.font = '16px sans-serif';
+    ctx.fillText(new Date().toLocaleDateString('zh-CN'), W - 40, footY + 36);
+
+    const dataUrl = canvas.toDataURL('image/png');
+    const img = document.getElementById('personality-poster-img');
+    if (img) img.src = dataUrl;
+}
+
+// ============== 海报模板 3：杂志风 ==============
+function drawPosterMagazine() {
+    if (!_personalityCache) return;
+    const canvas = document.getElementById('personality-poster-canvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+
+    // 米白底
+    ctx.fillStyle = '#F8F4ED';
+    ctx.fillRect(0, 0, W, H);
+
+    const mbtiScores = calculateMBTIScores(_personalityCache);
+    const mbtiType = MBTI_TYPES[mbtiScores.type];
+
+    // 顶部红色横条
+    ctx.fillStyle = '#D63031';
+    ctx.fillRect(0, 0, W, 12);
+    ctx.fillRect(0, H - 12, W, 12);
+
+    // 杂志标题
+    ctx.fillStyle = '#D63031';
+    ctx.font = 'italic bold 60px serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('TRAVEL', W / 2, 90);
+    ctx.font = 'italic 28px serif';
+    ctx.fillStyle = '#333';
+    ctx.fillText('— 2025 PERSONALITY ISSUE —', W / 2, 140);
+
+    // 分割线
+    ctx.fillStyle = '#D63031';
+    ctx.fillRect(W / 2 - 100, 170, 200, 3);
+
+    // MBTI 标题
+    ctx.fillStyle = '#1A1A1A';
+    ctx.font = 'bold 90px sans-serif';
+    ctx.fillText(mbtiScores.type, W / 2, 260);
+    ctx.font = 'bold 36px sans-serif';
+    ctx.fillText(mbtiType.emoji + ' ' + mbtiType.name, W / 2, 330);
+
+    // 副标题
+    ctx.fillStyle = '#666';
+    ctx.font = 'italic 24px serif';
+    ctx.fillText('"' + mbtiType.desc + '"', W / 2, 380);
+
+    // 引言区
+    const archetypes = determineArchetypes(_personalityCache);
+    const main = archetypes[0];
+    const quoteY = 440;
+    ctx.fillStyle = '#FDCB6E';
+    ctx.fillRect(60, quoteY, W - 120, 180);
+    ctx.fillStyle = '#1A1A1A';
+    ctx.font = '32px serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('"' + main.desc + '"', 100, quoteY + 70);
+    ctx.font = 'bold 28px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText('— ' + main.emoji + ' ' + main.name, W - 100, quoteY + 130);
+    ctx.font = '16px sans-serif';
+    ctx.fillStyle = '#888';
+    ctx.textAlign = 'left';
+    ctx.fillText('匹配度 ' + Math.round(main.score) + '%', 100, quoteY + 145);
+
+    // 数据
+    const stats = _personalityCache.stats;
+    const dataY = 680;
+    const items = [
+        { num: stats.totalTrips, label: 'TRIPS' },
+        { num: stats.totalCities, label: 'CITIES' },
+        { num: stats.totalDays, label: 'DAYS' }
+    ];
+    items.forEach((d, i) => {
+        const x = 60 + i * ((W - 120) / 3);
+        ctx.fillStyle = '#1A1A1A';
+        ctx.font = 'bold 64px serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(d.num, x + (W - 120) / 6, dataY);
+        ctx.font = '18px sans-serif';
+        ctx.fillStyle = '#D63031';
+        ctx.fillText(d.label, x + (W - 120) / 6, dataY + 40);
+    });
+
+    // 四维
+    const dimY = 820;
+    const dims = [
+        { name: 'ENERGY', l: 'E', r: 'I', v: mbtiScores.EI },
+        { name: 'INFO', l: 'S', r: 'N', v: mbtiScores.SN },
+        { name: 'DECISION', l: 'T', r: 'F', v: mbtiScores.TF },
+        { name: 'LIFESTYLE', l: 'J', r: 'P', v: mbtiScores.JP }
+    ];
+    const colW = (W - 120) / 4;
+    dims.forEach((d, i) => {
+        const x = 60 + i * colW;
+        ctx.fillStyle = '#1A1A1A';
+        ctx.font = 'bold 14px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(d.name, x + colW / 2, dimY);
+        ctx.font = 'bold 24px sans-serif';
+        ctx.fillText((d.v >= 50 ? d.r : d.l), x + colW / 2, dimY + 30);
+        // 条
+        ctx.fillStyle = '#E0E0E0';
+        roundRect(ctx, x + 20, dimY + 50, colW - 40, 8, 4, true, false);
+        const fillW = (colW - 40) * (d.v / 100);
+        const isRight = d.v >= 50;
+        ctx.fillStyle = '#D63031';
+        if (isRight) {
+            roundRect(ctx, x + 20 + (colW - 40) - fillW, dimY + 50, fillW, 8, 4, true, false);
+        } else {
+            roundRect(ctx, x + 20, dimY + 50, fillW, 8, 4, true, false);
+        }
+        ctx.fillStyle = '#888';
+        ctx.font = '12px sans-serif';
+        ctx.fillText(Math.round(d.v) + '%', x + colW / 2, dimY + 80);
+    });
+
+    // 底部
+    ctx.fillStyle = '#1A1A1A';
+    ctx.font = 'italic 18px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('— ' + new Date().toLocaleDateString('zh-CN') + ' · 旅途忆档 —', W / 2, H - 50);
+
+    const dataUrl = canvas.toDataURL('image/png');
+    const img = document.getElementById('personality-poster-img');
+    if (img) img.src = dataUrl;
+}
+
+// ============== 海报模板 4：拍立得风 ==============
+function drawPosterPolaroid() {
+    if (!_personalityCache) return;
+    const canvas = document.getElementById('personality-poster-canvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+
+    // 背景 - 温暖米色
+    ctx.fillStyle = '#FFF8F0';
+    ctx.fillRect(0, 0, W, H);
+
+    // 装饰：胶带
+    ctx.fillStyle = 'rgba(255,200,100,0.5)';
+    ctx.save();
+    ctx.translate(120, 100);
+    ctx.rotate(-0.2);
+    ctx.fillRect(-60, -15, 120, 30);
+    ctx.restore();
+    ctx.fillStyle = 'rgba(100,200,255,0.4)';
+    ctx.save();
+    ctx.translate(W - 120, 110);
+    ctx.rotate(0.15);
+    ctx.fillRect(-60, -15, 120, 30);
+    ctx.restore();
+
+    const mbtiScores = calculateMBTIScores(_personalityCache);
+    const mbtiType = MBTI_TYPES[mbtiScores.type];
+    const archetypes = determineArchetypes(_personalityCache);
+    const main = archetypes[0];
+
+    // 拍立得相框
+    const photoX = 100;
+    const photoY = 200;
+    const photoW = W - 200;
+    const photoH = 600;
+    ctx.fillStyle = 'white';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)';
+    ctx.shadowBlur = 30;
+    ctx.shadowOffsetY = 10;
+    ctx.fillRect(photoX, photoY, photoW, photoH);
+    ctx.shadowColor = 'transparent';
+
+    // 相框内（彩色渐变）
+    const grad = ctx.createLinearGradient(photoX, photoY, photoX + photoW, photoY + photoH);
+    grad.addColorStop(0, mbtiType.color);
+    grad.addColorStop(1, '#6C5CE7');
+    ctx.fillStyle = grad;
+    ctx.fillRect(photoX + 20, photoY + 20, photoW - 40, photoH - 130);
+
+    // 大 emoji
+    ctx.font = '200px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(main.emoji, W / 2, photoY + 220);
+
+    // MBTI
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 90px sans-serif';
+    ctx.fillText(mbtiScores.type, W / 2, photoY + 410);
+
+    // 名字
+    ctx.font = 'bold 32px sans-serif';
+    ctx.fillText(mbtiType.emoji + ' ' + mbtiType.name, W / 2, photoY + 460);
+
+    // 描述
+    ctx.font = '20px sans-serif';
+    ctx.fillText(mbtiType.desc, W / 2, photoY + 495);
+
+    // 手写区
+    ctx.fillStyle = '#1A1A1A';
+    ctx.font = 'italic 22px sans-serif';
+    ctx.fillText('「' + main.desc + '」', W / 2, photoY + photoH - 60);
+
+    // 底部 caption
+    ctx.fillStyle = '#666';
+    ctx.font = '16px sans-serif';
+    ctx.fillText('— 我的旅行人格 · 旅途忆档 · ' + new Date().toLocaleDateString('zh-CN'), W / 2, photoY + photoH - 30);
+
+    // 装饰手写
+    ctx.fillStyle = '#FF764D';
+    ctx.font = 'italic bold 36px cursive';
+    ctx.textAlign = 'left';
+    ctx.fillText('my travel', 80, 170);
+    ctx.fillStyle = '#6C5CE7';
+    ctx.font = 'italic bold 36px cursive';
+    ctx.textAlign = 'right';
+    ctx.fillText('persona ✨', W - 80, 170);
+
+    // 角落印章
+    ctx.save();
+    ctx.translate(W - 150, H - 180);
+    ctx.rotate(-0.15);
+    ctx.fillStyle = 'rgba(255,118,77,0.8)';
+    roundRect(ctx, -50, -25, 100, 50, 8, true, false);
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 18px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('认证人格', 0, 5);
+    ctx.restore();
+
+    const dataUrl = canvas.toDataURL('image/png');
+    const img = document.getElementById('personality-poster-img');
+    if (img) img.src = dataUrl;
+}
+
+// ============== 海报模板 5：暗夜黑 ==============
+function drawPosterDark() {
+    if (!_personalityCache) return;
+    const canvas = document.getElementById('personality-poster-canvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+
+    // 暗背景
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0, 0, W, H);
+
+    // 装饰：星点
+    for (let i = 0; i < 80; i++) {
+        const x = Math.random() * W;
+        const y = Math.random() * H;
+        const r = Math.random() * 1.5 + 0.5;
+        ctx.fillStyle = `rgba(255,255,255,${0.3 + Math.random() * 0.7})`;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // 大光晕
+    const mbtiScores = calculateMBTIScores(_personalityCache);
+    const mbtiType = MBTI_TYPES[mbtiScores.type];
+    const halo = ctx.createRadialGradient(W / 2, 280, 0, W / 2, 280, 300);
+    halo.addColorStop(0, mbtiType.color + 'AA');
+    halo.addColorStop(0.5, mbtiType.color + '33');
+    halo.addColorStop(1, 'transparent');
+    ctx.fillStyle = halo;
+    ctx.fillRect(0, 0, W, H);
+
+    const archetypes = determineArchetypes(_personalityCache);
+    const main = archetypes[0];
+
+    // 顶部
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '16px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('— MYSTIC TRAVEL PERSONA —', W / 2, 80);
+
+    // 大 MBTI
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 200px sans-serif';
+    ctx.fillText(mbtiScores.type, W / 2, 220);
+
+    // 主人格
+    ctx.font = 'bold 56px sans-serif';
+    ctx.fillText(main.emoji + '  ' + main.name, W / 2, 360);
+
+    ctx.font = '24px sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.fillText(main.desc, W / 2, 410);
+
+    // 数据卡片
+    const stats = _personalityCache.stats;
+    const cardY = 500;
+    ctx.fillStyle = 'rgba(255,255,255,0.05)';
+    roundRect(ctx, 60, cardY, W - 120, 200, 20, true, false);
+    const items = [
+        { num: stats.totalTrips, label: 'TRIPS' },
+        { num: stats.totalCities, label: 'CITIES' },
+        { num: stats.totalDays, label: 'DAYS' },
+        { num: stats.totalPhotos, label: 'PHOTOS' }
+    ];
+    items.forEach((d, i) => {
+        const x = 60 + i * ((W - 120) / 4);
+        ctx.fillStyle = mbtiType.color;
+        ctx.font = 'bold 48px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(d.num, x + (W - 120) / 8, cardY + 70);
+        ctx.fillStyle = 'rgba(255,255,255,0.6)';
+        ctx.font = '14px sans-serif';
+        ctx.fillText(d.label, x + (W - 120) / 8, cardY + 110);
+    });
+
+    // 四维
+    const dimY = 760;
+    const dims = [
+        { name: 'E/I', v: mbtiScores.EI },
+        { name: 'S/N', v: mbtiScores.SN },
+        { name: 'T/F', v: mbtiScores.TF },
+        { name: 'J/P', v: mbtiScores.JP }
+    ];
+    dims.forEach((d, i) => {
+        const x = 60 + i * ((W - 120) / 4);
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 18px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(d.name, x + (W - 120) / 8, dimY);
+        // 圆环
+        const cx = x + (W - 120) / 8;
+        const cy = dimY + 70;
+        const r = 35;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+        ctx.lineWidth = 6;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (d.v / 100));
+        ctx.strokeStyle = mbtiType.color;
+        ctx.lineWidth = 6;
+        ctx.stroke();
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 18px sans-serif';
+        ctx.fillText(Math.round(d.v) + '%', cx, cy + 6);
+    });
+
+    // 底部
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.font = '14px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('🧬 旅途忆档 · ' + new Date().toLocaleDateString('zh-CN'), W / 2, H - 60);
+
+    const dataUrl = canvas.toDataURL('image/png');
+    const img = document.getElementById('personality-poster-img');
+    if (img) img.src = dataUrl;
+}
+
+function roundRect(ctx, x, y, w, h, r, fill, stroke) {
+    if (typeof r === 'number') r = { tl: r, tr: r, br: r, bl: r };
+    ctx.beginPath();
+    ctx.moveTo(x + r.tl, y);
+    ctx.lineTo(x + w - r.tr, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r.tr);
+    ctx.lineTo(x + w, y + h - r.br);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r.br, y + h);
+    ctx.lineTo(x + r.bl, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r.bl);
+    ctx.lineTo(x, y + r.tl);
+    ctx.quadraticCurveTo(x, y, x + r.tl, y);
+    ctx.closePath();
+    if (fill) ctx.fill();
+    if (stroke) ctx.stroke();
+}
+
+// 下载海报
+function downloadPersonalityPoster() {
+    const canvas = document.getElementById('personality-poster-canvas');
+    if (!canvas) return;
+    const link = document.createElement('a');
+    link.download = `我的旅行人格_${new Date().toISOString().slice(0, 10)}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    showToast('📥 海报已下载', 'success');
+}
+
+// 复制图片到剪贴板
+async function copyPersonalityPoster() {
+    const canvas = document.getElementById('personality-poster-canvas');
+    if (!canvas) return;
+    try {
+        if (navigator.clipboard && window.ClipboardItem) {
+            canvas.toBlob(async (blob) => {
+                try {
+                    await navigator.clipboard.write([
+                        new ClipboardItem({ 'image/png': blob })
+                    ]);
+                    showToast('📋 已复制到剪贴板', 'success');
+                } catch (e) {
+                    showToast('复制失败，请改用下载', 'error');
+                }
+            });
+        } else {
+            showToast('当前浏览器不支持复制图片', 'error');
+        }
+    } catch (e) {
+        showToast('复制失败', 'error');
+    }
+}
+
+// 打开报告模态框
+function openPersonalityReportModal() {
+    if (!_personalityCache) {
+        showToast('请先生成分析结果', 'error');
+        return;
+    }
+    const archetypes = determineArchetypes(_personalityCache);
+    const analysis = _personalityCache;
+    const moodLabels = {
+        happy: '😊 开心', excited: '🤩 兴奋', peaceful: '😌 平静',
+        tired: '😓 疲惫', nostalgic: '🥹 怀念'
+    };
+
+    const html = `
+        <div style="padding: 8px;">
+            <h2 style="text-align: center; font-size: 24px; margin-bottom: 8px;">🧬 我的旅行人格报告</h2>
+            <p style="text-align: center; color: #888; font-size: 13px; margin-bottom: 24px;">生成于 ${new Date().toLocaleString('zh-CN')}</p>
+
+            <div style="background: linear-gradient(135deg, ${archetypes[0].color}33, #6C5CE733); padding: 24px; border-radius: 16px; margin-bottom: 16px;">
+                <div style="text-align: center; font-size: 64px;">${archetypes[0].emoji}</div>
+                <h3 style="text-align: center; margin: 8px 0; color: ${archetypes[0].color}; font-size: 28px;">${archetypes[0].name}</h3>
+                <p style="text-align: center; color: #555; font-size: 15px; margin-bottom: 12px;">${archetypes[0].desc}</p>
+                <div style="text-align: center; background: rgba(255,255,255,0.6); padding: 8px 16px; border-radius: 20px; display: inline-block; font-size: 13px;">
+                    匹配度 ${Math.round(archetypes[0].score)}%
+                </div>
+            </div>
+
+            <h3 style="margin-top: 24px; font-size: 18px; border-left: 4px solid ${archetypes[0].color}; padding-left: 10px;">🎭 人格组合</h3>
+            ${archetypes.map((a, i) => `
+                <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(0,0,0,0.03); border-radius: 12px; margin-bottom: 8px;">
+                    <div style="font-size: 32px;">${a.emoji}</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; color: ${a.color};">${['🥇', '🥈', '🥉'][i]} ${a.name}</div>
+                        <div style="font-size: 12px; color: #777;">${a.desc}</div>
+                    </div>
+                    <div style="font-size: 14px; color: #555; font-weight: 600;">${Math.round(a.score)}%</div>
+                </div>
+            `).join('')}
+
+            <h3 style="margin-top: 24px; font-size: 18px; border-left: 4px solid #FF764D; padding-left: 10px;">📊 六维人格分析</h3>
+            ${PERSONALITY_DIMENSIONS.map(d => {
+                const v = Math.round(analysis.dimensions[d.key] || 0);
+                return `
+                    <div style="margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px;">
+                            <span>${d.emoji} ${d.label}</span>
+                            <span style="font-weight: 600; color: ${d.color};">${v}/100</span>
+                        </div>
+                        <div style="height: 8px; background: rgba(0,0,0,0.06); border-radius: 4px; overflow: hidden;">
+                            <div style="height: 100%; width: ${v}%; background: ${d.color}; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('')}
+
+            <h3 style="margin-top: 24px; font-size: 18px; border-left: 4px solid #6C5CE7; padding-left: 10px;">📈 旅行数据</h3>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                ${[
+                    ['总旅行次数', analysis.stats.totalTrips],
+                    ['总天数', analysis.stats.totalDays],
+                    ['去过的城市', analysis.stats.totalCities],
+                    ['旅行照片', analysis.stats.totalPhotos],
+                    ['游玩景点', analysis.stats.totalSpots],
+                    ['平均评分', analysis.stats.avgRating || '—'],
+                    ['最常去', analysis.stats.topDestination],
+                    ['同行人数', analysis.companionCount],
+                    ['记录心情', Object.values(analysis.moodCount).reduce((s, n) => s + n, 0)]
+                ].map(([label, val]) => `
+                    <div style="background: rgba(0,0,0,0.03); padding: 10px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 20px; font-weight: 700; color: #333;">${val}</div>
+                        <div style="font-size: 11px; color: #777; margin-top: 2px;">${label}</div>
+                    </div>
+                `).join('')}
+            </div>
+
+            <h3 style="margin-top: 24px; font-size: 18px; border-left: 4px solid #00B894; padding-left: 10px;">😊 心情分布</h3>
+            ${Object.keys(moodLabels).map(k => {
+                const v = analysis.moodDistribution[k] || 0;
+                return `
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                        <span style="width: 80px; font-size: 13px;">${moodLabels[k]}</span>
+                        <div style="flex: 1; height: 8px; background: rgba(0,0,0,0.06); border-radius: 4px; overflow: hidden;">
+                            <div style="height: 100%; width: ${v}%; background: ${archetypes[0].color}; border-radius: 4px;"></div>
+                        </div>
+                        <span style="width: 40px; text-align: right; font-size: 13px; font-weight: 600;">${v}%</span>
+                    </div>
+                `;
+            }).join('')}
+
+            ${analysis.topTags.length > 0 ? `
+                <h3 style="margin-top: 24px; font-size: 18px; border-left: 4px solid #FDCB6E; padding-left: 10px;">🏷️ 旅行标签</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                    ${analysis.topTags.map(([tag, count]) => `
+                        <span style="background: ${archetypes[0].color}22; color: ${archetypes[0].color}; padding: 4px 12px; border-radius: 12px; font-size: 12px;">#${tag} ×${count}</span>
+                    `).join('')}
+                </div>
+            ` : ''}
+
+            <h3 style="margin-top: 24px; font-size: 18px; border-left: 4px solid #A29BFE; padding-left: 10px;">📜 性格宣言</h3>
+            <div style="background: linear-gradient(135deg, #FFF5F0, #FFF9E6); padding: 20px; border-radius: 12px; font-style: italic; line-height: 1.8; color: #444; white-space: pre-line;">
+${generateDeclaration(archetypes, analysis)}
+            </div>
+
+            <p style="text-align: center; color: #aaa; font-size: 12px; margin-top: 24px;">— 由 旅途忆档 AI 旅行分析师 生成 —</p>
+        </div>
+    `;
+
+    document.getElementById('personality-report-content').innerHTML = html;
+    openModal('personality-report');
+}
+
+// 下载报告（HTML）
+function downloadPersonalityReport() {
+    if (!_personalityCache) return;
+    const archetypes = determineArchetypes(_personalityCache);
+    const analysis = _personalityCache;
+    const decl = generateDeclaration(archetypes, analysis);
+    const dimText = PERSONALITY_DIMENSIONS.map(d => {
+        const v = Math.round(analysis.dimensions[d.key] || 0);
+        return `${d.emoji} ${d.label}: ${v}/100`;
+    }).join('\n');
+    const text = `🧬 我的旅行人格报告
+生成于 ${new Date().toLocaleString('zh-CN')}
+
+═══════════════════════════
+🎭 核心人格
+═══════════════════════════
+
+${archetypes[0].emoji} ${archetypes[0].name}
+${archetypes[0].desc}
+匹配度：${Math.round(archetypes[0].score)}%
+
+═══════════════════════════
+🥈 辅助人格
+═══════════════════════════
+
+${archetypes.slice(1).map((a, i) => `${a.emoji} ${a.name} - ${Math.round(a.score)}%`).join('\n')}
+
+═══════════════════════════
+📊 六维人格分析
+═══════════════════════════
+
+${dimText}
+
+═══════════════════════════
+📈 旅行数据
+═══════════════════════════
+
+· 总旅行次数：${analysis.stats.totalTrips}
+· 总天数：${analysis.stats.totalDays}
+· 去过的城市：${analysis.stats.totalCities}
+· 旅行照片：${analysis.stats.totalPhotos}
+· 游玩景点：${analysis.stats.totalSpots}
+· 平均评分：${analysis.stats.avgRating || '—'}
+· 最常去：${analysis.stats.topDestination}
+· 同行人数：${analysis.companionCount}
+
+═══════════════════════════
+📜 性格宣言
+═══════════════════════════
+
+${decl}
+
+═══════════════════════════
+
+— 由 旅途忆档 AI 旅行分析师 生成 —
+`;
+
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.download = `我的旅行人格报告_${new Date().toISOString().slice(0, 10)}.txt`;
+    link.href = URL.createObjectURL(blob);
+    link.click();
+    showToast('📥 报告已下载', 'success');
+}
+
+async function copyPersonalityReport() {
+    if (!_personalityCache) return;
+    const archetypes = determineArchetypes(_personalityCache);
+    const analysis = _personalityCache;
+    const decl = generateDeclaration(archetypes, analysis);
+    const dimText = PERSONALITY_DIMENSIONS.map(d => {
+        const v = Math.round(analysis.dimensions[d.key] || 0);
+        return `${d.emoji} ${d.label}: ${v}/100`;
+    }).join('\n');
+    const text = `🧬 我的旅行人格报告\n核心人格：${archetypes[0].emoji} ${archetypes[0].name}\n匹配度：${Math.round(archetypes[0].score)}%\n\n${dimText}\n\n${decl}\n\n— 旅途忆档 AI 旅行分析师 —`;
+
+    try {
+        await navigator.clipboard.writeText(text);
+        showToast('📋 报告已复制', 'success');
+    } catch (e) {
+        showToast('复制失败', 'error');
+    }
+}
+
+// showPage 路由添加（人格分析页）
+const _origShowPage = showPage;
+showPage = function(pageName) {
+    if (_origShowPage) _origShowPage(pageName);
+    if (pageName === 'personality') {
+        setTimeout(renderPersonalityPage, 50);
+    }
+};
+
+// ============================================================
+// ===== AI 增强分析（硅基流动/DeepSeek 等真实 API） =====
+// ============================================================
+
+// AI 提供商配置
+const AI_PROVIDERS = {
+    siliconflow: {
+        name: '硅基流动',
+        baseUrl: 'https://api.siliconflow.cn/v1',
+        defaultModel: 'Qwen/Qwen2.5-7B-Instruct',
+        models: ['Qwen/Qwen2.5-7B-Instruct', 'Qwen/Qwen2.5-14B-Instruct', 'THUDM/glm-4-9b-chat', '01-ai/Yi-1.5-9B-Chat-16K']
+    },
+    deepseek: {
+        name: 'DeepSeek',
+        baseUrl: 'https://api.deepseek.com/v1',
+        defaultModel: 'deepseek-chat',
+        models: ['deepseek-chat']
+    },
+    zhipu: {
+        name: '智谱 AI',
+        baseUrl: 'https://open.bigmodel.cn/api/paas/v4',
+        defaultModel: 'glm-4-flash',
+        models: ['glm-4-flash', 'glm-4', 'glm-4-plus']
+    },
+    custom: {
+        name: '自定义',
+        baseUrl: '',
+        defaultModel: '',
+        models: []
+    }
+};
+
+function hasAIConfig() {
+    try {
+        return !!(localStorage.getItem('ai_api_key'));
+    } catch (e) { return false; }
+}
+
+function getAIConfig() {
+    try {
+        return {
+            apiKey: localStorage.getItem('ai_api_key') || '',
+            baseUrl: localStorage.getItem('ai_base_url') || 'https://api.siliconflow.cn/v1',
+            model: localStorage.getItem('ai_model') || 'Qwen/Qwen2.5-7B-Instruct',
+            provider: localStorage.getItem('ai_provider') || 'siliconflow'
+        };
+    } catch (e) {
+        return null;
+    }
+}
+
+function openAISettingsModal() {
+    const cfg = getAIConfig();
+    if (cfg) {
+        document.getElementById('ai-provider').value = cfg.provider;
+        document.getElementById('ai-api-key').value = cfg.apiKey;
+        document.getElementById('ai-model').value = cfg.model;
+    }
+    onAIProviderChange();
+    openModal('ai-settings');
+}
+
+function onAIProviderChange() {
+    const provider = document.getElementById('ai-provider').value;
+    const prov = AI_PROVIDERS[provider];
+    if (!prov) return;
+    const modelInput = document.getElementById('ai-model');
+    if (!modelInput.value || modelInput.placeholder === '') {
+        modelInput.placeholder = prov.defaultModel;
+    }
+    if (prov.baseUrl) {
+        modelInput.dataset.baseUrl = prov.baseUrl;
+    }
+}
+
+function saveAISettings() {
+    try {
+        const provider = document.getElementById('ai-provider').value;
+        const apiKey = document.getElementById('ai-api-key').value.trim();
+        const modelInput = document.getElementById('ai-model');
+        const model = modelInput.value.trim() || AI_PROVIDERS[provider].defaultModel;
+        const baseUrl = AI_PROVIDERS[provider].baseUrl || modelInput.dataset.baseUrl;
+        if (!apiKey) {
+            showToast('请填写 API Key', 'error');
+            return;
+        }
+        localStorage.setItem('ai_provider', provider);
+        localStorage.setItem('ai_api_key', apiKey);
+        localStorage.setItem('ai_base_url', baseUrl);
+        localStorage.setItem('ai_model', model);
+        showToast('✅ AI 设置已保存', 'success');
+        closeModal('ai-settings');
+        // 重新渲染人格页（触发 AI 增强）
+        if (_personalityCache) requestAIPersonality(_personalityCache);
+    } catch (e) {
+        showToast('保存失败：' + e.message, 'error');
+    }
+}
+
+function clearAISettings() {
+    try {
+        localStorage.removeItem('ai_provider');
+        localStorage.removeItem('ai_api_key');
+        localStorage.removeItem('ai_base_url');
+        localStorage.removeItem('ai_model');
+        document.getElementById('ai-api-key').value = '';
+        document.getElementById('ai-model').value = '';
+        document.getElementById('ai-test-result').style.display = 'none';
+        showToast('🗑️ 已清除', 'success');
+    } catch (e) {}
+}
+
+async function testAIConnection() {
+    const resultEl = document.getElementById('ai-test-result');
+    resultEl.style.display = 'block';
+    resultEl.innerHTML = '<div style="color: #888; padding: 10px;">🔌 测试中...</div>';
+    const provider = document.getElementById('ai-provider').value;
+    const apiKey = document.getElementById('ai-api-key').value.trim();
+    const model = document.getElementById('ai-model').value.trim() || AI_PROVIDERS[provider].defaultModel;
+    const baseUrl = AI_PROVIDERS[provider].baseUrl;
+    if (!apiKey) {
+        resultEl.innerHTML = '<div style="color: #d63031; padding: 10px;">❌ 请先填写 API Key</div>';
+        return;
+    }
+    try {
+        const data = await callAI(baseUrl, apiKey, model, [
+            { role: 'user', content: '回复"OK"即可' }
+        ], { maxTokens: 20, temperature: 0.1 });
+        resultEl.innerHTML = '<div style="color: #00b894; padding: 10px; background: #e8f8f5; border-radius: 8px;">✅ 连接成功！<br><small>模型回复：' + escapeHtml(data.substring(0, 60)) + '</small></div>';
+    } catch (e) {
+        resultEl.innerHTML = '<div style="color: #d63031; padding: 10px; background: #ffeaea; border-radius: 8px;">❌ 连接失败：' + escapeHtml(e.message) + '</div>';
+    }
+}
+
+function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+}
+
+// 调用 AI API（OpenAI 兼容）
+async function callAI(baseUrl, apiKey, model, messages, opts = {}) {
+    const response = await fetch(baseUrl + '/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + apiKey
+        },
+        body: JSON.stringify({
+            model: model,
+            messages: messages,
+            temperature: opts.temperature ?? 0.85,
+            max_tokens: opts.maxTokens ?? 800,
+            top_p: opts.topP ?? 0.9
+        })
+    });
+    if (!response.ok) {
+        const errText = await response.text();
+        let msg = `HTTP ${response.status}`;
+        try { msg = JSON.parse(errText).error?.message || msg; } catch (e) {}
+        throw new Error(msg);
+    }
+    const data = await response.json();
+    return data.choices?.[0]?.message?.content || '';
+}
+
+// 构建 AI Prompt
+function buildAIPersonalityPrompt(analysis, mbtiScores) {
+    const archetypes = determineArchetypes(analysis);
+    const mbtiType = MBTI_TYPES[mbtiScores.type];
+    const stats = analysis.stats;
+    const moodTxt = Object.entries(analysis.moodDistribution)
+        .filter(([k, v]) => v > 0)
+        .sort((a, b) => b[1] - a[1])
+        .map(([k, v]) => {
+            const cn = { happy: '开心', excited: '兴奋', peaceful: '平静', tired: '疲惫', nostalgic: '怀念' }[k];
+            return `${cn}${v}%`;
+        }).join('、');
+    const tags = analysis.topTags.map(([t]) => '#' + t).join(' ');
+    const dimensions = PERSONALITY_DIMENSIONS.map(d => {
+        const v = Math.round(analysis.dimensions[d.key] || 0);
+        return `${d.label} ${v}/100`;
+    }).join('，');
+
+    return `你是一位资深的旅行人格分析师。请基于以下用户旅行数据，写一段**深度、个性化、有诗意**的人格分析。
+
+【用户旅行数据】
+- MBTI 倾向：${mbtiScores.type}（${mbtiType.name}）
+- 四维倾向：E/I=${mbtiScores.EI}%, S/N=${mbtiScores.SN}%, T/F=${mbtiScores.TF}%, J/P=${mbtiScores.JP}%
+- 总旅行次数：${stats.totalTrips} 次，共 ${stats.totalDays} 天
+- 去过 ${stats.totalCities} 座城市，拍了 ${stats.totalPhotos} 张照片
+- 最常去：${stats.topDestination}
+- 心情分布：${moodTxt}
+- 六维人格：${dimensions}
+- 辅助人格：${archetypes.slice(1).map(a => a.emoji + a.name).join('、')}
+- 旅行标签：${tags || '无'}
+
+【输出要求】严格按以下 JSON 格式输出（不要额外说明文字）：
+
+{
+  "poem": "一段 50 字以内的诗意宣言（第一人称）",
+  "deepAnalysis": "300 字深度解读（剖析人格特质，引用具体数据）",
+  "travelAdvice": "150 字个性化旅行建议（基于人格推荐旅行方式、节奏、目的地类型）",
+  "nextDestination": "推荐一个最契合人格的下一站（具体国家或城市，附 30 字理由）",
+  "careerFit": "100 字最适合的旅行相关职业"
+}
+
+要求：
+- 中文输出
+- 用词精准，避免套话
+- 必须引用用户数据中的具体数字和地名
+- 文风有温度、有洞察力`;
+}
+
+// 加载缓存的 AI 分析
+function loadCachedAIPersonality() {
+    try {
+        const cached = localStorage.getItem('ai_personality_result');
+        if (!cached) return false;
+        const data = JSON.parse(cached);
+        // 缓存时间 24 小时有效
+        if (Date.now() - data.timestamp > 24 * 3600 * 1000) return false;
+        if (data.analysisHash !== hashAnalysis(_personalityCache)) return false;
+        renderAIPersonalityResult(data.result);
+        return true;
+    } catch (e) { return false; }
+}
+
+function hashAnalysis(a) {
+    return a.stats.totalTrips + '-' + a.stats.totalCities + '-' + a.stats.totalPhotos + '-' + Date.now().toString().slice(0, -5);
+}
+
+async function requestAIPersonality(analysis) {
+    if (!hasAIConfig()) return;
+    const cfg = getAIConfig();
+    const mbtiScores = calculateMBTIScores(analysis);
+    const prompt = buildAIPersonalityPrompt(analysis, mbtiScores);
+    const aiContent = document.getElementById('ai-personality-content');
+    aiContent.innerHTML = '<div class="ai-loading"><div class="ai-spinner"></div><span>AI 正在分析你的旅行人格...</span></div>';
+    try {
+        const text = await callAI(cfg.baseUrl, cfg.apiKey, cfg.model, [
+            { role: 'system', content: '你是一位资深的旅行人格分析师。输出严格的 JSON 格式。' },
+            { role: 'user', content: prompt }
+        ], { maxTokens: 1500, temperature: 0.85 });
+
+        // 尝试解析 JSON
+        let result;
+        try {
+            // 提取 JSON 块
+            const jsonMatch = text.match(/\{[\s\S]*\}/);
+            result = JSON.parse(jsonMatch ? jsonMatch[0] : text);
+        } catch (e) {
+            // 解析失败就用纯文本
+            result = { deepAnalysis: text };
+        }
+        renderAIPersonalityResult(result);
+        // 缓存
+        try {
+            localStorage.setItem('ai_personality_result', JSON.stringify({
+                timestamp: Date.now(),
+                analysisHash: hashAnalysis(analysis),
+                result: result
+            }));
+        } catch (e) {}
+    } catch (e) {
+        aiContent.innerHTML = `<div style="color: #d63031; padding: 12px; background: #ffeaea; border-radius: 8px;">
+            <strong>❌ AI 调用失败</strong><br>
+            ${escapeHtml(e.message)}<br>
+            <button class="btn btn-secondary btn-sm" style="margin-top: 8px;" onclick="openAISettingsModal()">⚙️ 检查 API 设置</button>
+        </div>`;
+    }
+}
+
+function refreshAIPersonality() {
+    if (!_personalityCache) return;
+    try { localStorage.removeItem('ai_personality_result'); } catch (e) {}
+    requestAIPersonality(_personalityCache);
+}
+
+function renderAIPersonalityResult(result) {
+    const aiContent = document.getElementById('ai-personality-content');
+    let html = '';
+    if (result.poem) {
+        html += `<div class="ai-section" style="background: linear-gradient(135deg, #FFF5F0, transparent); padding: 12px; border-radius: 10px; border-left: 3px solid #FF764D;">
+            <div class="ai-section-title">📜 诗意宣言</div>
+            <div style="font-style: italic; font-size: 15px; line-height: 1.8; color: #5F27CD;">${escapeHtml(result.poem)}</div>
+        </div>`;
+    }
+    if (result.deepAnalysis) {
+        html += `<div class="ai-section">
+            <div class="ai-section-title">🔍 深度解读</div>
+            <div>${escapeHtml(result.deepAnalysis)}</div>
+        </div>`;
+    }
+    if (result.travelAdvice) {
+        html += `<div class="ai-section">
+            <div class="ai-section-title">🧭 旅行建议</div>
+            <div>${escapeHtml(result.travelAdvice)}</div>
+        </div>`;
+    }
+    if (result.nextDestination) {
+        html += `<div class="ai-section">
+            <div class="ai-section-title">🗺️ 下一站推荐</div>
+            <div>${escapeHtml(result.nextDestination)}</div>
+        </div>`;
+    }
+    if (result.careerFit) {
+        html += `<div class="ai-section">
+            <div class="ai-section-title">💼 适合的旅行职业</div>
+            <div>${escapeHtml(result.careerFit)}</div>
+        </div>`;
+    }
+    if (!html) {
+        html = '<div style="color: #888;">AI 返回内容为空，请重试。</div>';
+    }
+    aiContent.innerHTML = html;
+}
 </script>
 
 </body>
