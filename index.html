@@ -545,6 +545,32 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.3s; }
 
+        /* ===== 出行准备子 tab ===== */
+        .prep-tabs {
+            display: flex; gap: 8px; margin: 0 0 18px;
+            background: #F8F9FB; padding: 6px;
+            border-radius: 14px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .prep-tab {
+            flex: 1; padding: 11px 14px; border: none;
+            background: transparent; border-radius: 10px;
+            font-size: 14px; font-weight: 600; cursor: pointer;
+            color: #6B7280; transition: all 0.25s;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .prep-tab:hover { color: #1F2937; }
+        .prep-tab.active {
+            background: white; color: #1F2937;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .prep-tab-tag {
+            color: white; padding: 2px 7px; border-radius: 10px;
+            font-size: 10px; font-weight: 700; letter-spacing: 0.3px;
+        }
+        .prep-tab-icon { font-size: 18px; }
+        .prep-tab-panel { animation: fadeIn 0.3s; }
+
         /* ===== 模态框 ===== */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -736,8 +762,7 @@
             cursor: grabbing !important;
         }
         .year-wheel-panel.collapsed {
-            width: auto;
-            min-width: 0;
+            display: none;
         }
         .year-wheel-header {
             display: flex;
@@ -783,15 +808,6 @@
         }
         .year-wheel-body {
             padding: 0 16px 14px;
-            overflow: hidden;
-            transition: max-height 0.3s ease, opacity 0.25s ease, padding 0.3s ease;
-            max-height: 600px;
-            opacity: 1;
-        }
-        .year-wheel-panel.collapsed .year-wheel-body {
-            max-height: 0;
-            opacity: 0;
-            padding: 0 16px;
         }
         .year-wheel-fab {
             position: absolute;
@@ -814,6 +830,17 @@
             box-shadow: 0 8px 24px rgba(255,118,77,0.55);
         }
         .year-wheel-fab:active { transform: scale(0.95); }
+
+        /* AI 加载旋转动画 */
+        @keyframes ai-spin { to { transform: rotate(360deg); } }
+        .ai-spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid #FFE5D9;
+            border-top-color: #FF764D;
+            border-radius: 50%;
+            animation: ai-spin 0.8s linear infinite;
+        }
         .year-wheel-quick {
             display: flex;
             gap: 8px;
@@ -2634,9 +2661,6 @@
                 <span class="icon">📋</span> 旅行档案
                 <span class="badge" id="archive-count">0</span>
             </div>
-            <div class="sidebar-item" data-page="favorites" onclick="showPage('favorites'); closeMobileSidebar();">
-                <span class="icon">⭐</span> 我的收藏
-            </div>
             <div class="sidebar-item" data-page="timeline" onclick="showPage('timeline'); closeMobileSidebar();">
                 <span class="icon">📅</span> 时间轴
             </div>
@@ -2653,9 +2677,9 @@
                 <span class="icon">🧬</span> 旅行人格
                 <span class="badge" style="background: linear-gradient(135deg, #FF764D, #FDCB6E);">AI</span>
             </div>
-            <div class="sidebar-item" data-page="budget" onclick="showPage('budget'); closeMobileSidebar();">
-                <span class="icon">💰</span> 智能预算
-                <span class="badge" style="background: linear-gradient(135deg, #10B981, #34D399);">AI</span>
+            <div class="sidebar-item" data-page="ai-memoir" onclick="showPage('ai-memoir'); closeMobileSidebar();">
+                <span class="icon">📖</span> AI 回忆录
+                <span class="badge" style="background: linear-gradient(135deg, #667eea, #764ba2);">NEW</span>
             </div>
         </div>
 
@@ -2668,7 +2692,9 @@
         </div>
 
         <div class="sidebar-section">
-            <div class="sidebar-title">快速统计</div>
+            <div class="sidebar-title">
+                <span>快速统计</span>
+            </div>
             <div style="padding: 8px 16px; font-size: 13px; color: var(--text-light);">
                 <div style="margin-bottom: 12px;">
                     <div>总旅行次数</div>
@@ -2725,26 +2751,26 @@
                             </div>
                         </div>
                         <div class="hero-demo-step" data-step="1">
-                            <div class="demo-icon">🗺️</div>
+                            <div class="demo-icon">🎬</div>
                             <div class="demo-text">
-                                <div class="demo-title">真实地图足迹</div>
-                                <div class="demo-desc">圆圈=次数 · 颜色=天数</div>
+                                <div class="demo-title">AI 旅行电影</div>
+                                <div class="demo-desc">把旅程变成一部 5 分钟电影</div>
                                 <div class="demo-progress"><span style="width:0%;"></span></div>
                             </div>
                         </div>
                         <div class="hero-demo-step" data-step="2">
-                            <div class="demo-icon">🧬</div>
+                            <div class="demo-icon">📊</div>
                             <div class="demo-text">
-                                <div class="demo-title">16 型旅行人格</div>
-                                <div class="demo-desc">基于 6 维雷达的 MBTI 分析</div>
+                                <div class="demo-title">年度复盘 + 明年预测</div>
+                                <div class="demo-desc">AI 预测你明年会去哪儿 / 怎么玩</div>
                                 <div class="demo-progress"><span style="width:0%;"></span></div>
                             </div>
                         </div>
                         <div class="hero-demo-step" data-step="3">
-                            <div class="demo-icon">📤</div>
+                            <div class="demo-icon">🤖</div>
                             <div class="demo-text">
-                                <div class="demo-title">一键分享海报</div>
-                                <div class="demo-desc">朋友圈/小红书专属海报</div>
+                                <div class="demo-title">AI 智能助手</div>
+                                <div class="demo-desc">问任何关于你旅行的问题</div>
                                 <div class="demo-progress"><span style="width:0%;"></span></div>
                             </div>
                         </div>
@@ -2855,44 +2881,61 @@
             </div>
         </div>
 
-        <!-- ===== 档案列表页 ===== -->
+        <!-- ===== 档案列表页（全部档案 + 我的收藏） ===== -->
         <div id="page-archives" class="page">
             <div class="page-header">
                 <div class="page-title">📋 旅行档案</div>
                 <p class="page-subtitle">管理你的每一次旅行记忆</p>
             </div>
 
-            <div class="search-box">
-                <input type="text" id="search-input" placeholder="搜索旅行档案..." oninput="filterArchives()">
-                <button class="btn btn-primary" onclick="newArchive()">➕ 新建</button>
+            <!-- 档案子 tab 切换 -->
+            <div class="archive-tabs" id="archive-tabs" style="display:flex;gap:8px;margin-bottom:18px;background:#F8F9FB;padding:6px;border-radius:14px;box-shadow:inset 0 1px 3px rgba(0,0,0,0.04);">
+                <button class="archive-tab active" data-tab="all" onclick="switchArchivesTab('all')" style="flex:1;padding:10px 14px;border:none;background:transparent;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;color:#6B7280;transition:all 0.2s;">
+                    <span style="margin-right:6px;">📋</span>全部档案 <span style="background:#E5E7EB;color:#374151;padding:2px 8px;border-radius:10px;font-size:11px;margin-left:4px;" id="archive-tab-count">0</span>
+                </button>
+                <button class="archive-tab" data-tab="favorites" onclick="switchArchivesTab('favorites')" style="flex:1;padding:10px 14px;border:none;background:transparent;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;color:#6B7280;transition:all 0.2s;">
+                    <span style="margin-right:6px;">⭐</span>我的收藏 <span style="background:linear-gradient(135deg,#F59E0B,#F97316);color:white;padding:2px 8px;border-radius:10px;font-size:11px;margin-left:4px;" id="fav-tab-count">0</span>
+                </button>
             </div>
 
-            <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center;">
-                <span style="font-size: 13px; color: var(--text-light); margin-right: 4px;">筛选：</span>
-                <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">全部</button>
-                <button class="filter-btn" data-filter="favorite" onclick="setFilter('favorite')">⭐ 收藏</button>
-                <button class="filter-btn" data-filter="upcoming" onclick="setFilter('upcoming')">⏰ 即将出发</button>
-                <button class="filter-btn" data-filter="past" onclick="setFilter('past')">✅ 已完成</button>
-                <div style="flex: 1;"></div>
-                <label style="font-size: 12px; color: var(--text-light); display: inline-flex; align-items: center; gap: 4px;">
-                    🔃 排序:
-                    <select id="archive-sort" onchange="filterArchives()" style="padding: 4px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; background: white; cursor: pointer;">
-                        <option value="newest">最新优先</option>
-                        <option value="oldest">最早优先</option>
-                        <option value="longest">最长旅行</option>
-                        <option value="title">按标题</option>
-                        <option value="dest">按目的地</option>
-                    </select>
-                </label>
-                <button class="btn btn-secondary btn-sm" onclick="exportData()" title="导出为精美HTML报告">📤 导出报告</button>
-                <button class="btn btn-secondary btn-sm" onclick="exportDataAsJson()" title="导出原始JSON数据备份">💾 数据备份</button>
-                <label class="btn btn-secondary btn-sm" style="cursor: pointer;">
-                    📥 导入数据
-                    <input type="file" accept=".json" style="display: none;" onchange="importData(event)">
-                </label>
+            <!-- 子面板：全部档案（原有 search/filter/list） -->
+            <div class="archive-tab-panel active" id="archive-panel-all">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="搜索旅行档案..." oninput="filterArchives()">
+                    <button class="btn btn-primary" onclick="newArchive()">➕ 新建</button>
+                </div>
+
+                <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center;">
+                    <span style="font-size: 13px; color: var(--text-light); margin-right: 4px;">筛选：</span>
+                    <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">全部</button>
+                    <button class="filter-btn" data-filter="upcoming" onclick="setFilter('upcoming')">⏰ 即将出发</button>
+                    <button class="filter-btn" data-filter="past" onclick="setFilter('past')">✅ 已完成</button>
+                    <div style="flex: 1;"></div>
+                    <label style="font-size: 12px; color: var(--text-light); display: inline-flex; align-items: center; gap: 4px;">
+                        🔃 排序:
+                        <select id="archive-sort" onchange="filterArchives()" style="padding: 4px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; background: white; cursor: pointer;">
+                            <option value="newest">最新优先</option>
+                            <option value="oldest">最早优先</option>
+                            <option value="longest">最长旅行</option>
+                            <option value="title">按标题</option>
+                            <option value="dest">按目的地</option>
+                        </select>
+                    </label>
+                    <button class="btn btn-secondary btn-sm" onclick="exportData()" title="导出为精美HTML报告">📤 导出报告</button>
+                    <button class="btn btn-secondary btn-sm" onclick="exportDataAsJson()" title="导出原始JSON数据备份">💾 数据备份</button>
+                    <label class="btn btn-secondary btn-sm" style="cursor: pointer;">
+                        📥 导入数据
+                        <input type="file" accept=".json" style="display: none;" onchange="importData(event)">
+                    </label>
+                </div>
+
+                <div id="archive-list" class="archive-grid"></div>
             </div>
 
-            <div id="archive-list" class="archive-grid"></div>
+            <!-- 子面板：我的收藏（直接复用 #favorites-list 容器） -->
+            <div class="archive-tab-panel" id="archive-panel-favorites" style="display:none;">
+                <div id="favorites-list" class="archive-grid"></div>
+            </div>
         </div>
 
         <!-- ===== 时间轴页 ===== -->
@@ -2986,51 +3029,118 @@
             </div>
         </div>
 
-        <!-- ===== 出行准备页（倒计时+打包清单） ===== -->
+        <!-- ===== 出行准备页（倒计时+打包清单+智能预算+AI风险评估） ===== -->
         <div id="page-prep" class="page">
             <div class="page-header">
                 <div class="page-title">🎒 出行准备</div>
-                <p class="page-subtitle">下一次旅行的倒计时和打包清单</p>
+                <p class="page-subtitle">下一次旅行的倒计时、打包清单、预算和风险评估</p>
             </div>
 
-            <!-- 即将出发的旅行 -->
-            <div id="prep-upcoming" style="margin-bottom: 24px;"></div>
+            <!-- 即将出发的旅行（始终置顶，所有 tab 共享） -->
+            <div id="prep-upcoming" style="margin-bottom: 16px;"></div>
 
-            <!-- 打包清单 -->
-            <div class="card">
-                <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center;">
-                    <h3 style="margin-right: auto;">📝 打包清单</h3>
-                    <button class="btn btn-primary btn-sm" onclick="addPackingCategory()">📁 新建分类</button>
-                    <button class="btn btn-secondary btn-sm" onclick="resetPackingList()">🔄 重置</button>
-                    <select class="form-control" id="packing-template" style="width: auto; min-width: 180px;" onchange="loadPackingTemplate(this.value)">
-                        <option value="">📋 选择模板...</option>
-                        <option value="weekend">🏖️ 周末短途</option>
-                        <option value="week">🌴 一周旅行</option>
-                        <option value="business">💼 商务出行</option>
-                        <option value="hiking">🥾 户外徒步</option>
-                    </select>
+            <!-- 子 tab 切换 -->
+            <div class="prep-tabs" id="prep-tabs">
+                <button class="prep-tab active" data-tab="packing" onclick="switchPrepTab('packing')">
+                    <span class="prep-tab-icon">📦</span>
+                    <span>打包清单</span>
+                </button>
+                <button class="prep-tab" data-tab="budget" onclick="switchPrepTab('budget')">
+                    <span class="prep-tab-icon">💰</span>
+                    <span>智能预算</span>
+                    <span class="prep-tab-tag" style="background:linear-gradient(135deg,#10B981,#34D399);">AI</span>
+                </button>
+                <button class="prep-tab" data-tab="risk" onclick="switchPrepTab('risk')">
+                    <span class="prep-tab-icon">🛡️</span>
+                    <span>AI 风险评估</span>
+                    <span class="prep-tab-tag" style="background:linear-gradient(135deg,#f093fb,#f5576c);">NEW</span>
+                </button>
+            </div>
+
+            <!-- 子 tab 1：打包清单 -->
+            <div class="prep-tab-panel active" id="prep-panel-packing">
+                <div class="card">
+                    <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center;">
+                        <h3 style="margin-right: auto;">📝 打包清单</h3>
+                        <button class="btn btn-primary btn-sm" onclick="addPackingCategory()">📁 新建分类</button>
+                        <button class="btn btn-secondary btn-sm" onclick="resetPackingList()">🔄 重置</button>
+                        <select class="form-control" id="packing-template" style="width: auto; min-width: 180px;" onchange="loadPackingTemplate(this.value)">
+                            <option value="">📋 选择模板...</option>
+                            <option value="weekend">🏖️ 周末短途</option>
+                            <option value="week">🌴 一周旅行</option>
+                            <option value="business">💼 商务出行</option>
+                            <option value="hiking">🥾 户外徒步</option>
+                        </select>
+                    </div>
+                    <div id="packing-container"></div>
                 </div>
-                <div id="packing-container"></div>
-            </div>
-        </div>
-
-        <!-- ===== 我的收藏页 ===== -->
-        <div id="page-favorites" class="page">
-            <div class="page-header">
-                <div class="page-title">⭐ 我的收藏</div>
-                <p class="page-subtitle">珍藏最爱的旅行记忆</p>
             </div>
 
-            <div id="favorites-list" class="archive-grid"></div>
-        </div>
-
-        <!-- ===== 智能预算 AI 顾问（硬核新功能） ===== -->
-        <div id="page-budget" class="page">
-            <div class="page-header">
-                <div class="page-title">💰 智能预算顾问</div>
-                <p class="page-subtitle">基于你历史消费 + 城市系数的 AI 预算建议</p>
+            <!-- 子 tab 2：智能预算（直接复用 #budget-content 容器） -->
+            <div class="prep-tab-panel" id="prep-panel-budget" style="display:none;">
+                <div id="budget-content"></div>
             </div>
-            <div id="budget-content"></div>
+
+            <!-- 子 tab 3：AI 风险评估（直接复用 #risk-* 容器） -->
+            <div class="prep-tab-panel" id="prep-panel-risk" style="display:none;">
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 24px 28px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(245,87,108,0.25);">
+                    <div style="display:flex;align-items:center;gap:14px;">
+                        <div style="font-size:36px;">🛡️</div>
+                        <div>
+                            <h2 style="margin:0;font-size:22px;">AI 旅行风险实时评估</h2>
+                            <p style="margin:4px 0 0;opacity:0.92;font-size:13px;">输入旅行计划,AI 综合评估天气/健康/安全/预算,生成风险热力图和装备清单</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px;">
+                    <div>
+                        <div class="card">
+                            <div class="card-title">🗺️ 旅行计划</div>
+                            <div style="margin-bottom: 10px;">
+                                <label style="font-size: 12px; color: #888;">目的地 *</label>
+                                <input type="text" id="risk-destination" placeholder="例:西藏拉萨 / 日本东京" style="width: 100%; padding: 8px; border: 1px solid #DDD; border-radius: 6px;">
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <label style="font-size: 12px; color: #888;">出发日期</label>
+                                <input type="date" id="risk-start" style="width: 100%; padding: 8px; border: 1px solid #DDD; border-radius: 6px;">
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <label style="font-size: 12px; color: #888;">返回日期</label>
+                                <input type="date" id="risk-end" style="width: 100%; padding: 8px; border: 1px solid #DDD; border-radius: 6px;">
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <label style="font-size: 12px; color: #888;">同行人(可多选)</label>
+                                <select id="risk-companions" multiple style="width: 100%; padding: 8px; border: 1px solid #DDD; border-radius: 6px; min-height: 80px;">
+                                    <option value="solo">独自</option>
+                                    <option value="couple">情侣</option>
+                                    <option value="family">家人</option>
+                                    <option value="kids">有儿童</option>
+                                    <option value="elderly">有老人</option>
+                                    <option value="friends">朋友</option>
+                                </select>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <label style="font-size: 12px; color: #888;">活动类型(逗号分隔)</label>
+                                <input type="text" id="risk-activities" placeholder="例:徒步,高原观光,寺庙" style="width: 100%; padding: 8px; border: 1px solid #DDD; border-radius: 6px;">
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <label style="font-size: 12px; color: #888;">预算(元)</label>
+                                <input type="number" id="risk-budget" placeholder="10000" style="width: 100%; padding: 8px; border: 1px solid #DDD; border-radius: 6px;">
+                            </div>
+                            <button class="btn btn-primary" onclick="generateRiskAssessment()" style="width: 100%; padding: 12px; font-size: 15px;">🛡️ 风险评估</button>
+                            <div id="risk-status" style="margin-top: 10px; font-size: 13px; color: #888; text-align: center;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="risk-output">
+                            <div class="card" style="text-align: center; color: #BBB; padding: 60px 20px;">
+                                <div style="font-size: 56px; margin-bottom: 12px;">🛡️</div>
+                                <div>填写旅行计划<br>AI 将从天气/健康/安全/预算四个维度评估</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- ===== 成就页 ===== -->
@@ -3316,11 +3426,222 @@
             </div>
         </div>
 
+        <!-- ===== AI 实验室 · 回忆录 ===== -->
+        <div id="page-ai-memoir" class="page" style="display: none;">
+            <div class="page-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #FF764D 100%); color: white; padding: 32px 28px; border-radius: 20px; margin-bottom: 24px; box-shadow: 0 12px 32px rgba(102,126,234,0.3);">
+                <div style="display:flex;align-items:center;gap:14px;">
+                    <div style="font-size:38px;">📖✨</div>
+                    <div>
+                        <h1 style="margin: 0; font-size: 28px;">AI 回忆录 · 故事中心</h1>
+                        <p style="margin: 6px 0 0; opacity: 0.94; font-size: 14px;">回忆录写作 + 旅行电影 + 年度复盘 + AI 智能助手,一站搞定</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 顶级 tab 切换：回忆录 / 故事中心 -->
+            <div class="memoir-tabs" id="memoir-tabs" style="display:flex;gap:8px;margin-bottom:18px;background:#F8F9FB;padding:6px;border-radius:14px;box-shadow:inset 0 1px 3px rgba(0,0,0,0.04);">
+                <button class="memoir-tab active" data-tab="memoir" onclick="switchMemoirTab('memoir')" style="flex:1;padding:11px 14px;border:none;background:white;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;color:#1F2937;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                    <span style="margin-right:6px;">📖</span>AI 回忆录
+                </button>
+                <button class="memoir-tab" data-tab="story" onclick="switchMemoirTab('story')" style="flex:1;padding:11px 14px;border:none;background:transparent;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;color:#6B7280;">
+                    <span style="margin-right:6px;">✨</span>AI 故事中心
+                    <span class="prep-tab-tag" style="background:linear-gradient(135deg,#FF764D,#FDCB6E,#6C5CE7);">HOT</span>
+                </button>
+            </div>
+
+            <!-- 面板 1: AI 回忆录 -->
+            <div class="memoir-tab-panel active" id="memoir-panel-memoir">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <div class="card">
+                            <div class="card-title">📷 1. 上传旅行照片(3-15 张)</div>
+                            <div id="memoir-photos" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; min-height: 80px;"></div>
+                            <input type="file" id="memoir-photo-input" accept="image/*" multiple style="display: none;" onchange="onMemoirPhotosSelected(event)">
+                            <button class="btn btn-secondary" onclick="document.getElementById('memoir-photo-input').click()" style="width: 100%;">➕ 选择照片</button>
+                        </div>
+                        <div class="card" style="margin-top: 16px;">
+                            <div class="card-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                                <span>📝 2. 提供素材</span>
+                                <div style="display:flex;background:#F3F4F6;border-radius:8px;padding:3px;gap:2px;">
+                                    <button id="memoir-source-tab-manual" onclick="switchMemoirSource('manual')" style="padding:4px 12px;border:none;background:#FF764D;color:white;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;">✍️ 手填</button>
+                                    <button id="memoir-source-tab-archive" onclick="switchMemoirSource('archive')" style="padding:4px 12px;border:none;background:transparent;color:#6B7280;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;">📚 从档案</button>
+                                </div>
+                            </div>
+
+                            <!-- 子面板:手填 -->
+                            <div id="memoir-source-manual">
+                                <div style="margin-bottom: 10px;">
+                                    <label style="font-size: 12px; color: #888;">目的地</label>
+                                    <input type="text" id="memoir-destination" placeholder="例:云南大理" style="width: 100%; padding: 8px; border: 1px solid #DDD; border-radius: 6px;">
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <label style="font-size: 12px; color: #888;">旅行日期</label>
+                                    <input type="text" id="memoir-dates" placeholder="例:2024-02-10 至 2024-02-16" style="width: 100%; padding: 8px; border: 1px solid #DDD; border-radius: 6px;">
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <label style="font-size: 12px; color: #888;">文字片段(日记/感受/趣事)</label>
+                                    <textarea id="memoir-text" placeholder="粘贴你写过的任何文字,AI 会融合进回忆录..." rows="4" style="width: 100%; padding: 8px; border: 1px solid #DDD; border-radius: 6px; font-family: inherit; resize: vertical;"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- 子面板:从档案 -->
+                            <div id="memoir-source-archive" style="display:none;">
+                                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;align-items:center;">
+                                    <button class="btn btn-secondary btn-sm" onclick="memoirSelectAllArchives()" style="font-size:11px;padding:3px 8px;">全选</button>
+                                    <button class="btn btn-secondary btn-sm" onclick="memoirSelectNoneArchives()" style="font-size:11px;padding:3px 8px;">全不选</button>
+                                    <button class="btn btn-secondary btn-sm" onclick="memoirSelectInvertArchives()" style="font-size:11px;padding:3px 8px;">反选</button>
+                                    <button class="btn btn-secondary btn-sm" onclick="memoirSelectThisYearArchives()" style="font-size:11px;padding:3px 8px;">只今年</button>
+                                    <button class="btn btn-primary btn-sm" onclick="toggleMemoirArchiveList()" id="memoir-toggle-list-btn" style="font-size:11px;padding:3px 8px;">展开 ▾</button>
+                                    <span id="memoir-selection-count" style="margin-left:auto;font-size:11px;color:#4F46E5;font-weight:600;"></span>
+                                </div>
+                                <div id="memoir-archive-list" style="display:none;max-height:160px;overflow-y:auto;border:1px solid #E5E7EB;border-radius:6px;background:white;padding:4px;"></div>
+                                <button class="btn btn-primary" onclick="applyMemoirArchiveSelection()" style="width:100%;margin-top:8px;font-size:12px;padding:7px;">📥 加载选中档案到上方输入框</button>
+                            </div>
+                        </div>
+                        <div class="card" style="margin-top: 16px;">
+                            <div class="card-title">✨ 3. 选择风格 + 生成</div>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px;">
+                                <button class="memoir-style-btn active" data-style="essay" style="padding: 10px; border: 2px solid #FF764D; background: #FFF5F0; border-radius: 8px; cursor: pointer; font-size: 12px;">📜 散文</button>
+                                <button class="memoir-style-btn" data-style="diary" style="padding: 10px; border: 2px solid #DDD; background: white; border-radius: 8px; cursor: pointer; font-size: 12px;">📓 日记</button>
+                                <button class="memoir-style-btn" data-style="novel" style="padding: 10px; border: 2px solid #DDD; background: white; border-radius: 8px; cursor: pointer; font-size: 12px;">📚 小说</button>
+                            </div>
+                            <button class="btn btn-primary" onclick="generateMemoir()" style="width: 100%; padding: 12px; font-size: 15px;">🚀 AI 生成回忆录</button>
+                            <div id="memoir-status" style="margin-top: 10px; font-size: 13px; color: #888; text-align: center;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="card" style="min-height: 400px;">
+                            <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>📖 AI 回忆录</span>
+                                <div id="memoir-actions" style="display: none;">
+                                    <button class="btn btn-secondary" onclick="exportMemoirAsImage()" style="font-size: 12px; padding: 4px 10px;">🖼️ 长图</button>
+                                    <button class="btn btn-secondary" onclick="copyMemoirText()" style="font-size: 12px; padding: 4px 10px;">📋 复制</button>
+                                </div>
+                            </div>
+                            <div id="memoir-output" style="font-size: 14px; line-height: 1.9; color: #333; min-height: 320px; padding: 8px; background: #FFF9E6; border-radius: 8px; border: 1px dashed #FDCB6E;">
+                                <div style="text-align: center; color: #BBB; padding: 60px 20px;">
+                                    <div style="font-size: 56px; margin-bottom: 12px;">📖</div>
+                                    <div>上传照片,补充文字,选择风格<br>点击"AI 生成回忆录"开始</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 面板 2: AI 故事中心 -->
+            <div class="memoir-tab-panel" id="memoir-panel-story" style="display:none;">
+                <!-- 故事中心二级 tab -->
+                <!-- 档案选择器(决定哪些档案参与 AI 故事) -->
+                <div class="card" id="story-archive-selector" style="margin-bottom:18px;padding:16px 18px;background:linear-gradient(135deg,#F0F4FF 0%,#FAFBFC 100%);border:1px solid #E0E7FF;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <span style="font-size:20px;">📚</span>
+                            <span style="font-weight:700;color:#1F2937;font-size:15px;">选择参与 AI 故事的档案</span>
+                            <span id="story-selection-count" style="background:#EEF2FF;color:#4F46E5;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600;"></span>
+                        </div>
+                        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                            <button class="btn btn-secondary btn-sm" onclick="selectAllStoryArchives()" style="font-size:12px;padding:4px 10px;">全选</button>
+                            <button class="btn btn-secondary btn-sm" onclick="selectNoneStoryArchives()" style="font-size:12px;padding:4px 10px;">全不选</button>
+                            <button class="btn btn-secondary btn-sm" onclick="selectInvertStoryArchives()" style="font-size:12px;padding:4px 10px;">反选</button>
+                            <button class="btn btn-secondary btn-sm" onclick="selectThisYearArchives()" style="font-size:12px;padding:4px 10px;">只今年</button>
+                            <button class="btn btn-primary btn-sm" onclick="toggleStoryArchiveList()" id="story-toggle-list-btn" style="font-size:12px;padding:4px 10px;">展开 ▾</button>
+                        </div>
+                    </div>
+                    <div id="story-archive-list" style="display:none;max-height:200px;overflow-y:auto;border:1px solid #E5E7EB;border-radius:8px;background:white;padding:8px;"></div>
+                </div>
+                <div class="story-tabs" id="story-tabs" style="display:flex;gap:8px;margin-bottom:18px;background:#F8F9FB;padding:6px;border-radius:14px;box-shadow:inset 0 1px 3px rgba(0,0,0,0.04);">
+                    <button class="story-tab active" data-tab="movie" onclick="switchStoryTab('movie')" style="flex:1;padding:11px 14px;border:none;background:white;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;color:#1F2937;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                        <span style="margin-right:6px;">🎬</span>旅行电影
+                    </button>
+                    <button class="story-tab" data-tab="yearly" onclick="switchStoryTab('yearly')" style="flex:1;padding:11px 14px;border:none;background:transparent;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;color:#6B7280;">
+                        <span style="margin-right:6px;">📊</span>年度复盘+预测
+                    </button>
+                    <button class="story-tab" data-tab="agent" onclick="switchStoryTab('agent')" style="flex:1;padding:11px 14px;border:none;background:transparent;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;color:#6B7280;">
+                        <span style="margin-right:6px;">🤖</span>AI 智能体
+                        <span class="prep-tab-tag" style="background:linear-gradient(135deg,#10B981,#34D399);">AI</span>
+                    </button>
+                </div>
+
+                <!-- 旅行电影 -->
+                <div class="story-tab-panel active" id="story-panel-movie">
+                    <div class="card" style="padding:24px;text-align:center;">
+                        <div style="font-size:48px;margin-bottom:12px;">🎬</div>
+                        <h3 style="margin:0 0 6px;">把旅行变成一部电影</h3>
+                        <p style="color:var(--text-light);font-size:14px;margin-bottom:18px;">AI 自动编排你的所有档案 → 全屏播放,5分钟看完你的整个旅行人生</p>
+                        <div id="movie-selector" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:18px;"></div>
+                        <button class="btn btn-primary btn-lg" onclick="playTravelMovie()" id="movie-play-btn" style="font-size:16px;padding:12px 32px;">
+                            ▶️ 开始播放
+                        </button>
+                        <div style="margin-top:14px;font-size:12px;color:var(--text-light);">
+                            共 <b id="movie-total-count">0</b> 段旅程 · 精选 <b id="movie-photo-count">0</b> 张照片
+                        </div>
+                    </div>
+                    <div id="movie-player" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:9999;overflow:hidden;">
+                        <div id="movie-bg" style="position:absolute;top:0;left:0;right:0;bottom:0;background-size:cover;background-position:center;transition:opacity 1.5s,transform 6s;opacity:0;transform:scale(1.05);"></div>
+                        <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0.7) 100%);"></div>
+                        <div id="movie-text" style="position:absolute;left:0;right:0;bottom:18%;text-align:center;color:white;padding:0 24px;text-shadow:0 4px 24px rgba(0,0,0,0.6);opacity:0;transition:opacity 1.2s;"></div>
+                        <div id="movie-progress" style="position:absolute;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,0.2);"><div id="movie-progress-bar" style="height:100%;background:linear-gradient(90deg,#FF764D,#FDCB6E);width:0%;transition:width 0.4s;"></div></div>
+                        <button onclick="stopTravelMovie()" style="position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.15);border:none;color:white;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;backdrop-filter:blur(8px);">✕</button>
+                        <button onclick="toggleMoviePause()" id="movie-pause-btn" style="position:absolute;top:20px;right:74px;background:rgba(255,255,255,0.15);border:none;color:white;width:44px;height:44px;border-radius:50%;font-size:18px;cursor:pointer;backdrop-filter:blur(8px);">⏸</button>
+                    </div>
+                </div>
+
+                <!-- 年度复盘 -->
+                <div class="story-tab-panel" id="story-panel-yearly" style="display:none;">
+                    <div id="yearly-content">
+                        <div class="card" style="text-align:center;padding:60px 20px;color:#BBB;">
+                            <div style="font-size:48px;margin-bottom:12px;">📊</div>
+                            <div>点击下方按钮生成年度复盘</div>
+                        </div>
+                    </div>
+                    <div style="text-align:center;margin-top:18px;">
+                        <select id="yearly-year" class="form-control" style="display:inline-block;width:auto;margin-right:8px;"></select>
+                        <button class="btn btn-primary" onclick="renderYearlyReport()">📊 生成年度报告</button>
+                        <button class="btn btn-secondary" onclick="predictNextYear()">🔮 明年预测 (AI)</button>
+                    </div>
+                    <div id="yearly-predict" style="margin-top:18px;"></div>
+                </div>
+
+                <!-- AI 智能体 -->
+                <div class="story-tab-panel" id="story-panel-agent" style="display:none;">
+                    <div style="display:grid;grid-template-columns:280px 1fr;gap:20px;">
+                        <div class="card">
+                            <div class="card-title">💡 试试这些问题</div>
+                            <div id="agent-suggestions" style="display:flex;flex-direction:column;gap:8px;">
+                                <button class="btn btn-secondary" onclick="askAgent('推荐我下次去哪儿？')" style="text-align:left;font-size:13px;">📍 推荐我下次去哪儿？</button>
+                                <button class="btn btn-secondary" onclick="askAgent('分析我最爱去哪些城市')" style="text-align:left;font-size:13px;">🏙️ 我最爱去哪些城市？</button>
+                                <button class="btn btn-secondary" onclick="askAgent('明年最可能去哪儿？')" style="text-align:left;font-size:13px;">🔮 明年最可能去哪儿？</button>
+                                <button class="btn btn-secondary" onclick="askAgent('我和谁旅行最多次？')" style="text-align:left;font-size:13px;">👥 我和谁旅行最多次？</button>
+                                <button class="btn btn-secondary" onclick="askAgent('我的旅行风格是什么样的？')" style="text-align:left;font-size:13px;">🎨 我的旅行风格？</button>
+                                <button class="btn btn-secondary" onclick="askAgent('给我一个省钱建议')" style="text-align:left;font-size:13px;">💰 给我一个省钱建议</button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="card" style="min-height:480px;display:flex;flex-direction:column;">
+                                <div class="card-title">🤖 AI 旅行助手</div>
+                                <div id="agent-chat" style="flex:1;overflow-y:auto;padding:8px;max-height:480px;background:#FAFBFC;border-radius:10px;margin-bottom:12px;">
+                                    <div style="text-align:center;color:#BBB;padding:60px 20px;">
+                                        <div style="font-size:48px;margin-bottom:12px;">🤖</div>
+                                        <div>试试问我关于你旅行的问题<br>或点击左侧推荐问题</div>
+                                    </div>
+                                </div>
+                                <div style="display:flex;gap:8px;">
+                                    <input type="text" id="agent-input" placeholder="问我任何关于旅行的问题..." class="form-control" style="flex:1;" onkeydown="if(event.key==='Enter') askAgentFromInput()">
+                                    <button class="btn btn-primary" onclick="askAgentFromInput()">发送</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 </div>
 
 <!-- 模态框：新建/编辑档案 -->
-<div id="modal-add-archive" class="modal-overlay" oninput="_scheduleAutoSaveDraft(); updateFormCompleteness();" onchange="checkDuplicateTrip(); updateFormCompleteness();">
+<div id="modal-add-archive" class="modal-overlay" onclick="_onArchiveModalClick(event)" oninput="_scheduleAutoSaveDraft()" onchange="_onArchiveModalChange(event)">
     <div class="modal">
             <div class="modal-header" style="position: relative;">
                 <h3 id="modal-title">✈️ 新建旅行档案</h3>
@@ -3332,6 +3653,13 @@
             <div class="form-completeness" style="margin-top: 4px;">
                 <div class="form-completeness-fill" id="form-completeness-fill" style="width: 0%"></div>
                 <span class="form-completeness-label" id="form-completeness-label">0/10</span>
+            </div>
+
+            <!-- 草稿恢复提示 -->
+            <div id="draft-restore-banner" style="display: none; margin: 10px 0 4px; padding: 10px 14px; background: linear-gradient(135deg, rgba(255,118,77,0.08), rgba(250,112,154,0.08)); border: 1.5px dashed #FF764D; border-radius: 10px; font-size: 13px; color: #C44545; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span style="flex: 1;">📝 检测到未保存的草稿(<span id="draft-restore-time"></span>)</span>
+                <button type="button" class="btn btn-primary btn-sm" onclick="_restoreDraftNow()" style="padding: 4px 12px; font-size: 12px;">恢复</button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="_discardDraft()" style="padding: 4px 12px; font-size: 12px;">丢弃</button>
             </div>
 
         <input type="hidden" id="edit-archive-id">
@@ -3652,49 +3980,26 @@
 <!-- 隐藏的海报 Canvas -->
 <canvas id="personality-poster-canvas" width="750" height="1334" style="display: none;"></canvas>
 
-<!-- 模态框：AI 设置 -->
+<!-- 模态框：AI 大模型中心(多供应商 + 文本/视觉 + 故障转移) -->
 <div id="modal-ai-settings" class="modal-overlay">
-    <div class="modal" style="max-width: 560px;">
+    <div class="modal" style="max-width: 760px; max-height: 90vh; overflow-y: auto;">
         <div class="modal-header">
-            <h3>🤖 AI 增强分析设置</h3>
+            <h3>🤖 AI 大模型中心</h3>
             <button class="modal-close" onclick="closeModal('ai-settings')">✕</button>
         </div>
         <div style="padding: 8px 0;">
             <div style="background: linear-gradient(135deg, #FFF5F0, #FFF9E6); padding: 14px; border-radius: 12px; margin-bottom: 16px; font-size: 13px; line-height: 1.6;">
-                <strong>💡 这是什么：</strong>配置真实 AI API 后，旅行人格分析将调用大模型生成<strong>更深入、更有诗意</strong>的性格解读、专属旅行建议和下一站预测。<br>
-                <strong>🔒 隐私：</strong>API Key 仅存储在本地浏览器（localStorage），不会上传任何服务器。<br>
-                <strong>💰 推荐：</strong>硅基流动（SiliconFlow）注册即送<strong>免费额度</strong>，无需信用卡。
+                <strong>💡 这是什么:</strong>配置多个 AI 大模型供应商,支持<strong>自动故障转移</strong>和<strong>多模态视觉识别</strong>。<br>
+                <strong>🔒 隐私:</strong>所有 API Key 仅存本地浏览器(localStorage),不上传任何服务器。<br>
+                <strong>💰 推荐组合:</strong>智谱 GLM-4V(视觉·免费) + DeepSeek(长文·便宜) + 硅基流动(备用·免费)
             </div>
 
-            <div style="margin-bottom: 14px;">
-                <label style="display: block; font-weight: 600; margin-bottom: 6px;">服务商</label>
-                <select id="ai-provider" onchange="onAIProviderChange()" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
-                    <option value="siliconflow">硅基流动 SiliconFlow（推荐·免费）</option>
-                    <option value="deepseek">DeepSeek（便宜·需充值）</option>
-                    <option value="zhipu">智谱 AI GLM（有免费额度）</option>
-                    <option value="custom">自定义 OpenAI 兼容接口</option>
-                </select>
-            </div>
-
-            <div style="margin-bottom: 14px;">
-                <label style="display: block; font-weight: 600; margin-bottom: 6px;">API Key</label>
-                <input type="password" id="ai-api-key" placeholder="sk-xxxxxxxxxxxxxxxx" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; font-family: monospace;">
-                <div style="margin-top: 4px; font-size: 12px; color: #888;">
-                    <a href="https://cloud.siliconflow.cn/account/ak" target="_blank" style="color: #FF764D;">👉 硅基流动 API Key 申请</a>
-                    ·
-                    <a href="https://platform.deepseek.com/api_keys" target="_blank" style="color: #FF764D;">👉 DeepSeek 申请</a>
-                </div>
-            </div>
-
-            <div style="margin-bottom: 14px;">
-                <label style="display: block; font-weight: 600; margin-bottom: 6px;">模型</label>
-                <input type="text" id="ai-model" placeholder="Qwen/Qwen2.5-7B-Instruct" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
-            </div>
+            <div id="ai-providers-list"></div>
 
             <div style="display: flex; gap: 8px; margin-top: 20px;">
-                <button class="btn btn-primary" onclick="saveAISettings()" style="flex: 1;">💾 保存设置</button>
-                <button class="btn btn-secondary" onclick="testAIConnection()" style="flex: 1;">🔌 测试连接</button>
-                <button class="btn btn-secondary" onclick="clearAISettings()" style="flex: 1;">🗑️ 清除</button>
+                <button class="btn btn-primary" onclick="addAIProviderRow()" style="flex: 1;">➕ 添加供应商</button>
+                <button class="btn btn-secondary" onclick="saveAllAIProviders()" style="flex: 1;">💾 全部保存</button>
+                <button class="btn btn-secondary" onclick="testAllAIProviders()" style="flex: 1;">🔌 测试全部</button>
             </div>
 
             <div id="ai-test-result" style="margin-top: 12px; display: none;"></div>
@@ -3742,14 +4047,16 @@ window.addEventListener('load', () => {
         if (splash) splash.classList.add('hidden');
         setTimeout(() => { if (typeof startHeroDemo === 'function') startHeroDemo(); }, 200);
     });
-    // 预热 3D 地球纹理,等用户切到 3D 地球时秒开
+    // 预热 3D 地球纹理(本地 + CDN),等用户切到 3D 地球时秒开
     if (typeof Image !== 'undefined') {
         setTimeout(() => {
             try {
-                const img1 = new Image();
-                img1.src = 'assets/globe/lib/earth-night.jpg';
-                const img2 = new Image();
-                img2.src = 'assets/globe/lib/earth-topology.png';
+                ['assets/globe/lib/earth-night.jpg', 'assets/globe/lib/earth-topology.png',
+                 'https://unpkg.com/three-globe/example/img/earth-night.jpg',
+                 'https://unpkg.com/three-globe/example/img/earth-topology.png'].forEach(s => {
+                    const img = new Image();
+                    img.src = s;
+                });
             } catch (e) {}
         }, 800);
     }
@@ -3806,7 +4113,7 @@ function startHeroDemo() {
         _heroStep++;
     };
     advance();
-    _heroDemoTimer = setInterval(advance, 3500);
+    _heroDemoTimer = setInterval(advance, 2000);
 }
 function stopHeroDemo() {
     if (_heroDemoTimer) { clearInterval(_heroDemoTimer); _heroDemoTimer = null; }
@@ -3816,15 +4123,15 @@ function stopHeroDemo() {
 let _tourTimer = null;
 let _tourStep = 0;
 const TOUR_STEPS = [
-    { page: 'home', delay: 0, text: '👋 欢迎来到旅行复盘！这就是首页：Hero 大屏 + 自动 Demo 循环。', focus: '#home-hero' },
-    { page: 'home', delay: 6000, text: '📊 4 个 KPI 大数字：核心数据一眼可见，hover 还会动。', focus: '.kpi-dashboard' },
-    { page: 'archives', delay: 12000, text: '📁 旅行档案：每段旅程有照片、心情、评分、标签。点击「新建档案」试试智能文本解析。', focus: '.archive-grid' },
-    { page: null, delay: 18000, text: '🤖 智能文本解析：粘贴一段游记，AI 自动提取 17 个字段。', action: 'openSmartImport()' },
-    { page: 'dataview', delay: 24000, text: '🗺️ 真实地图足迹：Leaflet 真实地图，圆圈=次数，颜色=天数。', focus: '#city-heatmap' },
-    { page: 'personality', delay: 30000, text: '🧬 6 维人格雷达 → MBTI 16 型。', focus: '#personality-radar-wrap, .personality-radar-wrap, canvas' },
-    { page: null, delay: 38000, text: '📤 一键生成专属海报（可分享到朋友圈 / 小红书）！', action: 'generatePersonalityPoster()' },
-    { page: 'timeline', delay: 46000, text: '⏱️ 智能时间轴：按年分组、季节 emoji、错峰入场动画。', focus: '#timeline-container' },
-    { page: 'home', delay: 54000, text: '✅ 60 秒 Tour 完成！项目 100% 离线可用、AI 可选。', focus: '.hero-section' }
+    { page: 'home', delay: 0, text: '👋 欢迎来到旅行复盘！Hero 大屏 + 自动 Demo 循环。', focus: '#home-hero' },
+    { page: 'archives', delay: 4000, text: '📁 旅行档案：每段旅程有照片、心情、评分、标签。', focus: '.archive-grid' },
+    { page: 'prep', delay: 8000, text: '🎒 出行准备：3 个子 tab 一站搞定打包 + 预算 + 风险评估。', focus: '#prep-tabs' },
+    { page: null, delay: 12000, text: '💰 智能预算：基于你历史消费 + 城市系数自动试算。', action: "switchPrepTab('budget')" },
+    { page: null, delay: 16000, text: '🛡️ AI 风险评估：4 维风险 + 装备清单 + 应急方案。', action: "switchPrepTab('risk')" },
+    { page: 'dataview', delay: 20000, text: '🗺️ 真实地图足迹 + 旅行节奏流 + 城市热力图。', focus: '#city-heatmap' },
+    { page: 'personality', delay: 24000, text: '🧬 6 维人格雷达 → MBTI 16 型 + 一键海报。', focus: '#personality-radar-wrap' },
+    { page: 'map', delay: 28000, text: '🌍 3D 地球：城市标记可点击 + 详情弹窗。', focus: '#map-container' },
+    { page: 'home', delay: 32000, text: '✅ 32 秒 Tour 完成！AI 可选 + 100% 离线可用。', focus: '.hero-section' }
 ];
 function startQuickTour() {
     stopQuickTour();
@@ -4415,30 +4722,352 @@ function getSampleData() {
 
 // ===== 页面导航 =====
 function showPage(pageName) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active');
+        // 兼容内联 style="display:none" 的页面
+        if (p.id && p.id.startsWith('page-ai-')) p.style.display = 'none';
+    });
     document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
 
     const page = document.getElementById('page-' + pageName);
-    if (page) page.classList.add('active');
+    if (page) {
+        page.classList.add('active');
+        if (page.id && page.id.startsWith('page-ai-')) page.style.display = 'block';
+    }
 
     const sidebarItem = document.querySelector(`.sidebar-item[data-page="${pageName}"]`);
     if (sidebarItem) sidebarItem.classList.add('active');
 
+    // 每次切换页面时强制同步 sidebar 快速统计（防止 sidebar 与详情页数据不一致）
+    try {
+        if (typeof updateSidebarStats === 'function') updateSidebarStats();
+    } catch (e) { console.error('updateSidebarStats failed:', e); }
+
     // 页面特定加载
     try {
-        if (pageName === 'archives') filterArchives();
+        if (pageName === 'archives') {
+            // 默认显示"全部档案"子 tab
+            switchArchivesTab('all');
+            filterArchives();
+        }
         if (pageName === 'timeline') { renderTimeline(); setTimeout(renderCompanionNetwork, 50); }
         if (pageName === 'map') { initMap(); renderYearWheel(); refreshCompanionSelects(); try { initYearWheelDrag(); } catch (e) {} }
         if (pageName === 'stories') renderStories();
         if (pageName === 'achievements') renderAchievements();
         if (pageName === 'stats') renderStats();
         if (pageName === 'home') updateDashboard();
-        if (pageName === 'prep') renderPrepPage();
-        if (pageName === 'favorites') renderFavorites();
+        if (pageName === 'prep') {
+            // 默认显示"打包清单"子 tab
+            switchPrepTab('packing');
+            renderPrepPage();
+        }
         if (pageName === 'dataview') renderDataView();
-        if (pageName === 'budget') renderBudgetAdvisor();
+        if (pageName === 'ai-memoir') { switchMemoirTab('memoir'); renderMemoirPhotos(); }
+        if (pageName === 'personality' && typeof reAnalyzePersonality === 'function') {
+            // 仅在已有数据时重新分析
+        }
     } catch (e) {
         console.error('页面加载出错:', pageName, e);
+    }
+}
+
+// ===== 出行准备子 tab 切换 =====
+function switchPrepTab(tabName) {
+    // 切换 tab 按钮状态
+    document.querySelectorAll('#prep-tabs .prep-tab').forEach(b => {
+        b.classList.toggle('active', b.dataset.tab === tabName);
+    });
+    // 切换 panel 显示
+    document.querySelectorAll('.prep-tab-panel').forEach(p => {
+        p.style.display = 'none';
+    });
+    const panel = document.getElementById('prep-panel-' + tabName);
+    if (panel) {
+        panel.style.display = 'block';
+    }
+    // 渲染对应内容
+    try {
+        if (tabName === 'packing') {
+            // 打包清单：renderPrepPage 顶部已调用过 packing 部分
+            if (typeof renderPackingList === 'function') renderPackingList();
+        } else if (tabName === 'budget') {
+            // 智能预算：调用 renderBudgetAdvisor
+            if (typeof renderBudgetAdvisor === 'function') renderBudgetAdvisor();
+        } else if (tabName === 'risk') {
+            // 风险评估：基于下一次即将出发的档案自动填充
+            _autoFillRiskForm();
+        }
+    } catch (e) {
+        console.error('prep tab 切换出错:', tabName, e);
+    }
+}
+
+// 风险评估表单自动填充（基于最新的即将出发档案）
+function _autoFillRiskForm() {
+    try {
+        const today = new Date(); today.setHours(0,0,0,0);
+        const upcoming = (archives || [])
+            .filter(a => new Date(a.start) >= today)
+            .sort((a, b) => new Date(a.start) - new Date(b.start))[0];
+        // 不覆盖用户已输入的内容
+        const destEl = document.getElementById('risk-destination');
+        if (destEl && upcoming && !destEl.value) destEl.value = upcoming.destination || '';
+        const startEl = document.getElementById('risk-start');
+        if (startEl && upcoming && !startEl.value) startEl.value = upcoming.start || '';
+        const endEl = document.getElementById('risk-end');
+        if (endEl && upcoming && !endEl.value) endEl.value = upcoming.end || '';
+        // 同行人
+        const compEl = document.getElementById('risk-companions');
+        if (compEl && upcoming) {
+            const companions = (upcoming.companions || []).map(c => typeof c === 'string' ? c : c.name).filter(Boolean);
+            const tags = [];
+            if (companions.length === 0) tags.push('solo');
+            else if (companions.length === 1) tags.push('solo');
+            else if (companions.length === 2) tags.push('couple');
+            else tags.push('friends');
+            Array.from(compEl.options).forEach(opt => {
+                opt.selected = tags.includes(opt.value);
+            });
+        }
+    } catch (e) {}
+}
+
+// ===== 旅行档案子 tab 切换 =====
+function switchArchivesTab(tabName) {
+    // 切换 tab 按钮状态
+    document.querySelectorAll('#archive-tabs .archive-tab').forEach(b => {
+        b.classList.toggle('active', b.dataset.tab === tabName);
+        // active tab 加白底高亮
+        if (b.classList.contains('active')) {
+            b.style.background = 'white';
+            b.style.color = '#1F2937';
+            b.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+        } else {
+            b.style.background = 'transparent';
+            b.style.color = '#6B7280';
+            b.style.boxShadow = 'none';
+        }
+    });
+    // 切换 panel 显示
+    document.querySelectorAll('.archive-tab-panel').forEach(p => {
+        p.style.display = 'none';
+    });
+    const panel = document.getElementById('archive-panel-' + tabName);
+    if (panel) panel.style.display = 'block';
+    // 渲染对应内容
+    try {
+        if (tabName === 'favorites') {
+            if (typeof renderFavorites === 'function') renderFavorites();
+        } else if (tabName === 'all') {
+            if (typeof filterArchives === 'function') filterArchives();
+        }
+        // 更新 badge 计数
+        _updateArchivesTabCounts();
+    } catch (e) {
+        console.error('archive tab 切换出错:', tabName, e);
+    }
+}
+
+function _updateArchivesTabCounts() {
+    try {
+        const allCount = (archives || []).length;
+        const favCount = (archives || []).filter(a => a.favorite).length;
+        const allBadge = document.getElementById('archive-tab-count');
+        const favBadge = document.getElementById('fav-tab-count');
+        if (allBadge) allBadge.textContent = allCount;
+        if (favBadge) favBadge.textContent = favCount;
+    } catch (e) {}
+}
+
+// ===== AI Key 未配置的统一提示 =====
+// 用法:
+//   showAIMissingHint({ target: el })         // 渲染提示框到 target
+//   showAIMissingHint({ target: el, autoOpen: true }) // 渲染+自动打开设置
+//   showAIMissingHint({ compact: true })      // 返回可嵌入字符串（用于聊天/小区域）
+function showAIMissingHint(opts) {
+    const o = opts || {};
+    const isEn = (typeof currentLang !== 'undefined' && currentLang === 'en');
+    const title = isEn ? '🔑 AI API Key Not Configured' : '🔑 AI API Key 尚未配置';
+    const desc = isEn
+        ? 'This feature requires an AI provider. Click the button below to configure your API key (8 free/paid providers supported: GLM, DeepSeek, Qwen, Moonshot, Doubao, SiliconFlow, OpenAI, Custom).'
+        : '该功能需要 AI 大模型。点击下方按钮配置 API Key(支持 8 家供应商:智谱/DeepSeek/Qwen/月之暗面/豆包/硅基流动/OpenAI/自定义,推荐智谱 GLM-4-Flash 免费)';
+    const btnText = isEn ? '⚙️ Open AI Settings' : '⚙️ 立即配置 AI Key';
+    const compact = o.compact === true;
+    // compact 模式：返回可嵌入 HTML 字符串，用于聊天气泡等小区域
+    if (compact) {
+        return `<div class="ai-missing-hint" style="background:linear-gradient(135deg,#FFF7ED,#FFEDD5);border:2px solid #FB923C;padding:14px 16px;border-radius:18px 18px 18px 4px;font-size:14px;color:#9A3412;">
+            <div style="font-weight:700;margin-bottom:6px;">${title}</div>
+            <div style="font-size:13px;color:#7C2D12;margin-bottom:10px;line-height:1.5;">${desc}</div>
+            <button onclick="openAISettingsModal();const h=this.closest('.ai-missing-hint');if(h)h.remove();" style="background:linear-gradient(135deg,#F59E0B,#EA580C);color:white;border:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">${btnText}</button>
+        </div>`;
+    }
+    const target = o.target || document.body;
+    // 清空旧提示
+    const old = target && target.querySelector ? target.querySelector('.ai-missing-hint') : null;
+    if (old) old.remove();
+    const div = document.createElement('div');
+    div.className = 'ai-missing-hint';
+    div.style.cssText = 'background:linear-gradient(135deg,#FFF7ED,#FFEDD5);border:2px solid #FB923C;border-radius:14px;padding:24px;margin:20px 0;text-align:center;box-shadow:0 8px 24px rgba(251,146,60,0.18);';
+    div.innerHTML = `
+        <div style="font-size:48px;margin-bottom:8px;">🔑</div>
+        <div style="font-size:18px;font-weight:700;color:#9A3412;margin-bottom:8px;">${title}</div>
+        <div style="font-size:13px;color:#7C2D12;line-height:1.6;margin-bottom:14px;max-width:560px;margin-left:auto;margin-right:auto;">${desc}</div>
+        <button onclick="openAISettingsModal();const h=document.querySelector('.ai-missing-hint');if(h)h.remove();" style="background:linear-gradient(135deg,#F59E0B,#EA580C);color:white;border:none;padding:12px 28px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(245,158,11,0.4);">${btnText}</button>
+        <div style="margin-top:14px;font-size:11px;color:#9A3412;opacity:0.75;">${isEn ? '💡 Tip: click the bottom-right 🤖 button to open settings' : '💡 提示:点击底部右下角 🤖 按钮也能打开设置'}</div>
+    `;
+    if (target && target.insertBefore) {
+        target.insertBefore(div, target.firstChild);
+    } else if (target && target.appendChild) {
+        target.appendChild(div);
+    } else {
+        document.body.appendChild(div);
+    }
+    if (o.autoOpen && typeof openAISettingsModal === 'function') {
+        setTimeout(() => openAISettingsModal(), 200);
+    }
+    return div;
+}
+
+// 弹窗式快速提示
+function showAIMissingToast() {
+    const isEn = (typeof currentLang !== 'undefined' && currentLang === 'en');
+    if (isEn) {
+        showToast('🔑 Please configure AI API Key first', 'warning');
+    } else {
+        showToast('🔑 请先配置 AI API Key', 'warning');
+    }
+    setTimeout(() => {
+        if (typeof openAISettingsModal === 'function') openAISettingsModal();
+    }, 600);
+}
+
+// ===== 增强 AI 错误信息(本地化 + 排错建议) =====
+// 输入:err (Error 对象) + fallback (fallback 详情文本)
+// 输出:{ title, detail, tips, btnText }
+function enhanceAIError(err, fallback) {
+    const isEn = (typeof currentLang !== 'undefined' && currentLang === 'en');
+    const msg = (err && err.message) ? err.message : (fallback || String(err || 'Unknown error'));
+    const lower = msg.toLowerCase();
+    let title, detail, tips, btnText;
+
+    btnText = isEn ? 'Open AI Settings' : '打开 AI 设置';
+    detail = msg;
+
+    // 401 / 403 - 令牌失效
+    if (/401|403|令牌|身份验证|鉴权|认证失败|token|apikey|api[_\- ]?key|authentication|unauthor|invalid.*auth|incorrect.*key/i.test(msg)) {
+        title = isEn ? '\u{1F511} API Key Invalid or Expired' : '\u{1F511} API Key 已失效或验证失败';
+        tips = isEn
+            ? 'Tips: (1) Check the API key is correct (no extra spaces). (2) Regenerate a new key on the provider dashboard. (3) Some providers (GLM, Qwen) require separate activation. (4) Free-tier keys have QPS limits \u2014 wait and retry.'
+            : '排查建议:(1) 检查 API Key 是否正确复制(无多余空格/换行)。(2) 去供应商后台重新生成新 Key。(3) 部分供应商(智谱/通义)需要先激活/实名。(4) 免费额度通常有 QPS 限制,稍等再试。';
+    }
+    // 图片输入格式 / 视觉模型错误
+    else if (/image.*format|invalid.*image|image.*input|图片.*格式|视觉.*模型|vision.*format|vision.*not.*support|图片.*解析|base64.*invalid|格式.*解析.*错误|不支持.*image/i.test(msg)) {
+        title = isEn ? '\u{1F5BC}\uFE0F Image Input Format Error' : '\u{1F5BC}\uFE0F 图片输入格式错误';
+        tips = isEn
+            ? 'Tips: (1) This provider may not support vision/image input via OpenAI-compatible API. (2) Switch to a vision-capable provider: GLM-4V / Qwen-VL / Doubao-1.5-vision. (3) Try a smaller image (<5MB) in JPG/PNG. (4) Some providers require image URL instead of base64.'
+            : '排查建议:(1) 该供应商可能不兼容 OpenAI 风格的视觉输入(image_url 格式)。(2) 切换到支持视觉的供应商:智谱 GLM-4V / 通义 Qwen-VL / 豆包视觉。(3) 图片压缩到 5MB 以内,JPG/PNG 格式。(4) 部分供应商要求传图片 URL 而非 base64。';
+    }
+    // 404 - 模型不存在
+    else if (/404|model.*not.*found|\u6a21\u578b.*\u4e0d\u5b58\u5728|\u65e0\u6548.*\u6a21\u578b|invalid.*model|\u6a21\u578b.*\u9519\u8bef/i.test(msg)) {
+        title = isEn ? '\u{1F4E6} Model Not Found' : '\u{1F4E6} 模型不存在或已下线';
+        tips = isEn
+            ? 'Tips: (1) Switch to the default model in AI Settings (e.g. glm-4-flash / deepseek-chat). (2) Verify the model name matches provider docs. (3) Some models are region-restricted.'
+            : '排查建议:(1) 在 AI 设置里把模型切换为默认推荐模型(如 glm-4-flash / deepseek-chat)。(2) 检查模型名拼写是否与供应商文档一致。(3) 部分模型仅在特定区域可用。';
+    }
+    // 429 - 限流
+    else if (/429|rate.*limit|too.*many|\u9650\u6d41|\u9891\u7387/i.test(msg)) {
+        title = isEn ? '\u23F1\uFE0F Rate Limited' : '\u23F1\uFE0F 调用频率超限';
+        tips = isEn
+            ? 'Tips: (1) Wait 30-60s and retry. (2) Free tier has lower QPS \u2014 upgrade or use a paid key. (3) Try the next provider (auto-failover enabled).'
+            : '排查建议:(1) 等待 30-60 秒后重试。(2) 免费额度 QPS 较低,考虑升级或换付费 Key。(3) 列表中下一个供应商会自动接管(已开启故障转移)。';
+    }
+    // 余额 / 配额
+    else if (/balance|quota|insufficient|\u4f59\u989d|\u914d\u989d|\u6b20\u8d39|\u4ed8\u8d39|\u8d26\u6237.*\u4f59\u989d/i.test(msg)) {
+        title = isEn ? '\u{1F4B3} Insufficient Balance' : '\u{1F4B3} 余额不足';
+        tips = isEn
+            ? 'Tips: (1) Top up at the provider dashboard. (2) Free options: GLM-4-Flash / SiliconFlow / Qwen-Turbo. (3) New accounts usually get trial credits.'
+            : '排查建议:(1) 前往供应商后台充值。(2) 免费方案:切换到智谱 GLM-4-Flash / 硅基流动 / 通义千问 Turbo。(3) 新账号通常有体验额度,检查是否已用完。';
+    }
+    // 网络错误
+    else if (/network|fetch|timeout|aborted|\u7f51\u7edc|\u8d85\u65f6|failed.*to.*fetch|\u8fde\u63a5\u5931\u8d25/i.test(msg)) {
+        title = isEn ? '\u{1F310} Network Error' : '\u{1F310} 网络错误';
+        tips = isEn
+            ? 'Tips: (1) Check your internet connection. (2) The provider may be down \u2014 try another. (3) Some regions need a proxy for overseas APIs (OpenAI / DeepSeek).'
+            : '排查建议:(1) 检查网络连接。(2) 供应商可能临时不可用,切换到其他供应商试试。(3) 部分地区访问 OpenAI / DeepSeek 等需要科学上网。';
+    }
+    // CORS
+    else if (/cors|origin|\u8de8\u57df|cross-origin|\u62d2\u7edd\u8bbf\u95ee|blocked.*by/i.test(msg)) {
+        title = isEn ? '\u{1F6A7} CORS Blocked' : '\u{1F6A7} CORS 跨域拦截';
+        tips = isEn
+            ? 'Tips: (1) The provider may not support browser CORS. (2) Use a server-side proxy. (3) These work in browser directly: Zhipu, Qwen, SiliconFlow, DeepSeek, Moonshot, Doubao.'
+            : '排查建议:(1) 该供应商可能不允许浏览器直连。(2) 需要通过服务端代理转发。(3) 智谱/通义/硅基流动/DeepSeek/月之暗面/豆包 通常浏览器可直接调用。';
+    }
+    // AI 返回内容不是合法 JSON(模型在 JSON 中夹了多余文本/未转义字符/截断)
+    else if (/Expected.*after.*array|JSON.*at position|Unexpected.*token.*in JSON|Invalid JSON|Unexpected end of JSON|line \d+ column \d+|JSON\.parse|Unexpected.*JSON|json.*\u89e3\u6790|\u89e3\u6790.*json|\u9519\u8bef.*JSON|json.*\u683c\u5f0f|\u4e0d\u662f.*json|Unexpected.*number.*in|JSON Parse|malformed JSON|control character/i.test(msg)) {
+        title = isEn ? '\u{1F4DC} AI Returned Non-JSON' : '\u{1F4DC} AI 返回内容非 JSON';
+        tips = isEn
+            ? 'Tips: (1) The model output extra text/control characters/truncation. (2) In AI Settings: switch to a model that follows JSON strictly (GLM-4-Flash / DeepSeek-V3 / Qwen-Plus). (3) Lower temperature to 0.3-0.5 for stricter output. (4) Click \u201cRetry\u201d below to resend the request \u2014 sometimes one retry is enough.'
+            : '排查建议:(1) 模型输出夹杂了多余文字/控制字符/中途截断。(2) 在 AI 设置里切换为更遵循 JSON 格式的模型(推荐 GLM-4-Flash / DeepSeek-V3 / Qwen-Plus)。(3) 降低 Temperature 到 0.3-0.5,输出更稳定。(4) 直接点下方"重新生成"按钮重试一次,部分场景重试可自愈。';
+    }
+    // 未配置
+    else if (/\u672a\u914d\u7f6e|please.*config|not.*config|no.*provider|\u4f9b\u5e94\u5546.*\u4e0d\u53ef\u7528/i.test(msg)) {
+        title = isEn ? '\u{1F511} AI Not Configured' : '\u{1F511} AI 尚未配置';
+        tips = isEn
+            ? 'Click the button below to add an AI provider. Free options: Zhipu GLM-4-Flash, SiliconFlow, Qwen-Turbo.'
+            : '点击下方按钮添加供应商。免费方案:智谱 GLM-4-Flash / 硅基流动 / 通义千问 Turbo。';
+    }
+    // 兜底
+    else {
+        title = isEn ? '\u274C Service Unavailable' : '\u274C 服务暂时不可用';
+        tips = isEn
+            ? 'All enabled providers failed. Check: (1) API key is correct. (2) Network is reachable. (3) Provider service is up. Open AI Settings to switch providers.'
+            : '所有启用的供应商都调用失败。请检查:(1) API Key 是否正确。(2) 网络是否可达。(3) 供应商服务是否正常。可在 AI 设置切换供应商。';
+    }
+
+    return { title, detail, tips, btnText };
+}
+
+// 渲染 AI 错误到指定元素
+function renderAIError(targetEl, err, opts) {
+    if (!targetEl) return;
+    const enhanced = enhanceAIError(err, (err && err.message) || String(err));
+    const isChat = opts && opts.style === 'chat';
+    if (isChat) {
+        targetEl.innerHTML = '<div style="max-width:86%;background:#FFEBEE;border:1px solid #FFCDD2;padding:14px 16px;border-radius:18px 18px 18px 4px;font-size:13px;color:#C62828;line-height:1.6;"><div style="font-weight:700;margin-bottom:6px;">' + enhanced.title + '</div><div style="font-size:12px;color:#B91C1C;margin-bottom:8px;white-space:pre-wrap;">' + escapeHtml(enhanced.detail) + '</div><div style="font-size:11px;color:#7F1D1D;background:#FFF;border:1px dashed #FCA5A5;padding:8px;border-radius:6px;margin-bottom:8px;">' + enhanced.tips + '</div><button onclick="openAISettingsModal()" style="background:#DC2626;color:white;border:none;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;">⚡ ' + enhanced.btnText + '</button></div>';
+    } else {
+        targetEl.innerHTML = '<div class="card" style="background:#FFEBEE;border:1px solid #FFCDD2;padding:18px;margin-bottom:14px;"><div style="font-weight:700;font-size:15px;color:#C62828;margin-bottom:8px;">' + enhanced.title + '</div><div style="font-size:12px;color:#B91C1C;margin-bottom:10px;white-space:pre-wrap;line-height:1.5;">' + escapeHtml(enhanced.detail) + '</div><div style="font-size:11px;color:#7F1D1D;background:#FFF;border:1px dashed #FCA5A5;padding:10px;border-radius:6px;margin-bottom:10px;line-height:1.6;">' + enhanced.tips + '</div><button onclick="openAISettingsModal()" style="background:#DC2626;color:white;border:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">⚡ ' + enhanced.btnText + '</button></div>';
+    }
+}
+
+
+
+// ===== 回忆录 + 故事中心 顶级 tab 切换 =====
+function switchMemoirTab(tabName) {
+    document.querySelectorAll('#memoir-tabs .memoir-tab').forEach(b => {
+        const active = b.dataset.tab === tabName;
+        b.classList.toggle('active', active);
+        if (active) {
+            b.style.background = 'white';
+            b.style.color = '#1F2937';
+            b.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+        } else {
+            b.style.background = 'transparent';
+            b.style.color = '#6B7280';
+            b.style.boxShadow = 'none';
+        }
+    });
+    document.querySelectorAll('.memoir-tab-panel').forEach(p => {
+        p.style.display = 'none';
+    });
+    const panel = document.getElementById('memoir-panel-' + tabName);
+    if (panel) panel.style.display = 'block';
+    // 子 tab 切到 story 时初始化
+    if (tabName === 'story' && typeof initAiStoryPage === 'function') {
+        initAiStoryPage();
+    }
+    // 切到 memoir 时刷新档案选择器(可能有新档案)
+    if (tabName === 'memoir' && typeof renderMemoirArchiveSelector === 'function') {
+        renderMemoirArchiveSelector();
     }
 }
 
@@ -4449,20 +5078,51 @@ function openModal(modalName) {
 
     if (modalName === 'add-archive') {
         setTimeout(() => {
-            initDestinationAutocomplete();
-            updateFormCompleteness();
-            // 编辑模式：清理草稿
+            _draftRestored = false;
+            if (typeof initDestinationAutocomplete === 'function') initDestinationAutocomplete();
+            if (typeof updateFormCompleteness === 'function') updateFormCompleteness();
             const editId = (document.getElementById('edit-archive-id') || {}).value;
-            if (!editId) {
-                _restoreDraft();
+            const ind = document.getElementById('autosave-indicator');
+            const banner = document.getElementById('draft-restore-banner');
+            if (banner) banner.style.display = 'none';
+            if (editId) {
+                if (ind) { ind.style.display = 'none'; ind.className = 'autosave-indicator'; }
+                if (typeof updateFormCompleteness === 'function') updateFormCompleteness();
             } else {
-                // 编辑模式：清除草稿指示器
-                const ind = document.getElementById('autosave-indicator');
-                if (ind) ind.style.display = 'none';
-                updateFormCompleteness();
+                // 新建模式:不自动恢复,只显示"检测到草稿"提示
+                if (ind) { ind.style.display = 'none'; ind.className = 'autosave-indicator'; }
+                _checkDraftExists();
             }
         }, 50);
     }
+}
+
+function _checkDraftExists() {
+    try {
+        const raw = localStorage.getItem('archive-draft');
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (!data || !data.title) return;
+        const banner = document.getElementById('draft-restore-banner');
+        const tEl = document.getElementById('draft-restore-time');
+        if (!banner || !tEl) return;
+        tEl.textContent = new Date(data.savedAt).toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+        banner.style.display = 'flex';
+    } catch (e) {}
+}
+
+function _restoreDraftNow() {
+    const restored = _restoreDraft();
+    const banner = document.getElementById('draft-restore-banner');
+    if (banner) banner.style.display = 'none';
+    if (restored && typeof showToast === 'function') showToast('✓ 已恢复草稿', 'success');
+}
+
+function _discardDraft() {
+    try { localStorage.removeItem('archive-draft'); } catch (e) {}
+    const banner = document.getElementById('draft-restore-banner');
+    if (banner) banner.style.display = 'none';
+    if (typeof showToast === 'function') showToast('已丢弃草稿', 'info');
 }
 
 // ============== 硬核 1-A: 智能文本导入 ==============
@@ -4860,7 +5520,7 @@ function refreshDestinationDatalist() {
     }
     // 2) 用户已去过的目的地（按使用频次排前）
     const counts = {};
-    (archives || []).forEach(a => { if (a.destination) counts[a.destination] = (counts[a.destination] || 0) + 1; });
+    getSelectedArchives().forEach(a => { if (a.destination) counts[a.destination] = (counts[a.destination] || 0) + 1; });
     const used = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
     const usedSet = new Set(used);
     const final = [...used, ...Array.from(cities).filter(c => !usedSet.has(c))];
@@ -4881,18 +5541,18 @@ function onDestinationInput() {
     }
 }
 
-// 触发标签、心情、评分等变化时，实时更新雷达图
+// 触发标签、心情、评分等变化时，防抖更新雷达图（避免连续点击时卡顿）
 const _orig_toggleMood = window.toggleMood;
 window.toggleMood = function(el) {
     if (_orig_toggleMood) _orig_toggleMood(el);
     else el.classList.toggle('selected');
-    renderEditRadar();
+    debouncedRenderEditRadar();
 };
 const _orig_toggleTravelTag = window.toggleTravelTag;
 window.toggleTravelTag = function(el) {
     if (_orig_toggleTravelTag) _orig_toggleTravelTag(el);
     else el.classList.toggle('active');
-    renderEditRadar();
+    debouncedRenderEditRadar();
 };
 const _orig_setRating = window.setRating;
 window.setRating = function(v) {
@@ -4903,7 +5563,7 @@ window.setRating = function(v) {
             s.classList.toggle('active', parseInt(s.dataset.value) <= v);
         });
     }
-    renderEditRadar();
+    debouncedRenderEditRadar();
 };
 
 // 6 维旅行画像计算
@@ -5052,17 +5712,24 @@ function renderEditRadar() {
     ).join('');
 }
 
+// 雷达图防抖(避免每键输入都重画 canvas)
+let _radarTimer = null;
+function debouncedRenderEditRadar() {
+    clearTimeout(_radarTimer);
+    _radarTimer = setTimeout(renderEditRadar, 350);
+}
+
 // 在 form 数据变化时也触发雷达图更新
 ['f-start', 'f-end', 'f-itinerary', 'f-diary'].forEach(id => {
     document.addEventListener('DOMContentLoaded', () => {
         const el = document.getElementById(id);
-        if (el) el.addEventListener('input', renderEditRadar);
+        if (el) el.addEventListener('input', debouncedRenderEditRadar);
     });
 });
 // 立即执行（如果 DOM 已就绪）
 ['f-start', 'f-end', 'f-itinerary', 'f-diary'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.addEventListener('input', renderEditRadar);
+    if (el) el.addEventListener('input', debouncedRenderEditRadar);
 });
 
 
@@ -7543,6 +8210,20 @@ const i18nPhrases = {
     '置顶': 'Pin',
     '置底': 'Bottom',
     '反选': 'Invert',
+    '全不选': 'None',
+    '只今年': 'This Year',
+    '从档案': 'From Archives',
+    '手填': 'Manual',
+    '提供素材': 'Provide Materials',
+    '提供照片': 'Provide Photos',
+    '加载选中档案到上方输入框': 'Load selected archives to inputs above',
+    '加载选中档案的照片到 DNA 分析': 'Load selected archive photos for DNA',
+    '加载选中档案到 DNA 分析': 'Load selected archives for DNA',
+    '选择参与 AI 故事的档案': 'Select Archives for AI Stories',
+    '选择参与 AI 故事中心的档案': 'Select Archives for AI Story Center',
+    '1. 提供照片': '1. Provide Photos',
+    '2. 提供素材': '2. Provide Materials',
+    '默认全部': 'All by default',
     '多选': 'Multi',
     '单选': 'Single',
     '批量': 'Batch',
@@ -8288,13 +8969,298 @@ const i18nPhrases = {
     '独自旅行3次': '3 solo trips',
     '记录10次同行人': '10+ trips with companions',
     '和5个不同的人旅行': 'Travel with 5+ people',
-    '和家人一起旅行': 'Family trip',
+    // ===== AI 实验室 / 故事中心 / 风险评估 / DNA 词条 =====
+    '智能预算': { en: 'Budget Advisor', ja: '予算アドバイザー' },
+    '智能预算顾问': { en: 'Budget Advisor', ja: '予算' },
+    '旅行计划': { en: 'Trip Plan', ja: '旅行プラン' },
+    '风险评估': { en: 'Risk Assessment', ja: 'リスク評価' },
+    'AI 风险评估': { en: 'AI Risk Assessment', ja: 'AI リスク評価' },
+    'AI 旅行风险实时评估': { en: 'AI Travel Risk Assessment', ja: 'AI 旅行リスク評価' },
+    '风险提示': { en: 'Risk Tips', ja: 'リスク提示' },
+    '应急方案': { en: 'Emergency Plan', ja: '緊急対応' },
+    '装备清单': { en: 'Gear List', ja: '装備リスト' },
+    'AI 生成回忆录': { en: 'Generate Memoir', ja: 'AI 回想録' },
+    'AI 旅行助手': { en: 'AI Travel Assistant', ja: 'AI 旅行助手' },
+    'AI 智能体': { en: 'AI Agent', ja: 'AI エージェント' },
+    'AI 故事中心': { en: 'AI Story Center', ja: 'AI ストーリー' },
+    'AI 回忆录 · 故事中心': { en: 'AI Memoir · Story Center', ja: 'AI 回想録・ストーリー' },
+    'AI 回忆录写作引擎': { en: 'AI Memoir Engine', ja: 'AI 回想録' },
+    '旅行人格': { en: 'Travel Personality', ja: '旅行性格' },
+    '智能文本解析': { en: 'Smart Text Parsing', ja: 'スマート解析' },
+    '真实地图足迹': { en: 'Real Map Footprint', ja: 'リアル地図' },
+    '16 型旅行人格': { en: '16-type MBTI', ja: 'MBTI 16 類型' },
+    '一键分享海报': { en: 'One-click Poster', ja: 'ワンタップ' },
+    '年度复盘': { en: 'Yearly Review', ja: '年間レビュー' },
+    '年度复盘+预测': { en: 'Yearly Review + Prediction', ja: '年間レビュー+予測' },
+    '明年预测': { en: 'Next Year Prediction', ja: '来年予測' },
+    '生成年度报告': { en: 'Generate Yearly Report', ja: 'レポート生成' },
+    '试试这些问题': { en: 'Try these questions', ja: '質問例' },
+    '推荐我下次去哪儿？': { en: 'Where should I go next?', ja: '次どこ行く？' },
+    '分析我最爱去哪些城市': { en: 'Which cities do I love most?', ja: '好きな都市は？' },
+    '明年最可能去哪儿？': { en: 'Where am I most likely to go next year?', ja: '来年は？' },
+    '我和谁旅行最多次？': { en: 'Who do I travel with most?', ja: '誰と多い？' },
+    '我的旅行风格是什么样的？': { en: 'What is my travel style?', ja: '私の旅行スタイル' },
+    '我的旅行风格？': { en: 'My travel style?', ja: 'スタイル？' },
+    '给我一个省钱建议': { en: 'Give me a money-saving tip', ja: '節約ヒント' },
+    '问我任何关于旅行的问题...': { en: 'Ask me anything about travel...', ja: '質問する...' },
+    '发送': { en: 'Send', ja: '送信' },
+    'AI 正在分析': { en: 'AI is analyzing', ja: 'AI 分析中' },
+    'AI 正在分析你': { en: 'AI is analyzing your', ja: '分析中:' },
+    '段旅行数据...': { en: 'trips data...', ja: '件のデータ...' },
+    '由 AI 回答': { en: 'answered by AI', ja: 'AI 回答' },
+    '试试问我关于你旅行的问题': { en: 'Try asking me about your travel', ja: '質問例' },
+    '或点击左侧推荐问题': { en: 'or click suggestions', ja: 'または候補をクリック' },
+    '抱歉，服务暂时不可用': { en: 'Sorry, service unavailable', ja: 'サービス停止' },
+    '旅行电影': { en: 'Travel Movie', ja: '旅行映画' },
+    '把旅行变成一部电影': { en: 'Turn travel into a movie', ja: '旅を映画に' },
+    'AI 自动编排你的所有档案 → 全屏播放,5分钟看完你的整个旅行人生': { en: 'AI curates your archives, full-screen playback', ja: 'AI 自動編集' },
+    '开始播放': { en: 'Play', ja: '再生' },
+    '准备就绪': { en: 'Ready', ja: '準備完了' },
+    '先添加旅行档案': { en: 'Add travel archives first', ja: 'まず追加' },
+    '请先添加旅行档案 + 照片': { en: 'Please add travel archives and photos', ja: '追加してください' },
+    '我的旅行': { en: 'My Travel', ja: '私の旅' },
+    '未完待续': { en: 'To be continued', ja: '続く' },
+    '下一次旅行,从这里开始': { en: 'Next trip starts here', ja: '次へ' },
+    'A TRAVEL MEMOIR': { en: 'A TRAVEL MEMOIR', ja: '旅行回想録' },
+    'THE END... OR NEW BEGINNING': { en: 'THE END... OR NEW BEGINNING', ja: '続く...' },
+    '我的收藏': { en: 'My Favorites', ja: 'お気に入り' },
+    '全部档案': { en: 'All Archives', ja: '全件' },
+    '我的旅行年度报告': { en: 'My Travel Annual Report', ja: '旅行年間レポート' },
+    '总消费': { en: 'Total Spent', ja: '総消費' },
+    '旅行次数': { en: 'Trips', ja: '旅行回数' },
+    '足迹城市': { en: 'Cities', ja: '都市数' },
+    '旅行天数': { en: 'Travel Days', ja: '日数' },
+    '照片总数': { en: 'Photos', ja: '写真数' },
+    '平均评分': { en: 'Avg Rating', ja: '平均評価' },
+    '消费分布': { en: 'Expense Breakdown', ja: '消費内訳' },
+    '最常同行': { en: 'Top Companions', ja: '同行者' },
+    '年度标签云': { en: 'Annual Tag Cloud', ja: '年間タグ' },
+    '全部足迹': { en: 'All Footprints', ja: '足跡' },
+    'AI PREDICTION': { en: 'AI PREDICTION', ja: 'AI 予測' },
+    '明年(2027)你可能会...': { en: 'In 2027 you might...', ja: '2027 年は...' },
+    '预计总消费': { en: 'Forecast Total', ja: '予測総消費' },
+    '最可能同行': { en: 'Likely Companion', ja: '同行者予測' },
+    '旅行风格': { en: 'Travel Style', ja: '旅行スタイル' },
+    '推荐目的地 Top 3': { en: 'Top 3 Destinations', ja: 'おすすめ Top 3' },
+    '未命名': { en: 'Untitled', ja: '名称未設定' },
+    '暂无带照片的档案': { en: 'No archives with photos', ja: '写真なし' },
+    '暂无消费数据': { en: 'No expense data', ja: '消費データなし' },
+    '暂无同行人数据': { en: 'No companion data', ja: '同行者なし' },
+    '分析中...': { en: 'Analyzing...', ja: '分析中...' },
+    '生成中...': { en: 'Generating...', ja: '生成中...' },
+    '正在生成...': { en: 'Generating...', ja: '生成中...' },
+    'AI 智能分析 · 仅供决策参考': { en: 'AI analysis · for reference only', ja: 'AI 分析' },
+    '由 AI 预测 · 仅供娱乐参考': { en: 'AI prediction · for fun only', ja: 'AI 予測' },
+    '点击下方按钮生成年度复盘': { en: 'Click below to generate yearly report', ja: 'クリックで生成' },
+    '暂无数据': { en: 'No data', ja: 'データなし' },
+    '该年份没有旅行档案': { en: 'No trips in this year', ja: '該当なし' },
+    '你的旅行档案还是空的': { en: 'No travel archives yet', ja: 'まだありません' },
+    '先添加几段旅行': { en: 'Add some trips', ja: '旅を追加' },
+    '这样我能基于你的真实数据回答': { en: 'so I can answer based on real data', ja: 'データに基づく回答' },
+    'AI 助手需要 API Key 才能回答': { en: 'AI needs API Key', ja: 'API キー必要' },
+    '点击下方按钮配置(支持 8 家供应商,推荐 GLM-4-Flash 免费)': { en: 'Click to configure (8 providers, GLM-4-Flash free)', ja: '設定' },
+    '立即配置 AI Key': { en: 'Configure AI Key Now', ja: '設定する' },
+    'AI API Key 尚未配置': { en: 'AI API Key Not Configured', ja: '未設定' },
+    '该功能需要 AI 大模型': { en: 'This feature needs AI', ja: 'AI 必要' },
+    '点击下方按钮配置 API Key(支持 8 家供应商:智谱/DeepSeek/Qwen/月之暗面/豆包/硅基流动/OpenAI/自定义,推荐智谱 GLM-4-Flash 免费)': { en: 'Configure API Key (8 providers, GLM-4-Flash free recommended)', ja: 'API キー設定' },
+    'This feature requires an AI provider. Click the button below to configure your API key (8 free/paid providers supported: GLM, DeepSeek, Qwen, Moonshot, Doubao, SiliconFlow, OpenAI, Custom).': { en: 'This feature requires an AI provider. Click the button below to configure your API key (8 free/paid providers supported: GLM, DeepSeek, Qwen, Moonshot, Doubao, SiliconFlow, OpenAI, Custom).', ja: 'AI 必要' },
+    '💡 提示:点击底部右下角 🤖 按钮也能打开设置': { en: 'Tip: click bottom-right 🤖 button', ja: 'ヒント' },
+    'Open AI Settings': { en: 'Open AI Settings', ja: '設定を開く' },
+    'OPEN AI SETTINGS': { en: 'OPEN AI SETTINGS', ja: '設定を開く' },
+    '选择照片': { en: 'Choose Photos', ja: '写真選択' },
+    '选择照片...': { en: 'Choose Photos...', ja: '写真選択...' },
+    '目的地': { en: 'Destination', ja: '目的地' },
+    '旅行日期': { en: 'Travel Date', ja: '旅行日' },
+    '文字片段(日记/感受/趣事)': { en: 'Text snippets (diary / feelings / fun)', ja: '日記・感想' },
+    '粘贴你写过的任何文字,AI 会融合进回忆录...': { en: 'Paste any text, AI blends it in...', ja: 'テキスト貼付' },
+    '散文': { en: 'Essay', ja: 'エッセイ' },
+    '日记': { en: 'Diary', ja: '日記' },
+    '小说': { en: 'Novel', ja: '小説' },
+    '长图': { en: 'Long Image', ja: '長画像' },
+    '复制': { en: 'Copy', ja: 'コピー' },
+    '已复制到剪贴板': { en: 'Copied', ja: 'コピー済' },
+    '已收藏': { en: 'Favorited', ja: 'お気に入り' },
+    '已取消收藏': { en: 'Unfavorited', ja: '解除' },
+    '上传照片,补充文字,选择风格': { en: 'Upload photos, add text, choose style', ja: '写真・文字・スタイル' },
+    '点击"AI 生成回忆录"开始': { en: 'click "Generate Memoir" to start', ja: 'クリックで開始' },
+    '点击下方按钮生成年度复盘': { en: 'Click below to generate yearly report', ja: 'クリックで生成' },
+    '确定': { en: 'OK', ja: 'OK' },
+    '取消': { en: 'Cancel', ja: 'キャンセル' },
+    '保存': { en: 'Save', ja: '保存' },
+    '删除': { en: 'Delete', ja: '削除' },
+    '编辑': { en: 'Edit', ja: '編集' },
+    '添加': { en: 'Add', ja: '追加' },
+    '加载中...': { en: 'Loading...', ja: '読込中...' },
+    '正在加载...': { en: 'Loading...', ja: '読込中...' },
+    '确认删除': { en: 'Confirm Delete', ja: '削除確認' },
+    '确认删除该档案？': { en: 'Confirm delete?', ja: '削除？' },
+    '操作成功': { en: 'Success', ja: '成功' },
+    '操作失败': { en: 'Failed', ja: '失敗' },
+    '复制成功': { en: 'Copied', ja: 'コピー' },
+    '已保存': { en: 'Saved', ja: '保存済' },
+    '已删除': { en: 'Deleted', ja: '削除済' },
+    '生成成功': { en: 'Generated', ja: '成功' },
+    '生成失败': { en: 'Generate failed', ja: '失敗' },
+    '加载失败': { en: 'Load failed', ja: '失敗' },
+    '保存成功': { en: 'Saved', ja: '保存済' },
+    '保存失败': { en: 'Save failed', ja: '失敗' },
+    '旅行复盘': { en: 'Travel Review', ja: '旅行復習' },
+    '旅行复盘 · AI 智能旅行伴侣': { en: 'Travel Review · AI Travel Companion', ja: 'AI 旅行コンパニオン' },
+    'AI 智能旅行伴侣': { en: 'AI Travel Companion', ja: 'AI コンパニオン' },
+    '次旅行': { en: 'trips', ja: '回' },
+    '张照片': { en: 'photos', ja: '枚' },
+    '个城市': { en: 'cities', ja: '都市' },
+    '请先配置 AI 供应商': { en: 'Please configure AI provider', ja: 'AI 設定' },
+    '需要至少 2 段旅行档案才能预测': { en: 'Need at least 2 trips to predict', ja: '2 件以上必要' },
+    '请至少上传 3 张照片': { en: 'Please upload at least 3 photos', ja: '3 枚以上' },
+    '请至少 3 张照片': { en: 'At least 3 photos', ja: '3 枚以上' },
+    '请填写目的地': { en: 'Please enter destination', ja: '目的地入力' },
+    '正在生成风险评估...': { en: 'Generating risk assessment...', ja: '生成中' },
+    '正在生成 DNA 报告...': { en: 'Generating DNA report...', ja: '生成中' },
+    '由 AI 智能分析 · 仅供决策参考': { en: 'AI analysis · for reference only', ja: 'AI 分析' },
+
+    // ===== Home page hero / 工具 / 工具栏 =====
+    '🛠️ 工具': { en: '🛠️ Tools', ja: '🛠️ ツール' },
+    '工具': { en: 'Tools', ja: 'ツール' },
+    '填充示例数据': { en: 'Load Sample Data', ja: 'サンプルデータ' },
+    '清空所有数据': { en: 'Clear All Data', ja: '全データ削除' },
+    '⚠️ 未配置 · 点击设置（智能解析 / 人格分析需要）': { en: '⚠️ Not configured · Click to set up (Smart parse / Personality needs AI)', ja: '⚠️ 未設定' },
+    '未配置 · 点击设置（智能解析 / 人格分析需要）': { en: 'Not configured · Click to set up (Smart parse / Personality needs AI)', ja: '未設定' },
+    '值得被 AI 珍藏': { en: 'Worth AI-Treasuring', ja: 'AI で珍藏' },
+    '粘贴一段游记,AI 自动提取时间/城市/花费/标签/心情;': { en: 'Paste a travel note, AI auto-extracts time / city / cost / tag / mood;', ja: 'AI 自動解析' },
+    '智能 识别 → 6 维人格雷达 → MBTI → 一键分享海报': { en: 'Smart Parse → 6D Personality Radar → MBTI → One-click Poster', ja: 'AI 解析' },
+    '智能识别 → 6 维人格雷达 → MBTI → 一键分享海报': { en: 'Smart Parse → 6D Personality Radar → MBTI → One-click Poster', ja: 'AI 解析' },
+    '"我和老婆春节去云南玩了5天..."': { en: '"I went to Yunnan with my wife for 5 days..."', ja: '「春節雲南」' },
+    '把旅程变成一部 5 分钟电影': { en: 'Turn your journey into a 5-min movie', ja: '5 分映画' },
+    'AI 预测你明年会去哪儿 / 怎么玩': { en: 'AI predicts where & how you travel next year', ja: 'AI 予測' },
+    'AI 智能助手': { en: 'AI Travel Assistant', ja: 'AI 助手' },
+    '问任何关于你旅行的问题': { en: 'Ask anything about your travel', ja: '質問する' },
+    '添加第一段旅程': { en: 'Add Your First Trip', ja: '最初の旅' },
+    '看见旅行足迹': { en: 'See Your Footprint', ja: '足跡を見る' },
+    '解锁旅行人格': { en: 'Unlock Travel Personality', ja: '人格解除' },
+    '粘贴一段游记,AI 自动提取时间/城市/花费/心情;也可手动填写': { en: 'Paste a travel note, AI auto-extracts time / city / cost / mood; or fill manually', ja: 'AI 自動解析' },
+    '真实高德地图渲染 · 城市点大小=次数,颜色=天数 · 同行人对比': { en: 'Real AMap · city dot size = times, color = days · companion compare', ja: 'リアル地図' },
+    '6 维雷达 + 16 型 MBTI + AI 复盘报告 + 一键分享海报': { en: '6D Radar + 16-type MBTI + AI Review + One-click Poster', ja: 'MBTI 16 類型' },
+    '解锁人格 →': { en: 'Unlock →', ja: '解除 →' },
+    '珍藏了 5 个瞬间': { en: '5 moments preserved', ja: '5 件の瞬間' },
+    '均评分': { en: 'Avg Rating', ja: '平均評価' },
+    '使用标签': { en: 'Tags Used', ja: 'タグ' },
+    '同行伙伴': { en: 'Companions', ja: '同行者' },
+    '✈️ 下一次旅行': { en: '✈️ Next Trip', ja: '✈️ 次の旅' },
+    '下一次旅行': { en: 'Next Trip', ja: '次の旅' },
+    '还没有计划中的旅行': { en: 'No planned trips yet', ja: '予定なし' },
+    '记录旅行中的小细节，以后翻看会很有趣': { en: 'Record small moments — fun to revisit later', ja: '記録する' },
+    '最新优先': { en: 'Newest First', ja: '新しい順' },
+    '最早优先': { en: 'Oldest First', ja: '古い順' },
+    '最长旅行': { en: 'Longest Trip', ja: '最長' },
+    '🕸️ 旅行同伴网络': { en: '🕸️ Travel Companion Network', ja: '🕸️ 同行者' },
+    '谁是你最常一起旅行的人？节点越大代表同行次数越多，连线粗细代表共同出行次数。': { en: 'Who do you travel with most? Larger node = more trips, thicker line = shared trips.', ja: '同行者' },
+    '🗺️ 卫星地图': { en: '🗺️ Satellite', ja: '🗺️ 衛星' },
+    '下一次旅行的倒计时、打包清单、预算和风险评估': { en: 'Next trip countdown, packing list, budget & risk assessment', ja: '次の旅準備' },
+    '输入旅行计划,AI 综合评估天气/健康/安全/预算,生成风险热力图和装备清单': { en: 'Input travel plan, AI assesses weather / health / safety / budget, generates risk heatmap & gear list', ja: 'AI 評価' },
+    '有儿童': { en: 'With Children', ja: '子供連れ' },
+    '有老人': { en: 'With Elderly', ja: '高齢者連れ' },
+    '活动类型(逗号分隔)': { en: 'Activities (comma-separated)', ja: '活動 (カンマ区切)' },
+    '填写旅行计划': { en: 'Fill in Travel Plan', ja: '旅行プラン入力' },
+    'AI 将从天气/健康/安全/预算四个维度评估': { en: 'AI will assess 4 dimensions: weather / health / safety / budget', ja: 'AI 評価' },
+
+    // ===== Home / Personality / Story / DNA / Prep pages =====
+    '粘贴一段游记,AI 自动提取时间/城市/花费/标签/心情;': { en: 'Paste a travel note, AI auto-extracts time / city / cost / tag / mood;', ja: 'AI 自動解析' },
+    '多尝试当地美食，是了解一个地方文化的好方式': { en: 'Try local food — a great way to understand a place', ja: '当地グルメ' },
+    '🌊 旅行节奏流（按时间顺序）': { en: '🌊 Travel Rhythm Flow (Chronological)', ja: '🌊 旅行リズム' },
+    '横轴时间,色块高度=停留天数,颜色=心情。连贯的色块 = 连续旅行': { en: 'X-axis = time, block height = stay days, color = mood. Continuous blocks = continuous travel', ja: '時系列' },
+    '基于真实地图：圆圈越大=去的次数越多,红色越深=停留总天数越多。点击城市查看详情。': { en: 'Real map: bigger circle = more visits, deeper red = more total days. Click city for details.', ja: 'リアル地図' },
+    '次旅行的 AI 本地分析': { en: 'AI Local Analysis of Your Trips', ja: 'AI 分析' },
+    '还没有旅行数据': { en: 'No travel data yet', ja: 'データなし' },
+    '先创建几个旅行档案，让我给你分析专属人格！': { en: 'Create some trips first — let me analyze your unique personality!', ja: '人格分析' },
+    '世界很大，你的脚步从未停下': { en: 'The world is vast, your steps never stop', ja: '世界は広い' },
+    '高效征服每个目的地': { en: 'Efficiently conquer every destination', ja: '効率的' },
+    '组织力强、目标导向': { en: 'Organized, goal-oriented', ja: '組織力' },
+    '可能忽视过程享受': { en: 'May overlook process enjoyment', ja: '過程' },
+    '🎯 综合 6 维旅行画像': { en: '🎯 6D Travel Profile', ja: '🎯 6 次元' },
+    '聚合你所有旅行的标签、心情、评分、行程长度计算出的旅行人格剖面。': { en: 'Aggregated from all your trips\' tags, mood, rating, length — your travel personality profile.', ja: '旅行性格' },
+    '🤖 AI 深度解读': { en: '🤖 AI Deep Analysis', ja: '🤖 AI 解釈' },
+    '由大模型生成': { en: 'AI-generated', ja: 'AI 生成' },
+    '📊 六维人格雷达': { en: '📊 6D Personality Radar', ja: '📊 6 次元' },
+    '— 来自 AI 旅行分析师 · 旅途忆档': { en: '— From AI Travel Analyst · TravelMemoir', ja: '— AI 旅行分析' },
+    '📄 查看完整报告': { en: '📄 Full Report', ja: '📄 全文' },
+    '🤖 AI 增强': { en: '🤖 AI Enhance', ja: '🤖 AI 強化' },
+    '🔄 重新分析': { en: '🔄 Re-analyze', ja: '🔄 再分析' },
+    '回忆录写作 + 旅行电影 + 年度复盘 + AI 智能助手,一站搞定': { en: 'Memoir + Movie + Yearly Review + AI Assistant — all in one', ja: '一站式' },
+    '📝 2. 补充背景信息(可选)': { en: '📝 2. Add Context (Optional)', ja: '📝 2. 背景' },
+    '✨ 3. 选择风格 + 生成': { en: '✨ 3. Choose Style + Generate', ja: '✨ 3. スタイル' },
+    '🏙️ 我最爱去哪些城市？': { en: '🏙️ Cities I love most?', ja: '🏙️ 都市' },
+    '📷 上传旅行照(5-10 张)': { en: '📷 Upload Travel Photos (5-10)', ja: '📷 写真' },
+    '📚 或从历史档案分析': { en: '📚 Or Analyze from Archives', ja: '📚 履歴' },
+    '📍 基本信息': { en: '📍 Basic Info', ja: '📍 基本情報' },
+    '🏞️ 景点地点': { en: '🏞️ Spots & Places', ja: '🏞️ 場所' },
+    '📷 照片': { en: '📷 Photos', ja: '📷 写真' },
+    '把朋友圈/小红书/笔记的旅行文本粘进来，自动解析填表（AI + 规则双引擎）': { en: 'Paste travel text from WeChat / Xiaohongshu / notes, auto-parse (AI + rules dual engine)', ja: 'AI 自動解析' },
+    '📥 粘贴文本': { en: '📥 Paste Text', ja: '📥 貼付' },
+    '主要目的地': { en: 'Main Destination', ja: '目的地' },
+    '⚡ 快捷:': { en: '⚡ Quick:', ja: '⚡ 快捷:' },
+    '上个周末': { en: 'Last Weekend', ja: '先週週末' },
+    '粘贴一段游记，AI 自动提取时间/城市/花费/标签/心情；': { en: 'Paste a travel note, AI auto-extracts time / city / cost / tag / mood;', ja: 'AI 自動解析' },
+    '给自己留些空白时间，随性而行往往收获更多': { en: 'Leave some blank time, spontaneity often rewards more', ja: '余裕時間' },
+    '横轴时间，色块高度=停留天数，颜色=心情。连贯的色块 = 连续旅行': { en: 'X-axis = time, block height = stay days, color = mood. Continuous blocks = continuous travel', ja: '時系列' },
+    '基于真实地图：圆圈越大=去的次数越多，红色越深=停留总天数越多。点击城市查看详情。': { en: 'Real map: bigger circle = more visits, deeper red = more total days. Click city for details.', ja: 'リアル地図' },
+    '天气状况': { en: 'Weather', ja: '天気' },
+    '关系': { en: 'Relationship', ja: '関係' },
+    '输入名字回车添加，或在下拉框选择关系自动添加，点击标签删除': { en: 'Type a name + Enter, or pick a relationship to auto-add, click tag to remove', ja: '同行者追加' },
+    '整体心情': { en: 'Overall Mood', ja: '全体気分' },
+    '记录旅途中的每个景点和地点': { en: 'Record every spot and place on the trip', ja: '場所記録' },
+    '行程安排': { en: 'Itinerary', ja: '旅程' },
+    '旅行日记 / 详细记录': { en: 'Travel Diary / Detail', ja: '日記' },
+    '6 维旅行画像（实时预览）': { en: '6D Travel Profile (Live Preview)', ja: '6 次元' },
+    '根据你选的标签、心情、评分、行程长度自动计算': { en: 'Auto-calculated from your tags, mood, rating, trip length', ja: '自動計算' },
+    '✨ 旅行亮点（最难忘的事）': { en: '✨ Highlights (Most Memorable)', ja: '✨ 亮点' },
+    '😔 遗憾的事': { en: '😔 Regrets', ja: '😔 遗憾' },
+    '💡 经验教训 / 改进建议': { en: '💡 Lessons / Improvements', ja: '💡 教训' },
+    '👥 推荐给谁': { en: '👥 Recommend To', ja: '👥 推薦' },
+    '🔁 还想再去吗？': { en: '🔁 Want to Revisit?', ja: '🔁 再訪' },
+    '✅ 一定会': { en: '✅ Definitely', ja: '✅ 必ず' },
+    '💭 旅行感悟（一句话总结）': { en: '💭 Reflection (One-liner)', ja: '💭 感想' },
+    '上传照片（支持拖拽排序）': { en: 'Upload Photos (Drag to Reorder)', ja: '写真 (ドラッグ可)' },
+    '支持多选 · 拖拽缩略图重排 · 单击删除 · 图片本地保存': { en: 'Multi-select · drag thumbnails to reorder · click to remove · saved locally', ja: 'マルチ選択' },
+    '💾 保存档案': { en: '💾 Save', ja: '💾 保存' },
+    '把任意旅行文本（朋友圈、攻略、笔记）粘到下面，系统会用': { en: 'Paste any travel text (WeChat / guides / notes) below, the system uses', ja: 'テキスト貼付' },
+    '立即抽出关键字段,\n                可选调用': { en: 'to instantly extract key fields,\n                optionally calls', ja: '抽出' },
+    '做精细语义补全（需在「AI 设置」配置）。': { en: 'for fine-grained completion (configure in "AI Settings").', ja: 'AI 設定' },
+    '本地规则引擎': { en: 'Local Rule Engine', ja: 'ローカルルール' },
+    'AI 大模型': { en: 'AI LLM', ja: 'AI 大模型' },
+    '📋 填充示例': { en: '📋 Load Example', ja: '📋 例' },
+    '同时调用 AI': { en: 'Also call AI', ja: 'AI 呼出' },
+    '📊 解析结果预览': { en: '📊 Parse Preview', ja: '📊 解析' },
+    '🔍 仅解析预览': { en: '🔍 Parse Only', ja: '🔍 解析のみ' },
+    '✅ 解析并填表': { en: '✅ Parse & Fill', ja: '✅ 解析' },
+    '长按图片保存到相册 · 或点击下方按钮': { en: 'Long-press image to save, or click button below', ja: '長押し' },
+    '📋 复制文本': { en: '📋 Copy Text', ja: '📋 コピー' },
+    '立即抽出关键字段，\n                可选调用': { en: 'to instantly extract key fields,\n                optionally calls', ja: '抽出' },
+    '🤖 AI 大模型中心': { en: '🤖 AI LLM Center', ja: '🤖 AI センター' },
+    '配置多个 AI 大模型供应商,支持': { en: 'Configure multiple AI providers, support', ja: 'AI 設定' },
+    '所有 API Key 仅存本地浏览器(localStorage),不上传任何服务器。': { en: 'All API keys are stored locally in browser (localStorage), never uploaded to any server.', ja: 'API キー' },
+    '智谱 GLM-4V(视觉·免费) + DeepSeek(长文·便宜) + 硅基流动(备用·免费)': { en: 'Zhipu GLM-4V (vision · free) + DeepSeek (long text · cheap) + SiliconFlow (backup · free)', ja: 'AI モデル' },
+    '💡 这是什么:': { en: '💡 What is this:', ja: '💡 説明' },
+    '自动故障转移': { en: 'Auto Failover', ja: '自動切替' },
+    '多模态视觉识别': { en: 'Multimodal Vision', ja: 'マルチモーダル' },
+    '💰 推荐组合:': { en: '💰 Recommended:', ja: '💰 推奨' },
+    '➕ 添加供应商': { en: '➕ Add Provider', ja: '➕ 追加' },
   };
   for (const k in _ext) {
-    if (!i18nPhrases[k]) {
-      i18nPhrases[k] = { en: _ext[k] };
+    const v = _ext[k];
+    if (v && typeof v === 'object') {
+      if (!i18nPhrases[k]) {
+        i18nPhrases[k] = { en: v.en || '', ja: v.ja || '' };
+      } else {
+        if (!i18nPhrases[k].en && v.en) i18nPhrases[k].en = v.en;
+        if (!i18nPhrases[k].ja && v.ja) i18nPhrases[k].ja = v.ja;
+      }
     } else {
-      if (!i18nPhrases[k].en) i18nPhrases[k].en = _ext[k];
+      if (!i18nPhrases[k]) {
+        i18nPhrases[k] = { en: v };
+      } else {
+        if (!i18nPhrases[k].en) i18nPhrases[k].en = v;
+      }
     }
   }
 })();
@@ -8547,11 +9513,20 @@ function reRenderAllViews() {
             'stories': renderStories,
             'achievements': renderAchievements,
             'stats': renderStats,
-            'favorites': renderFavorites,
             'dataview': renderDataView,
             'prep': renderPrepPage,
             'map': renderFilteredMarkers,
-            'personality': renderPersonalityPage
+            'personality': renderPersonalityPage,
+            'ai-memoir': () => {
+                if (typeof switchMemoirTab === 'function' && document.getElementById('memoir-panel-story') && document.getElementById('memoir-panel-story').style.display !== 'none') {
+                    if (typeof initAiStoryPage === 'function') initAiStoryPage();
+                }
+                if (typeof renderMemoirPhotos === 'function') renderMemoirPhotos();
+            },
+            'archives': () => {
+                if (typeof filterArchives === 'function') filterArchives();
+                if (typeof _updateArchivesTabCounts === 'function') _updateArchivesTabCounts();
+            }
         };
         const fn = pageRenders[visiblePage];
         if (fn && typeof fn === 'function') {
@@ -9150,16 +10125,30 @@ function resetForm() {
     currentCompanions = [];
     renderCompanionTags();
     document.getElementById('f-itinerary').value = '';
+    document.getElementById('f-diary').value = '';
     document.getElementById('f-reflection').value = '';
+    document.getElementById('f-highlights').value = '';
+    document.getElementById('f-regrets').value = '';
+    document.getElementById('f-lessons').value = '';
+    document.getElementById('f-recommend').value = '';
     document.getElementById('expense-items').innerHTML = '';
+    document.getElementById('spots-container').innerHTML = '';
     document.getElementById('photo-items').innerHTML = '';
     currentPhotos = [];
+    currentSpots = [];
+    if (typeof renderSpots === 'function') renderSpots();
     document.querySelectorAll('.mood-tag').forEach(t => t.classList.remove('selected'));
     document.querySelectorAll('.travel-tag').forEach(t => t.classList.remove('active'));
-    currentRating = 0;
-    currentRevisit = '';
-    currentSpots = [];
-    renderSpots();
+    document.querySelectorAll('[data-revisit]').forEach(t => t.classList.remove('selected'));
+    document.querySelectorAll('.star').forEach(s => { s.classList.remove('active'); s.classList.remove('selected'); });
+    if (typeof currentRating !== 'undefined') currentRating = 0;
+    if (typeof currentRevisit !== 'undefined') currentRevisit = '';
+    const ratingText = document.getElementById('rating-text');
+    if (ratingText) ratingText.textContent = '点击评分';
+    const dateSummary = document.getElementById('date-summary');
+    if (dateSummary) dateSummary.textContent = '';
+    const dup = document.getElementById('duplicate-warning');
+    if (dup) dup.style.display = 'none';
 }
 
 // 抽取消费行的统一创建函数（带删除按钮）
@@ -9345,13 +10334,12 @@ function saveArchive() {
         archives.push(archive);
     }
 
-    saveData();
-    updateSidebarStats();
-    updateAchievements();
     closeModal('add-archive');
     // 清除草稿
     try { localStorage.removeItem('archive-draft'); } catch (e) {}
     showToast(editId ? '档案已更新' : '档案已创建');
+    // 集中刷新(替代散落的 updateSidebarStats/updateAchievements/saveData)
+    refreshAllStats();
     showPage('archives');
 }
 
@@ -9484,60 +10472,248 @@ function updateFormCompleteness() {
     if (fill) fill.style.width = pct + '%';
     if (lbl) lbl.textContent = `${filled}/${total}`;
 }
-// 自动保存草稿（每 2 秒）
+// 自动保存草稿
+
+// 完成度防抖(避免每键输入都跑 12 字段扫描)
+let _completenessTimer = null;
+function updateFormCompletenessDebounced() {
+    clearTimeout(_completenessTimer);
+    _completenessTimer = setTimeout(updateFormCompleteness, 200);
+}
+
+// ===== 集中刷新函数:新建/编辑/删除档案后调用 =====
+function refreshAllStats() {
+    try {
+        if (typeof saveData === 'function') try { saveData(); } catch (e) {}
+        // 侧边栏 + home 仪表盘
+        if (typeof updateSidebarStats === 'function') updateSidebarStats();
+        if (typeof updateAchievements === 'function') updateAchievements();
+        if (typeof updateDashboard === 'function') updateDashboard();
+        if (typeof updateHomeUpcoming === 'function') updateHomeUpcoming();
+        // 当前可见页(只刷当前页,避免开销)
+        const pageName = (typeof getCurrentPageName === 'function') ? getCurrentPageName() : 'home';
+        if (pageName === 'archives' && typeof filterArchives === 'function') filterArchives();
+        if (pageName === 'timeline' && typeof renderTimeline === 'function') renderTimeline();
+        if (pageName === 'stories' && typeof renderStories === 'function') renderStories();
+        if (pageName === 'achievements' && typeof renderAchievements === 'function') renderAchievements();
+        if (pageName === 'stats' && typeof renderStats === 'function') renderStats();
+        if (pageName === 'dataview' && typeof renderDataView === 'function') renderDataView();
+        if (pageName === 'map' && typeof renderYearWheel === 'function') renderYearWheel();
+        if (pageName === 'personality' && typeof renderPersonalityRadar === 'function') renderPersonalityRadar();
+        if (pageName === 'ai-memoir') {
+            if (typeof initAiStoryPage === 'function') initAiStoryPage();
+            if (typeof renderYearlyReport === 'function' && document.getElementById('yearly-content')) {
+                const yc = document.getElementById('yearly-content');
+                if (yc.innerHTML && yc.innerHTML.indexOf('年度报告') >= 0) {
+                    try { renderYearlyReport(); } catch (e) {}
+                }
+            }
+            if (typeof renderMemoirPhotos === 'function') renderMemoirPhotos();
+        }
+    } catch (e) { console.error('refreshAllStats failed:', e); }
+}
+
+// 自动保存草稿（每 0.8 秒防抖，覆盖全部字段）
 let _draftTimer = null;
+let _draftRestored = false;
 function _scheduleAutoSaveDraft() {
+    const ind = document.getElementById('autosave-indicator');
+    if (ind) {
+        ind.style.display = 'inline-flex';
+        ind.className = 'autosave-indicator saving';
+        ind.textContent = '⏳ 正在保存...';
+    }
     clearTimeout(_draftTimer);
-    _draftTimer = setTimeout(_autoSaveDraft, 1500);
+    _draftTimer = setTimeout(_autoSaveDraft, 800);
 }
 function _autoSaveDraft() {
-    const editId = (document.getElementById('edit-archive-id') || {}).value;
-    if (editId) return; // 编辑模式不存草稿
-    const data = {
-        title: (document.getElementById('f-title') || {}).value || '',
-        destination: (document.getElementById('f-destination') || {}).value || '',
-        start: (document.getElementById('f-start') || {}).value || '',
-        end: (document.getElementById('f-end') || {}).value || '',
-        transport: (document.getElementById('f-transport') || {}).value || '',
-        weather: (document.getElementById('f-weather') || {}).value || '',
-        itinerary: (document.getElementById('f-itinerary') || {}).value || '',
-        reflection: (document.getElementById('f-reflection') || {}).value || '',
-        savedAt: Date.now()
-    };
-    // 没有内容则不存
-    if (!data.title && !data.destination && !data.itinerary) return;
     try {
-        localStorage.setItem('archive-draft', JSON.stringify(data));
+        const editId = (document.getElementById('edit-archive-id') || {}).value;
+        if (editId) {
+            const ind = document.getElementById('autosave-indicator');
+            if (ind) { ind.style.display = 'none'; ind.className = 'autosave-indicator'; }
+            return;
+        }
+        const data = _captureArchiveForm();
+        const hasContent = data.title || data.destination || data.itinerary || data.diary ||
+            data.reflection || data.highlights || data.tags.length || data.mood || data.companions.length ||
+            data.expenses.length || data.spots.length || (data.photos && data.photos.length);
+        if (!hasContent) {
+            const ind = document.getElementById('autosave-indicator');
+            if (ind) { ind.style.display = 'none'; ind.className = 'autosave-indicator'; }
+            return;
+        }
+        if (data.photos && data.photos.length > 20) {
+            data.photos = data.photos.slice(0, 20);
+        }
+        try {
+            localStorage.setItem('archive-draft', JSON.stringify(data));
+        } catch (quotaErr) {
+            data.photos = [];
+            try { localStorage.setItem('archive-draft', JSON.stringify(data)); } catch (e) {}
+        }
         const ind = document.getElementById('autosave-indicator');
         if (ind) {
             ind.style.display = 'inline-flex';
+            ind.className = 'autosave-indicator';
             ind.textContent = '✓ 自动保存 ' + new Date().toLocaleTimeString('zh-CN', { hour12: false });
         }
-    } catch (e) {}
+    } catch (e) { console.error('_autoSaveDraft failed:', e); }
 }
 function _restoreDraft() {
     try {
         const raw = localStorage.getItem('archive-draft');
-        if (!raw) return;
+        if (!raw) return false;
         const data = JSON.parse(raw);
-        if (!data || !data.title) return;
-        if (document.getElementById('f-title').value) return; // 表单已有内容，不覆盖
-        document.getElementById('f-title').value = data.title || '';
-        document.getElementById('f-destination').value = data.destination || '';
-        document.getElementById('f-start').value = data.start || '';
-        document.getElementById('f-end').value = data.end || '';
-        document.getElementById('f-transport').value = data.transport || '';
-        document.getElementById('f-weather').value = data.weather || '';
-        document.getElementById('f-itinerary').value = data.itinerary || '';
-        document.getElementById('f-reflection').value = data.reflection || '';
-        onDateChange();
-        updateFormCompleteness();
+        if (!data) return false;
+        if (document.getElementById('f-title').value) return false;
+        _draftRestored = true;
+        const set = (id, val) => { const el = document.getElementById(id); if (el && val != null) el.value = val; };
+        set('f-title', data.title || '');
+        set('f-destination', data.destination || '');
+        set('f-start', data.start || '');
+        set('f-end', data.end || '');
+        set('f-transport', data.transport || '');
+        set('f-weather', data.weather || '');
+        set('f-itinerary', data.itinerary || '');
+        set('f-diary', data.diary || '');
+        set('f-reflection', data.reflection || '');
+        set('f-highlights', data.highlights || '');
+        set('f-regrets', data.regrets || '');
+        set('f-lessons', data.lessons || '');
+        set('f-recommend', data.recommend || '');
+        if (data.mood) {
+            document.querySelectorAll('.mood-tag').forEach(t => t.classList.remove('selected'));
+            document.querySelectorAll('.mood-tag').forEach(t => {
+                if (t.classList.contains(data.mood) || t.textContent.trim() === data.mood || t.dataset.mood === data.mood) {
+                    t.classList.add('selected');
+                }
+            });
+        }
+        if (data.revisit) {
+            document.querySelectorAll('[data-revisit]').forEach(t => t.classList.remove('selected'));
+            const target = document.querySelector('[data-revisit="' + data.revisit + '"]');
+            if (target) target.classList.add('selected');
+        }
+        if (Array.isArray(data.tags)) {
+            document.querySelectorAll('.travel-tag').forEach(t => t.classList.remove('active'));
+            data.tags.forEach(t => {
+                document.querySelectorAll('.travel-tag').forEach(el => {
+                    if ((el.dataset.tag === t) || el.textContent.trim() === t) el.classList.add('active');
+                });
+            });
+        }
+        if (data.rating && typeof setRating === 'function') {
+            setRating(data.rating);
+        }
+        if (Array.isArray(data.companions)) {
+            if (typeof setCompanionsValue === 'function') {
+                setCompanionsValue(data.companions);
+            } else if (typeof renderCompanionTags === 'function') {
+                currentCompanions = data.companions.slice();
+                renderCompanionTags();
+            } else {
+                currentCompanions = data.companions.slice();
+            }
+        }
+        if (Array.isArray(data.expenses) && data.expenses.length) {
+            const c = document.getElementById('expense-items');
+            if (c) {
+                c.innerHTML = '';
+                if (typeof _createExpenseRow === 'function') {
+                    data.expenses.forEach(e => c.appendChild(_createExpenseRow(e)));
+                }
+            }
+        }
+        if (Array.isArray(data.spots) && data.spots.length) {
+            const c = document.getElementById('spots-container');
+            if (c) {
+                c.innerHTML = '';
+                data.spots.forEach(s => {
+                    if (typeof addSpot === 'function') addSpot(s.name, s.desc, s.date);
+                });
+            }
+        }
+        if (Array.isArray(data.photos) && data.photos.length) {
+            currentPhotos = data.photos.slice();
+            if (typeof renderPhotoItems === 'function') renderPhotoItems();
+        }
+        if (typeof onDateChange === 'function') onDateChange();
+        if (typeof updateFormCompleteness === 'function') updateFormCompleteness();
+        if (typeof checkDuplicateTrip === 'function') checkDuplicateTrip();
         const ind = document.getElementById('autosave-indicator');
         if (ind) {
             ind.style.display = 'inline-flex';
+            ind.className = 'autosave-indicator';
             ind.textContent = '✓ 已恢复草稿 ' + new Date(data.savedAt).toLocaleTimeString('zh-CN', { hour12: false });
         }
-    } catch (e) {}
+        setTimeout(() => { _draftRestored = false; }, 600);
+        return true;
+    } catch (e) { console.error('_restoreDraft failed:', e); return false; }
+}
+function _captureArchiveForm() {
+    const v = (id) => ((document.getElementById(id) || {}).value || '');
+    const mood = document.querySelector('.mood-tag.selected');
+    const tags = [];
+    document.querySelectorAll('.travel-tag.active').forEach(el => tags.push(el.dataset.tag || el.textContent.trim()));
+    const revisit = document.querySelector('.mood-tag.selected[data-revisit]');
+    const ratingEl = document.querySelector('.star.active, .star.selected, .star[data-active="true"]');
+    const rating = ratingEl ? Number(ratingEl.dataset.value || 0) : 0;
+    const companions = (currentCompanions || []).slice();
+    const expenses = [];
+    document.querySelectorAll('#expense-items .expense-row, #expense-items [data-expense-row]').forEach(row => {
+        const cat = (row.querySelector('.expense-cat, [data-field="category"]') || {}).value || '';
+        const amt = (row.querySelector('.expense-amt, [data-field="amount"]') || {}).value || '';
+        const note = (row.querySelector('.expense-note, [data-field="note"]') || {}).value || '';
+        if (cat || amt) expenses.push({ category: cat, amount: amt, note: note });
+    });
+    const spots = [];
+    document.querySelectorAll('#spots-container .spot-row, #spots-container [data-spot-row]').forEach(row => {
+        const name = (row.querySelector('.spot-name, [data-field="name"]') || {}).value || '';
+        const desc = (row.querySelector('.spot-desc, [data-field="desc"]') || {}).value || '';
+        const date = (row.querySelector('.spot-date, [data-field="date"]') || {}).value || '';
+        if (name) spots.push({ name, desc, date });
+    });
+    return {
+        title: v('f-title'),
+        destination: v('f-destination'),
+        start: v('f-start'),
+        end: v('f-end'),
+        transport: v('f-transport'),
+        weather: v('f-weather'),
+        itinerary: v('f-itinerary'),
+        diary: v('f-diary'),
+        reflection: v('f-reflection'),
+        highlights: v('f-highlights'),
+        regrets: v('f-regrets'),
+        lessons: v('f-lessons'),
+        recommend: v('f-recommend'),
+        revisit: revisit ? revisit.dataset.revisit : '',
+        mood: mood ? (mood.dataset.mood || mood.textContent.trim()) : '',
+        tags: tags,
+        rating: rating,
+        companions: companions,
+        expenses: expenses,
+        spots: spots,
+        photos: (currentPhotos || []).slice(),
+        savedAt: Date.now()
+    };
+}
+function _onArchiveModalClick(e) {
+    const t = e.target;
+    if (!t) return;
+    if (t.classList && (t.classList.contains('mood-tag') || t.classList.contains('travel-tag') || t.classList.contains('star'))) {
+        _scheduleAutoSaveDraft();
+    } else if (t.closest && t.closest('.companion-tag')) {
+        _scheduleAutoSaveDraft();
+    } else if (t.closest && t.closest('.date-quick')) {
+        _scheduleAutoSaveDraft();
+    }
+}
+function _onArchiveModalChange(e) {
+    checkDuplicateTrip();
+    updateFormCompletenessDebounced();
+    _scheduleAutoSaveDraft();
 }
 
 function editArchive(id) {
@@ -9587,10 +10763,7 @@ async function deleteArchive(id) {
     const ok = await showConfirm('🗑️ 删除旅行档案', '确定要删除这个旅行档案吗？\n此操作不可恢复！');
     if (!ok) return;
     archives = archives.filter(a => a.id !== id);
-    saveData();
-    updateSidebarStats();
-    updateAchievements();
-    renderArchiveList();
+    refreshAllStats();
     showToast('档案已删除');
 }
 
@@ -10619,13 +11792,13 @@ function renderPersonalityRadar() {
         <div style="color: ${top.color}; font-weight: 600; margin-bottom: 8px;">最强：${top.emoji} ${top.label}（${d[top.key]}/100）</div>
         ${_radarLabels.map(l => {
             const val = d[l.key];
-            return `<div style="display: flex; align-items: center; gap: 8px; margin: 4px 0;">
-                <span style="width: 10px; height: 10px; background: ${l.color}; border-radius: 50%; flex-shrink: 0;"></span>
-                <span style="flex: 1; color: #2D3436;">${l.emoji} ${l.label}</span>
-                <div style="width: 80px; height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden;">
-                    <div style="width: ${val}%; height: 100%; background: ${l.color}; border-radius: 3px;"></div>
+            return `<div style="display: flex; align-items: center; gap: 10px; margin: 6px 0; padding: 4px 0;">
+                <span style="width: 12px; height: 12px; background: ${l.color}; border-radius: 50%; flex-shrink: 0;"></span>
+                <span style="flex: 0 0 90px; color: #2D3436; font-size: 13px;">${l.emoji} ${l.label}</span>
+                <div style="flex: 1; min-width: 160px; height: 12px; background: #f0f0f0; border-radius: 6px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);">
+                    <div style="width: ${val}%; height: 100%; background: linear-gradient(90deg, ${l.color}99, ${l.color}); border-radius: 6px; transition: width 0.4s ease;"></div>
                 </div>
-                <b style="color: ${l.color}; min-width: 28px; text-align: right;">${val}</b>
+                <b style="color: ${l.color}; min-width: 36px; text-align: right; font-size: 14px;">${val}</b>
             </div>`;
         }).join('')}
     `;
@@ -10784,12 +11957,15 @@ function hideYearWheelTooltip() {
 }
 
 function applyYearFilter() {
-    if (typeof currentMapData === 'undefined' || !currentMapData) return;
-    const filtered = currentMapData.filter(a => {
+    // 直接从 archives 读数据源（不再依赖 currentMapData,避免 currentMapData 未填充时 fallback 到全量）
+    if (typeof archives === 'undefined' || !archives || archives.length === 0) return;
+    const filtered = archives.filter(a => {
         if (!a.start) return false;
         const year = parseInt(a.start.substring(0, 4));
         return selectedYears.has(year);
     });
+    // 同步缓存到 currentMapData,供后续 toggleSeasonMode / 重新筛选使用
+    currentMapData = filtered;
     renderFilteredMarkers(filtered);
 }
 
@@ -11065,6 +12241,13 @@ function renderCompanionCompare() {
 let currentMapData = [];
 function renderFilteredMarkers(filtered, animate = false, compareMode = null) {
     if (!mapInstance) return;
+    // 同步缓存当前数据集(供 applyYearFilter / toggleSeasonMode 等后续调用)
+    // filtered 为空时 fallback 到 archives,确保 currentMapData 始终有数据
+    if (filtered && filtered.length) {
+        currentMapData = filtered;
+    } else if (!currentMapData || currentMapData.length === 0) {
+        currentMapData = (archives || []).slice();
+    }
 
     // === Globe 模式：重建城市点 + 弧线 ===
     if (mapInstance.type === 'globe' && mapInstance.instance) {
@@ -11112,7 +12295,8 @@ function renderFilteredMarkers(filtered, animate = false, compareMode = null) {
     // === Leaflet 模式：直接复用 markerLayer / polylineLayer ===
     if (mapInstance.type === 'leaflet') {
         const data = filtered && filtered.length ? filtered : (archives || []);
-        _renderLeafletCities(mapInstance.map, mapInstance.markerLayer, mapInstance.polylineLayer, data);
+        const ctxCompare = (typeof compareMode === 'object' && compareMode) || null;
+        _renderLeafletCities(mapInstance.map, mapInstance.markerLayer, mapInstance.polylineLayer, data, seasonMode, ctxCompare);
         return;
     }
 
@@ -11559,10 +12743,18 @@ function initMap() {
     // 互斥:上一次 initMap 还没完成就直接 return
     if (_mapInitInProgress) return;
     const _mapContainer = document.getElementById('map');
-    // 可见性检查：容器不存在 / 容器不可见（offsetWidth=0）就跳过
-    if (!_mapContainer || _mapContainer.offsetWidth === 0 || _mapContainer.offsetParent === null) {
+    // 可见性检查：容器不存在 / 容器不可见（offsetWidth=0）就延后重试（最多 30 次 × 100ms = 3s）
+    // 解决 page-home→page-map 切换时 layout 还没重算导致 Leaflet 从未初始化的 bug
+    if (!_mapContainer) return;
+    if (_mapContainer.offsetWidth === 0 || _mapContainer.offsetParent === null) {
+        if (typeof window.__mapLayoutRetries === 'undefined') window.__mapLayoutRetries = 0;
+        if (window.__mapLayoutRetries < 30) {
+            window.__mapLayoutRetries++;
+            setTimeout(() => { window.__mapLayoutRetries--; initMap(); }, 100);
+        }
         return;
     }
+    window.__mapLayoutRetries = 0;
     // 复用：如果已有 Leaflet 实例且容器一致，只 invalidateSize + 刷新数据，不重建
     if (mapInstance && mapInstance.type === 'leaflet' && mapInstance.map) {
         try {
@@ -11575,7 +12767,8 @@ function initMap() {
         return;
     }
     _mapInitInProgress = true;
-    setTimeout(() => {
+    let __mapInitRetries = 0;
+    const __tryInit = () => {
         // 防御：先销毁旧实例（避免 _leaflet_pos 未定义错误）
         if (mapInstance) {
             try {
@@ -11587,10 +12780,10 @@ function initMap() {
         }
         const container = document.getElementById('map');
         if (!container) { _mapInitInProgress = false; return; }
-        // 二次可见性检查（在 setTimeout 异步执行时容器可能已被隐藏）
+        // 二次可见性检查（page-home→page-map 切换时 layout 还没重算的情况下，延后重试）
         if (container.offsetWidth === 0 || container.offsetParent === null) {
-            _mapInitInProgress = false;
-            return;
+            if (__mapInitRetries++ < 20) { setTimeout(__tryInit, 120); return; }
+            _mapInitInProgress = false; return;
         }
         // 二次检查容器内是否已存在 leaflet（避免并发竞态）
         if (container.querySelector('.leaflet-container')) {
@@ -11725,11 +12918,12 @@ function initMap() {
 
         // 聚合 + 渲染城市
         const data = (currentMapData && currentMapData.length) ? currentMapData : (archives || []);
-        _renderLeafletCities(map, markerLayer, polylineLayer, data);
+        _renderLeafletCities(map, markerLayer, polylineLayer, data, seasonMode);
 
         mapInstance = { type: 'leaflet', map, markerLayer, polylineLayer };
         _mapInitInProgress = false;
-    }, 80);
+    };
+    setTimeout(__tryInit, 80);
 }
 
 // 聚合城市坐标数据(从 archives 提取经纬度 + 频次,供 2D/3D 地图使用)
@@ -11991,18 +13185,41 @@ async function _initMap3DGlobe() {
             povAlt = 1.6;
         }
 
-        // 创建地球(本地纹理为主,CDN 为备用,确保必定可见)
+        // 创建地球(CDN 纹理为主,本地纹理为加速缓存,确保任何环境都可见)
+        // 优先用 unpkg.com 上的 three-globe 官方资源,绝对稳定
+        const cdnEarthImg = 'https://unpkg.com/three-globe/example/img/earth-night.jpg';
+        const cdnBumpImg = 'https://unpkg.com/three-globe/example/img/earth-topology.png';
         const localEarthImg = 'assets/globe/lib/earth-night.jpg';
         const localBumpImg = 'assets/globe/lib/earth-topology.png';
+
+        // 用 Image 异步探测本地纹理(成功后用本地,失败则降级 CDN)
+        let earthImg = cdnEarthImg, bumpImg = cdnBumpImg;
+        const probeImg = (url) => new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(img.naturalWidth > 0);
+            img.onerror = () => resolve(false);
+            img.src = url;
+        });
+        // 异步预检测本地(不阻塞 Globe 初始化)
+        Promise.all([probeImg(localEarthImg), probeImg(localBumpImg)]).then(([earthOk, bumpOk]) => {
+            if (earthOk && bumpOk) {
+                try { myGlobe.globeImageUrl(localEarthImg); } catch (e) {}
+                try { myGlobe.bumpImageUrl(localBumpImg); } catch (e) {}
+                console.log('[Globe] 本地纹理可用,已切换');
+            } else {
+                console.warn('[Globe] 本地纹理不可用,继续使用 CDN');
+            }
+        }).catch(() => {});
+
         const myGlobe = Globe()
             (container)
             .backgroundColor('#050816')
             .showAtmosphere(true)
             .atmosphereColor('#4A9EFF')
             .atmosphereAltitude(0.22)
-            // 本地纹理优先,绝对可用(相对路径,无需网络)
-            .globeImageUrl(localEarthImg)
-            .bumpImageUrl(localBumpImg)
+            // 先用 CDN 纹理(确保可见),本地就绪后异步替换
+            .globeImageUrl(cdnEarthImg)
+            .bumpImageUrl(cdnBumpImg)
             .showGlobe(true)
             .showGraticules(true) // 内置经纬线
             // 城市点
@@ -12103,28 +13320,15 @@ async function _initMap3DGlobe() {
     }
 }
 
-function _renderLeafletCities(map, markerLayer, polylineLayer, data) {
+function _renderLeafletCities(map, markerLayer, polylineLayer, data, useSeason = false, compareMode = null) {
     if (!markerLayer || !polylineLayer || !map) return;
     markerLayer.clearLayers();
     polylineLayer.clearLayers();
     if (!data || data.length === 0) return;
 
-    const cityGroups = {};
-    data.forEach(a => {
-        const c = getCityCoords(a.destination);
-        if (!c) return;
-        if (!cityGroups[a.destination]) cityGroups[a.destination] = { coords: c, archives: [] };
-        cityGroups[a.destination].archives.push(a);
-    });
-
-    const cities = Object.values(cityGroups).map(g => {
-        const days = g.archives.reduce((s, a) => {
-            if (a.end && a.start) return s + Math.ceil((new Date(a.end) - new Date(a.start)) / 86400000) + 1;
-            return s + 1;
-        }, 0);
-        const color = '#FF764D';
-        return { name: g.archives[0].destination, lat: g.coords.lat, lng: g.coords.lng, count: g.archives.length, days, color, archives: g.archives };
-    });
+    // 使用 _aggregateCitiesForMap 统一处理（支持季节/同行人对比着色）
+    const cities = _aggregateCitiesForMap(data, useSeason, compareMode);
+    if (!cities || cities.length === 0) return;
 
     // 路径
     if (cities.length > 1) {
@@ -13674,6 +14878,9 @@ function toggleFavorite(id) {
     archive.favorite = !archive.favorite;
     saveData();
     renderArchiveList();
+    renderFavorites();
+    // 同步档案 tab 计数
+    if (typeof _updateArchivesTabCounts === 'function') _updateArchivesTabCounts();
     showToast(archive.favorite ? '已收藏' : '已取消收藏');
 }
 
@@ -16491,112 +17698,309 @@ showPage = function(pageName) {
 
 // AI 提供商配置
 const AI_PROVIDERS = {
-    siliconflow: {
-        name: '硅基流动',
-        baseUrl: 'https://api.siliconflow.cn/v1',
-        defaultModel: 'Qwen/Qwen2.5-7B-Instruct',
-        models: ['Qwen/Qwen2.5-7B-Instruct', 'Qwen/Qwen2.5-14B-Instruct', 'THUDM/glm-4-9b-chat', '01-ai/Yi-1.5-9B-Chat-16K']
-    },
-    deepseek: {
-        name: 'DeepSeek',
-        baseUrl: 'https://api.deepseek.com/v1',
-        defaultModel: 'deepseek-chat',
-        models: ['deepseek-chat']
-    },
     zhipu: {
-        name: '智谱 AI',
+        name: '智谱 AI (GLM-4V 推荐)',
         baseUrl: 'https://open.bigmodel.cn/api/paas/v4',
         defaultModel: 'glm-4-flash',
-        models: ['glm-4-flash', 'glm-4', 'glm-4-plus']
+        models: ['glm-4-flash', 'glm-4', 'glm-4-plus', 'glm-4v-flash', 'glm-4v-plus'],
+        supportsVision: true,
+        visionModel: 'glm-4v-flash',
+        keyHint: 'https://open.bigmodel.cn/usercenter/apikeys',
+        free: '✅ 有免费额度'
+    },
+    siliconflow: {
+        name: '硅基流动 SiliconFlow',
+        baseUrl: 'https://api.siliconflow.cn/v1',
+        defaultModel: 'Qwen/Qwen2.5-7B-Instruct',
+        models: ['Qwen/Qwen2.5-7B-Instruct', 'Qwen/Qwen2.5-14B-Instruct', 'THUDM/glm-4-9b-chat', '01-ai/Yi-1.5-9B-Chat-16K', 'Qwen/Qwen2-VL-72B-Instruct'],
+        supportsVision: true,
+        visionModel: 'Qwen/Qwen2-VL-72B-Instruct',
+        keyHint: 'https://cloud.siliconflow.cn/account/ak',
+        free: '✅ 注册送额度'
+    },
+    deepseek: {
+        name: 'DeepSeek (便宜·长文)',
+        baseUrl: 'https://api.deepseek.com/v1',
+        defaultModel: 'deepseek-chat',
+        models: ['deepseek-chat', 'deepseek-reasoner'],
+        supportsVision: false,
+        keyHint: 'https://platform.deepseek.com/api_keys',
+        free: '⚠️ 需充值'
+    },
+    moonshot: {
+        name: '月之暗面 Kimi',
+        baseUrl: 'https://api.moonshot.cn/v1',
+        defaultModel: 'moonshot-v1-8k',
+        models: ['moonshot-v1-8k', 'moonshot-v1-32k', 'moonshot-v1-128k'],
+        supportsVision: false,
+        keyHint: 'https://platform.moonshot.cn/console/api-keys',
+        free: '✅ 有免费额度'
+    },
+    qwen: {
+        name: '通义千问 DashScope (OpenAI 兼容)',
+        baseUrl: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+        defaultModel: 'qwen-turbo',
+        models: ['qwen-turbo', 'qwen-plus', 'qwen-max', 'qwen-vl-plus', 'qwen-vl-max'],
+        supportsVision: true,
+        visionModel: 'qwen-vl-plus',
+        keyHint: 'https://dashscope.console.aliyun.com/apiKey',
+        free: '✅ 有免费额度'
+    },
+    doubao: {
+        name: '豆包 Doubao (字节)',
+        baseUrl: 'https://ark.cn-beijing.volces.com/api/v3',
+        defaultModel: 'doubao-1-5-pro-32k-250115',
+        models: ['doubao-1-5-pro-32k-250115', 'doubao-1-5-lite-32k-250115', 'doubao-1-5-vision-pro-32k-250115'],
+        supportsVision: true,
+        visionModel: 'doubao-1-5-vision-pro-32k-250115',
+        keyHint: 'https://www.volcengine.com/product/ark',
+        free: '✅ 有免费额度'
+    },
+    openai: {
+        name: 'OpenAI / 兼容服务',
+        baseUrl: 'https://api.openai.com/v1',
+        defaultModel: 'gpt-4o-mini',
+        models: ['gpt-4o-mini', 'gpt-4o', 'gpt-4-turbo', 'gpt-3.5-turbo'],
+        supportsVision: true,
+        visionModel: 'gpt-4o-mini',
+        keyHint: 'https://platform.openai.com/api-keys',
+        free: '⚠️ 需付费'
     },
     custom: {
-        name: '自定义',
+        name: '🔧 自定义 OpenAI 兼容接口',
         baseUrl: '',
         defaultModel: '',
-        models: []
+        models: [],
+        supportsVision: false,
+        keyHint: '请填写完整的 baseUrl(包含 /v1)',
+        free: '—'
     }
 };
 
-function hasAIConfig() {
+// 多模态视觉模型(可识别图片)
+const VISION_MODELS = {
+    'glm-4v-flash': { provider: 'zhipu', name: '智谱 GLM-4V-Flash(免费·推荐)' },
+    'glm-4v-plus': { provider: 'zhipu', name: '智谱 GLM-4V-Plus(高质量)' },
+    'Qwen/Qwen2-VL-72B-Instruct': { provider: 'siliconflow', name: '通义 Qwen2-VL-72B' },
+    'qwen-vl-plus': { provider: 'qwen', name: '通义千问 qwen-vl-plus' },
+    'qwen-vl-max': { provider: 'qwen', name: '通义千问 qwen-vl-max' },
+    'doubao-1-5-vision-pro-32k-250115': { provider: 'doubao', name: '豆包 Vision Pro' },
+    'gpt-4o-mini': { provider: 'openai', name: 'GPT-4o-mini(多模态)' },
+    'gpt-4o': { provider: 'openai', name: 'GPT-4o(多模态)' }
+};
+
+// ===== 多供应商 AI 配置(支持故障转移 + 文本/视觉) =====
+
+// 加载供应商列表(从旧单供应商格式自动迁移)
+function loadAIProviders() {
     try {
-        return !!(localStorage.getItem('ai_api_key'));
-    } catch (e) { return false; }
+        const arr = JSON.parse(localStorage.getItem('ai_providers_v2') || '[]');
+        if (Array.isArray(arr) && arr.length) return arr;
+    } catch (e) {}
+    // 从旧格式迁移
+    const oldKey = localStorage.getItem('ai_api_key');
+    if (oldKey) {
+        const oldProvider = localStorage.getItem('ai_provider') || 'siliconflow';
+        const oldBaseUrl = localStorage.getItem('ai_base_url');
+        const oldModel = localStorage.getItem('ai_model');
+        return [{
+            id: 'p_' + Date.now(),
+            enabled: true,
+            provider: oldProvider,
+            apiKey: oldKey,
+            baseUrl: oldBaseUrl || AI_PROVIDERS[oldProvider]?.baseUrl || '',
+            model: oldModel || AI_PROVIDERS[oldProvider]?.defaultModel || '',
+            priority: 0,
+            type: 'text',
+            label: '主供应商'
+        }];
+    }
+    return [];
 }
 
+function saveAIProviders(list) {
+    try {
+        localStorage.setItem('ai_providers_v2', JSON.stringify(list));
+    } catch (e) {}
+}
+
+function getEnabledProviders() {
+    return loadAIProviders().filter(p => p.enabled && p.apiKey).sort((a, b) => (a.priority || 0) - (b.priority || 0));
+}
+
+// 查找支持视觉的供应商(返回第一个可用的)
+function getVisionProvider() {
+    return getEnabledProviders().find(p => {
+        const cfg = AI_PROVIDERS[p.provider];
+        return cfg && cfg.supportsVision;
+    });
+}
+
+// 兼容性:旧代码仍调用 getAIConfig() - 返回第一个启用的供应商
 function getAIConfig() {
-    try {
-        return {
-            apiKey: localStorage.getItem('ai_api_key') || '',
-            baseUrl: localStorage.getItem('ai_base_url') || 'https://api.siliconflow.cn/v1',
-            model: localStorage.getItem('ai_model') || 'Qwen/Qwen2.5-7B-Instruct',
-            provider: localStorage.getItem('ai_provider') || 'siliconflow'
-        };
-    } catch (e) {
-        return null;
-    }
+    const list = getEnabledProviders();
+    if (list.length === 0) return null;
+    const p = list[0];
+    return { apiKey: p.apiKey, baseUrl: p.baseUrl, model: p.model, provider: p.provider };
+}
+function hasAIConfig() {
+    return getEnabledProviders().length > 0;
 }
 
+// 打开设置模态 - 渲染多供应商列表
 function openAISettingsModal() {
-    const cfg = getAIConfig();
-    if (cfg) {
-        document.getElementById('ai-provider').value = cfg.provider;
-        document.getElementById('ai-api-key').value = cfg.apiKey;
-        document.getElementById('ai-model').value = cfg.model;
-    }
-    onAIProviderChange();
+    renderAIProvidersList();
     openModal('ai-settings');
+    if (typeof updateAINavStatus === 'function') updateAINavStatus();
 }
 
-function onAIProviderChange() {
-    const provider = document.getElementById('ai-provider').value;
-    const prov = AI_PROVIDERS[provider];
-    if (!prov) return;
-    const modelInput = document.getElementById('ai-model');
-    if (!modelInput.value || modelInput.placeholder === '') {
-        modelInput.placeholder = prov.defaultModel;
+// 渲染供应商行
+function renderAIProvidersList() {
+    const list = loadAIProviders();
+    const container = document.getElementById('ai-providers-list');
+    if (!container) return;
+    if (list.length === 0) {
+        container.innerHTML = `<div style="text-align: center; padding: 30px; color: #999; background: #FAFAFA; border-radius: 12px; border: 2px dashed #E0E0E0;">
+            <div style="font-size: 32px; margin-bottom: 8px;">🤖</div>
+            <div style="font-weight: 600; margin-bottom: 4px;">还没有配置 AI 供应商</div>
+            <div style="font-size: 13px;">点击下方"➕ 添加供应商"开始配置</div>
+        </div>`;
+        return;
     }
-    if (prov.baseUrl) {
-        modelInput.dataset.baseUrl = prov.baseUrl;
-    }
+    container.innerHTML = list.map((p, idx) => {
+        const cfg = AI_PROVIDERS[p.provider] || {};
+        const modelOptions = (cfg.models || []).map(m => `<option value="${m}" ${m === p.model ? 'selected' : ''}>${m}</option>`).join('');
+        const supportsVision = cfg.supportsVision ? '✅ 多模态' : '📝 仅文本';
+        return `
+        <div class="ai-provider-card" data-pid="${p.id}" style="background: #FAFAFA; border: 1px solid ${p.enabled ? '#FF764D' : '#E0E0E0'}; border-radius: 12px; padding: 14px; margin-bottom: 12px; position: relative;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" ${p.enabled ? 'checked' : ''} onchange="updateAIProvider('${p.id}', 'enabled', this.checked)" style="width: 18px; height: 18px; cursor: pointer;">
+                    <input type="text" value="${(p.label || '').replace(/"/g, '&quot;')}" placeholder="备注名(例:主力 GLM-4V)" onchange="updateAIProvider('${p.id}', 'label', this.value)" style="font-weight: 600; border: none; background: transparent; font-size: 14px; width: 220px; outline: none;">
+                    <span style="font-size: 11px; padding: 2px 8px; border-radius: 10px; background: ${p.enabled ? '#FFE5D9' : '#EEE'}; color: ${p.enabled ? '#FF764D' : '#888'};">优先级 ${p.priority || 0}</span>
+                </div>
+                <button onclick="removeAIProvider('${p.id}')" style="background: transparent; border: none; color: #999; cursor: pointer; font-size: 16px;" title="删除">🗑️</button>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                <div>
+                    <label style="font-size: 11px; color: #888; display: block; margin-bottom: 3px;">供应商 (${supportsVision})</label>
+                    <select onchange="updateAIProvider('${p.id}', 'provider', this.value)" style="width: 100%; padding: 6px; border: 1px solid #DDD; border-radius: 6px; font-size: 13px;">
+                        ${Object.keys(AI_PROVIDERS).map(k => `<option value="${k}" ${k === p.provider ? 'selected' : ''}>${AI_PROVIDERS[k].name}</option>`).join('')}
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 11px; color: #888; display: block; margin-bottom: 3px;">优先级(数字小=优先)</label>
+                    <input type="number" value="${p.priority || 0}" onchange="updateAIProvider('${p.id}', 'priority', parseInt(this.value)||0)" style="width: 100%; padding: 6px; border: 1px solid #DDD; border-radius: 6px; font-size: 13px;">
+                </div>
+            </div>
+            <div style="margin-bottom: 8px;">
+                <label style="font-size: 11px; color: #888; display: block; margin-bottom: 3px;">API Key ${cfg.free || ''}</label>
+                <input type="password" value="${(p.apiKey || '').replace(/"/g, '&quot;')}" placeholder="sk-..." onchange="updateAIProvider('${p.id}', 'apiKey', this.value)" style="width: 100%; padding: 6px; border: 1px solid #DDD; border-radius: 6px; font-size: 13px; font-family: monospace;">
+                ${cfg.keyHint ? `<div style="font-size: 11px; margin-top: 3px;"><a href="${cfg.keyHint}" target="_blank" style="color: #FF764D;">👉 申请 Key</a></div>` : ''}
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div>
+                    <label style="font-size: 11px; color: #888; display: block; margin-bottom: 3px;">模型</label>
+                    ${(cfg.models && cfg.models.length) ?
+                        `<select onchange="updateAIProvider('${p.id}', 'model', this.value)" style="width: 100%; padding: 6px; border: 1px solid #DDD; border-radius: 6px; font-size: 13px;">${modelOptions}</select>` :
+                        `<input type="text" value="${(p.model || '').replace(/"/g, '&quot;')}" placeholder="模型名" onchange="updateAIProvider('${p.id}', 'model', this.value)" style="width: 100%; padding: 6px; border: 1px solid #DDD; border-radius: 6px; font-size: 13px;">`
+                    }
+                </div>
+                <div>
+                    <label style="font-size: 11px; color: #888; display: block; margin-bottom: 3px;">Base URL (自定义时填)</label>
+                    <input type="text" value="${(p.baseUrl || '').replace(/"/g, '&quot;')}" placeholder="${(cfg.baseUrl || 'https://...').replace(/"/g, '&quot;')}" onchange="updateAIProvider('${p.id}', 'baseUrl', this.value)" style="width: 100%; padding: 6px; border: 1px solid #DDD; border-radius: 6px; font-size: 13px; font-family: monospace;">
+                </div>
+            </div>
+            <div id="ai-test-${p.id}" style="margin-top: 8px; display: none;"></div>
+        </div>`;
+    }).join('');
 }
 
-function saveAISettings() {
-    try {
-        const provider = document.getElementById('ai-provider').value;
-        const apiKey = document.getElementById('ai-api-key').value.trim();
-        const modelInput = document.getElementById('ai-model');
-        const model = modelInput.value.trim() || AI_PROVIDERS[provider].defaultModel;
-        const baseUrl = AI_PROVIDERS[provider].baseUrl || modelInput.dataset.baseUrl;
-        if (!apiKey) {
-            showToast('请填写 API Key', 'error');
-            return;
+function updateAIProvider(pid, field, value) {
+    const list = loadAIProviders();
+    const p = list.find(x => x.id === pid);
+    if (!p) return;
+    p[field] = value;
+    if (field === 'provider') {
+        const cfg = AI_PROVIDERS[value] || {};
+        p.baseUrl = cfg.baseUrl || '';
+        p.model = cfg.defaultModel || '';
+        // 重新渲染以更新模型下拉
+        renderAIProvidersList();
+    }
+    saveAIProviders(list);
+}
+
+function addAIProviderRow() {
+    const list = loadAIProviders();
+    const usedPriorities = list.map(p => p.priority || 0);
+    const nextPriority = usedPriorities.length ? Math.max(...usedPriorities) + 1 : 0;
+    list.push({
+        id: 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        enabled: true,
+        provider: 'zhipu',
+        apiKey: '',
+        baseUrl: AI_PROVIDERS.zhipu.baseUrl,
+        model: AI_PROVIDERS.zhipu.defaultModel,
+        priority: nextPriority,
+        type: 'text',
+        label: '供应商 #' + (list.length + 1)
+    });
+    saveAIProviders(list);
+    renderAIProvidersList();
+}
+
+function removeAIProvider(pid) {
+    const list = loadAIProviders().filter(p => p.id !== pid);
+    saveAIProviders(list);
+    renderAIProvidersList();
+}
+
+function saveAllAIProviders() {
+    // 已经在每个 onchange 实时保存,这里给个反馈
+    showToast('✅ 已保存 ' + loadAIProviders().length + ' 个供应商', 'success');
+    if (typeof updateAINavStatus === 'function') updateAINavStatus();
+    closeModal('ai-settings');
+}
+
+async function testAllAIProviders() {
+    const list = getEnabledProviders();
+    if (!list.length) { showToast('请先添加并启用至少一个供应商', 'error'); return; }
+    for (const p of list) {
+        const resultEl = document.getElementById('ai-test-' + p.id);
+        if (resultEl) {
+            resultEl.style.display = 'block';
+            resultEl.innerHTML = '<span style="color: #999;">⏳ 测试中...</span>';
         }
-        localStorage.setItem('ai_provider', provider);
-        localStorage.setItem('ai_api_key', apiKey);
-        localStorage.setItem('ai_base_url', baseUrl);
-        localStorage.setItem('ai_model', model);
-        showToast('✅ AI 设置已保存', 'success');
-        closeModal('ai-settings');
-        if (typeof updateAINavStatus === 'function') updateAINavStatus();
-        // 重新渲染人格页（触发 AI 增强）
-        if (_personalityCache) requestAIPersonality(_personalityCache);
-    } catch (e) {
-        showToast('保存失败：' + e.message, 'error');
+        try {
+            const reply = await callAI(p.baseUrl, p.apiKey, p.model, [
+                { role: 'user', content: '你好,请用一句话回答"OK"表示连接正常。' }
+            ], { maxTokens: 50, temperature: 0.1 });
+            if (resultEl) {
+                resultEl.innerHTML = `<span style="color: #4CAF50;">✅ 连接成功 - ${reply.substring(0, 80)}</span>`;
+            }
+        } catch (e) {
+            if (resultEl) {
+                resultEl.innerHTML = `<span style="color: #E74C3C;">❌ 失败 - ${e.message.substring(0, 100)}</span>`;
+            }
+        }
     }
 }
 
+// 旧函数保留以避免破坏其他调用
+function saveAISettings() { saveAllAIProviders(); }
 function clearAISettings() {
-    try {
-        localStorage.removeItem('ai_provider');
+    if (confirm('确定清除所有 AI 配置?')) {
+        localStorage.removeItem('ai_providers_v2');
         localStorage.removeItem('ai_api_key');
         localStorage.removeItem('ai_base_url');
         localStorage.removeItem('ai_model');
-        document.getElementById('ai-api-key').value = '';
-        document.getElementById('ai-model').value = '';
-        document.getElementById('ai-test-result').style.display = 'none';
+        localStorage.removeItem('ai_provider');
+        renderAIProvidersList();
         showToast('🗑️ 已清除', 'success');
-    } catch (e) {}
+    }
 }
+function onAIProviderChange() { /* noop for backward compat */ }
 
 async function testAIConnection() {
     const resultEl = document.getElementById('ai-test-result');
@@ -16623,6 +18027,1134 @@ async function testAIConnection() {
 // ============================================================
 // (escapeHtml 已在 9299 定义)
 // ============================================================
+
+// ===== 通用 AI 调用(自动故障转移) =====
+// 用法: await callAIUniversal(messages, { maxTokens: 800 })
+// 自动按优先级尝试所有启用的供应商,首个成功即返回
+async function callAIUniversal(messages, opts = {}) {
+    const list = getEnabledProviders();
+    if (!list.length) throw new Error('未配置 AI 供应商,请先在 AI 设置中添加');
+    const errors = [];
+    for (const p of list) {
+        try {
+            const result = await callAI(p.baseUrl, p.apiKey, p.model, messages, opts);
+            return { content: result, provider: p.provider, model: p.model };
+        } catch (e) {
+            errors.push(`[${p.label || AI_PROVIDERS[p.provider]?.name || p.provider}] ${e.message.substring(0, 80)}`);
+        }
+    }
+    throw new Error('所有供应商调用失败:\n' + errors.join('\n'));
+}
+
+// ===== 多模态视觉识别(图片+文本→文本) =====
+// 用法: await callAIVision([{dataUrl}], '请描述这张图')
+async function callAIVision(images, prompt, opts = {}) {
+    const list = getEnabledProviders();
+    if (!list.length) throw new Error('未配置 AI 供应商');
+    // 优先选择支持视觉的供应商
+    const visionList = list.filter(p => AI_PROVIDERS[p.provider]?.supportsVision);
+    const useList = visionList.length ? visionList : list;
+    const errors = [];
+    for (const p of useList) {
+        try {
+            const cfg = AI_PROVIDERS[p.provider];
+            // 自动选择视觉模型
+            const visionModel = (cfg.visionModel && (p.model === cfg.defaultModel || !p.model)) ? cfg.visionModel : p.model;
+            const content = [
+                { type: 'text', text: prompt },
+                ...images.map(img => ({
+                    type: 'image_url',
+                    image_url: { url: img.dataUrl }
+                }))
+            ];
+            const response = await fetch(p.baseUrl + '/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + p.apiKey
+                },
+                body: JSON.stringify({
+                    model: visionModel,
+                    messages: [{ role: 'user', content }],
+                    temperature: opts.temperature ?? 0.7,
+                    max_tokens: opts.maxTokens ?? 1000
+                })
+            });
+            if (!response.ok) {
+                const errText = await response.text();
+                let msg = `HTTP ${response.status}`;
+                try { msg = JSON.parse(errText).error?.message || msg; } catch (e) {}
+                throw new Error(msg);
+            }
+            const data = await response.json();
+            return { content: data.choices?.[0]?.message?.content || '', provider: p.provider, model: visionModel };
+        } catch (e) {
+            errors.push(`[${p.label || p.provider}] ${e.message.substring(0, 80)}`);
+        }
+    }
+    throw new Error('视觉模型调用失败:\n' + errors.join('\n'));
+}
+
+// 把 File 对象压缩并转 base64(data URL)
+function fileToCompressedDataUrl(file, maxWidth = 1024, quality = 0.85) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let w = img.width, h = img.height;
+                if (w > maxWidth) { h = h * (maxWidth / w); w = maxWidth; }
+                canvas.width = w; canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, w, h);
+                resolve(canvas.toDataURL('image/jpeg', quality));
+            };
+            img.onerror = reject;
+            img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+// ============================================================
+// ===== AI 实验室 · 回忆录写作引擎 =====
+// ============================================================
+let _memoirPhotos = []; // [{dataUrl, name}]
+let _memoirStyle = 'essay';
+let _memoirResult = '';
+
+document.querySelectorAll('.memoir-style-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.memoir-style-btn').forEach(b => {
+            b.classList.remove('active');
+            b.style.border = '2px solid #DDD';
+            b.style.background = 'white';
+        });
+        btn.classList.add('active');
+        btn.style.border = '2px solid #FF764D';
+        btn.style.background = '#FFF5F0';
+        _memoirStyle = btn.dataset.style;
+    });
+});
+
+async function onMemoirPhotosSelected(e) {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    if (_memoirPhotos.length + files.length > 15) {
+        showToast('最多 15 张照片', 'error');
+        return;
+    }
+    for (const f of files) {
+        try {
+            const dataUrl = await fileToCompressedDataUrl(f, 1024, 0.85);
+            _memoirPhotos.push({ dataUrl, name: f.name });
+        } catch (e) {}
+    }
+    renderMemoirPhotos();
+}
+
+function renderMemoirPhotos() {
+    const c = document.getElementById('memoir-photos');
+    if (!c) return;
+    c.innerHTML = _memoirPhotos.map((p, i) => `
+        <div style="position: relative; aspect-ratio: 1; border-radius: 6px; overflow: hidden; background: #EEE;">
+            <img src="${p.dataUrl}" style="width: 100%; height: 100%; object-fit: cover;">
+            <button onclick="removeMemoirPhoto(${i})" style="position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,0.6); color: white; border: none; cursor: pointer; font-size: 12px; line-height: 1;">✕</button>
+        </div>
+    `).join('') + (_memoirPhotos.length === 0 ? '<div style="grid-column: 1/-1; text-align: center; color: #BBB; padding: 30px;">点击下方按钮选择照片</div>' : '');
+}
+
+function removeMemoirPhoto(i) {
+    _memoirPhotos.splice(i, 1);
+    renderMemoirPhotos();
+}
+
+// ===== AI 回忆录 · 档案多选 =====
+let _memoirSelectedIds = new Set();
+let _memoirListExpanded = false;
+let _memoirSourceTab = 'manual'; // 'manual' | 'archive'
+
+function switchMemoirSource(tab) {
+    _memoirSourceTab = tab;
+    const manual = document.getElementById('memoir-source-manual');
+    const archive = document.getElementById('memoir-source-archive');
+    const tabM = document.getElementById('memoir-source-tab-manual');
+    const tabA = document.getElementById('memoir-source-tab-archive');
+    if (!manual || !archive || !tabM || !tabA) return;
+    if (tab === 'manual') {
+        manual.style.display = 'block';
+        archive.style.display = 'none';
+        tabM.style.background = '#FF764D'; tabM.style.color = 'white';
+        tabA.style.background = 'transparent'; tabA.style.color = '#6B7280';
+    } else {
+        manual.style.display = 'none';
+        archive.style.display = 'block';
+        tabM.style.background = 'transparent'; tabM.style.color = '#6B7280';
+        tabA.style.background = '#FF764D'; tabA.style.color = 'white';
+        // 切到档案 tab 时立即渲染一次列表(避免空白)
+        if (typeof renderMemoirArchiveSelector === 'function') renderMemoirArchiveSelector();
+    }
+}
+
+function renderMemoirArchiveSelector() {
+    const countEl = document.getElementById('memoir-selection-count');
+    const listEl = document.getElementById('memoir-archive-list');
+    if (!countEl || !listEl) return;
+    const list = archives || [];
+    const total = list.length;
+    const selCount = _memoirSelectedIds.size === 0 ? total : _memoirSelectedIds.size;
+    countEl.textContent = _memoirSelectedIds.size === 0
+        ? (currentLang === 'en' ? ('All ' + total + ' archives') : ('默认全部 ' + total + ' 段'))
+        : (currentLang === 'en' ? ('Selected ' + selCount + ' / ' + total) : ('已选 ' + selCount + ' / ' + total));
+    if (total === 0) {
+        listEl.innerHTML = '<div style="text-align:center;color:#9CA3AF;padding:20px;font-size:12px;">⚠ 还没有旅行档案</div>';
+        return;
+    }
+    listEl.innerHTML = list.map(a => {
+        const checked = _memoirSelectedIds.size === 0 || _memoirSelectedIds.has(a.id);
+        const photoCount = (a.photos || []).length;
+        const bg = checked ? '#F0F9FF' : '#FFF';
+        const hasPhotos = photoCount > 0;
+        return '<label style="display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:6px;cursor:pointer;font-size:12px;background:' + bg + ';">'
+            + '<input type="checkbox" ' + (checked ? 'checked' : '') + ' onchange="toggleMemoirArchive(' + a.id + ', this.checked)" style="width:15px;height:15px;cursor:pointer;flex-shrink:0;">'
+            + '<span style="flex:1;color:#1F2937;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">📍 <b>' + escapeHtml(a.destination || '未知') + '</b> · ' + (a.start || '') + '</span>'
+            + '<span style="color:' + (hasPhotos ? '#15803D' : '#9CA3AF') + ';font-size:11px;">' + (hasPhotos ? '🖼 ' + photoCount : '无照片') + '</span>'
+            + '</label>';
+    }).join('');
+}
+
+function toggleMemoirArchive(id, checked) {
+    if (checked) {
+        if (_memoirSelectedIds.size === 0) {
+            // 首次手动勾选 = "全选"以外的子集，先把全选转化为全选集合再剔除未勾选
+            _memoirSelectedIds = new Set((archives || []).map(a => a.id));
+        }
+        _memoirSelectedIds.add(id);
+    } else {
+        if (_memoirSelectedIds.size === 0) {
+            _memoirSelectedIds = new Set((archives || []).map(a => a.id));
+        }
+        _memoirSelectedIds.delete(id);
+    }
+    renderMemoirArchiveSelector();
+}
+
+function memoirSelectAllArchives() {
+    _memoirSelectedIds = new Set((archives || []).map(a => a.id));
+    renderMemoirArchiveSelector();
+}
+function memoirSelectNoneArchives() {
+    _memoirSelectedIds = new Set();
+    renderMemoirArchiveSelector();
+}
+function memoirSelectInvertArchives() {
+    if (_memoirSelectedIds.size === 0) {
+        _memoirSelectedIds = new Set();
+    } else {
+        const next = new Set();
+        (archives || []).forEach(a => { if (!_memoirSelectedIds.has(a.id)) next.add(a.id); });
+        _memoirSelectedIds = next;
+    }
+    renderMemoirArchiveSelector();
+}
+function memoirSelectThisYearArchives() {
+    const yr = String(new Date().getFullYear());
+    const matches = (archives || []).filter(a => (a.start || '').startsWith(yr));
+    if (matches.length === 0) {
+        if (typeof showToast === 'function') showToast('今年还没有旅行档案', 'info');
+        return;
+    }
+    _memoirSelectedIds = new Set(matches.map(a => a.id));
+    renderMemoirArchiveSelector();
+}
+function toggleMemoirArchiveList() {
+    _memoirListExpanded = !_memoirListExpanded;
+    const listEl = document.getElementById('memoir-archive-list');
+    const btn = document.getElementById('memoir-toggle-list-btn');
+    if (listEl) listEl.style.display = _memoirListExpanded ? 'block' : 'none';
+    if (btn) btn.textContent = _memoirListExpanded ? '收起 ▴' : '展开 ▾';
+    if (_memoirListExpanded) renderMemoirArchiveSelector();
+}
+
+function applyMemoirArchiveSelection() {
+    const list = (archives || []).filter(a =>
+        _memoirSelectedIds.size === 0 ? true : _memoirSelectedIds.has(a.id)
+    );
+    if (list.length === 0) {
+        if (typeof showToast === 'function') showToast('请至少选择一个档案', 'error');
+        return;
+    }
+    // 合并照片(去重)
+    const seen = new Set(_memoirPhotos.map(p => p.dataUrl));
+    let added = 0;
+    list.forEach(a => {
+        (a.photos || []).forEach(p => {
+            const url = (typeof p === 'object') ? (p.url || p.dataUrl || '') : (p || '');
+            if (url && !seen.has(url)) {
+                _memoirPhotos.push({ dataUrl: url, name: a.destination || a.title || '档案' });
+                seen.add(url);
+                added++;
+            }
+        });
+    });
+    renderMemoirPhotos();
+    // 合并目的地/日期(空才覆盖)
+    const dest = list.map(a => a.destination).filter(Boolean).join('、');
+    const dates = list.map(a => (a.start && a.end) ? (a.start + ' 至 ' + a.end) : (a.start || '')).filter(Boolean).join('；');
+    const destEl = document.getElementById('memoir-destination');
+    const datesEl = document.getElementById('memoir-dates');
+    if (destEl && dest && !destEl.value) destEl.value = dest;
+    if (datesEl && dates && !datesEl.value) datesEl.value = dates;
+    // 合并文字片段(日记+亮点+反思+行程)
+    const text = list.map(a => {
+        const parts = [];
+        if (a.title) parts.push('【' + a.title + '】');
+        if (a.diary) parts.push(a.diary);
+        else if (a.reflection) parts.push(a.reflection);
+        else if (a.highlights) parts.push(a.highlights);
+        if (a.itinerary) parts.push('行程：' + a.itinerary);
+        return parts.join('\n');
+    }).filter(Boolean).join('\n\n');
+    const textEl = document.getElementById('memoir-text');
+    if (textEl && text) {
+        textEl.value = textEl.value ? (textEl.value + '\n\n' + text) : text;
+    }
+    if (typeof showToast === 'function') {
+        showToast('已载入 ' + list.length + ' 段档案 · 新增 ' + added + ' 张照片', 'success');
+    }
+}
+
+async function generateMemoir() {
+    if (_memoirPhotos.length < 3) {
+        showToast('请至少上传 3 张照片', 'error');
+        return;
+    }
+    if (!hasAIConfig()) {
+        const output = document.getElementById('memoir-output');
+        if (output) {
+            showAIMissingHint({ target: output.parentElement, autoOpen: true });
+        } else {
+            showAIMissingToast();
+        }
+        return;
+    }
+    const status = document.getElementById('memoir-status');
+    const output = document.getElementById('memoir-output');
+    const actions = document.getElementById('memoir-actions');
+    status.innerHTML = '🔍 AI 正在识别每张照片的内容和情绪...';
+    output.innerHTML = '<div style="text-align: center; padding: 60px 20px; color: #888;"><div class="ai-spinner" style="margin: 0 auto 12px;"></div>分析照片中...</div>';
+    actions.style.display = 'none';
+
+    const dest = document.getElementById('memoir-destination').value.trim();
+    const dates = document.getElementById('memoir-dates').value.trim();
+    const userText = document.getElementById('memoir-text').value.trim();
+
+    try {
+        // Step 1: 视觉识别每张照片
+        const photoDescriptions = [];
+        // 限制最多 8 张用于单次 vision 调用,分批
+        const batchSize = 4;
+        for (let i = 0; i < Math.min(_memoirPhotos.length, 8); i += batchSize) {
+            const batch = _memoirPhotos.slice(i, i + batchSize);
+            const visionPrompt = `请用中文简洁描述每张照片(序号对应),每张 30-60 字。重点描述:场景、人物、情绪、关键细节。
+格式:
+照片 1: ...
+照片 2: ...
+照片 3: ...`;
+            const visionRes = await callAIVision(batch.map(p => ({ dataUrl: p.dataUrl })), visionPrompt, { maxTokens: 800 });
+            photoDescriptions.push(visionRes.content);
+            status.innerHTML = `🔍 已识别 ${Math.min(i + batchSize, 8)}/${Math.min(_memoirPhotos.length, 8)} 张照片...`;
+        }
+
+        // Step 2: 生成回忆录
+        status.innerHTML = '✍️ AI 正在创作回忆录...';
+        const styleMap = {
+            essay: '优美抒情散文(800-1200 字)',
+            diary: '细腻日记体(分段记录每天,每段 100-200 字)',
+            novel: '文学小说片段(第三人称,场景化叙事,800-1200 字)'
+        };
+        const prompt = `你是一位旅行文学作家。基于以下素材创作一篇${styleMap[_memoirStyle]}的旅行回忆录。
+
+【目的地】${dest || '未提供'}
+【时间】${dates || '未提供'}
+【照片描述】
+${photoDescriptions.join('\n---\n')}
+【用户文字】
+${userText || '无'}
+
+要求:
+1. 富有文学性,使用比喻、通感、留白
+2. 融合照片捕捉的视觉细节和用户文字中的情感
+3. 起承转合,叙事弧线清晰(出发→体验→转折→回味)
+4. 结尾点题,留下余韵
+5. 段落间空一行,直接输出正文,不要标题或解释`;
+
+        const result = await callAIUniversal([
+            { role: 'system', content: '你是旅行文学作家,擅长把旅行照片转化为感人文案。' },
+            { role: 'user', content: prompt }
+        ], { maxTokens: 2000, temperature: 0.85 });
+        _memoirResult = result.content;
+        output.innerHTML = `<div style="white-space: pre-wrap; font-family: 'Georgia', 'Source Han Serif', serif;">${escapeHtml(_memoirResult).replace(/\n/g, '<br>')}</div>`;
+        actions.style.display = 'block';
+        status.innerHTML = `✅ 生成完成 (${result.provider}/${result.model})`;
+    } catch (e) {
+        renderAIError(output, e);
+        status.innerHTML = '❌ ' + (currentLang === 'en' ? 'Failed' : '失败');
+    }
+}
+
+function copyMemoirText() {
+    if (!_memoirResult) return;
+    navigator.clipboard.writeText(_memoirResult).then(() => showToast('📋 已复制到剪贴板', 'success'));
+}
+
+function exportMemoirAsImage() {
+    if (!_memoirResult) return;
+    showToast('🖼️ 正在生成长图...', 'info');
+    const canvas = document.createElement('canvas');
+    canvas.width = 750;
+    // 根据文字长度计算高度(每行约 30 字,每行 36px)
+    const linesPerRow = 22;
+    const lineCount = Math.ceil(_memoirResult.length / linesPerRow) + 8;
+    canvas.height = Math.max(800, lineCount * 36 + 100);
+    const ctx = canvas.getContext('2d');
+    // 背景
+    const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    grad.addColorStop(0, '#FFF9E6');
+    grad.addColorStop(1, '#FFE5D9');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // 标题
+    ctx.fillStyle = '#FF764D';
+    ctx.font = 'bold 36px "Microsoft YaHei", sans-serif';
+    ctx.fillText('📖 我的旅行回忆录', 50, 70);
+    // 副标题
+    ctx.fillStyle = '#888';
+    ctx.font = '18px sans-serif';
+    ctx.fillText(new Date().toLocaleString('zh-CN'), 50, 100);
+    // 正文
+    ctx.fillStyle = '#333';
+    ctx.font = '22px "Microsoft YaHei", "Source Han Serif", serif';
+    const lines = _memoirResult.split('\n');
+    let y = 150;
+    const maxWidth = canvas.width - 100;
+    for (const line of lines) {
+        const words = line.split('');
+        let currentLine = '';
+        for (const ch of words) {
+            const testLine = currentLine + ch;
+            const metrics = ctx.measureText(testLine);
+            if (metrics.width > maxWidth && currentLine) {
+                ctx.fillText(currentLine, 50, y);
+                y += 36;
+                currentLine = ch;
+                if (y > canvas.height - 50) break;
+            } else {
+                currentLine = testLine;
+            }
+        }
+        if (currentLine) { ctx.fillText(currentLine, 50, y); y += 36; }
+        y += 8;
+        if (y > canvas.height - 50) break;
+    }
+    // 下载
+    const link = document.createElement('a');
+    link.download = `回忆录-${new Date().toISOString().slice(0,10)}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    showToast('✅ 长图已下载', 'success');
+}
+
+// ============================================================
+// ===== AI 实验室 · 风险评估 =====
+// ============================================================
+async function generateRiskAssessment() {
+    const dest = document.getElementById('risk-destination').value.trim();
+    if (!dest) { showToast('请填写目的地', 'error'); return; }
+    if (!hasAIConfig()) {
+        const output = document.getElementById('risk-output');
+        if (output) {
+            showAIMissingHint({ target: output.parentElement, autoOpen: true });
+        } else {
+            showAIMissingToast();
+        }
+        return;
+    }
+    const start = document.getElementById('risk-start').value;
+    const end = document.getElementById('risk-end').value;
+    const companions = Array.from(document.getElementById('risk-companions').selectedOptions).map(o => o.value);
+    const activities = document.getElementById('risk-activities').value.trim();
+    const budget = document.getElementById('risk-budget').value;
+    const status = document.getElementById('risk-status');
+    const output = document.getElementById('risk-output');
+    status.innerHTML = '🔍 AI 正在分析旅行风险...';
+    output.innerHTML = '<div style="text-align: center; padding: 60px 20px; color: #888;"><div class="ai-spinner" style="margin: 0 auto 12px;"></div>分析中...</div>';
+    const prompt = `你是资深旅行风险评估专家。请基于以下旅行计划,从 4 个维度评估风险,输出严格 JSON 格式:
+
+【目的地】${dest}
+【出发日期】${start || '未指定'}
+【返回日期】${end || '未指定'}
+【同行人】${companions.join(',') || '未指定'}
+【活动】${activities || '未指定'}
+【预算(元)】${budget || '未指定'}
+
+输出格式(必须是合法 JSON,不要加任何额外文字):
+{
+  "overall": "低/中/高 风险",
+  "overallScore": 0-100,
+  "weather": {"level": "低/中/高", "score": 0-100, "summary": "天气风险简述", "tips": ["建议1", "建议2"]},
+  "health": {"level": "低/中/高", "score": 0-100, "summary": "健康风险简述", "tips": ["建议1"]},
+  "safety": {"level": "低/中/高", "score": 0-100, "summary": "治安/疫情/政治风险简述", "tips": ["建议1"]},
+  "budget": {"level": "低/中/高", "score": 0-100, "estimated": {"flight": 0, "hotel": 0, "food": 0, "transport": 0, "tickets": 0, "misc": 0, "total": 0}, "tips": ["建议1"]},
+  "equipment": ["装备1", "装备2", "装备3", "装备4", "装备5", "装备6", "装备7", "装备8"],
+  "emergency": ["紧急联系 1", "紧急联系 2", "应急方案 1"]
+}`;
+    try {
+        const result = await callAIUniversal([
+            { role: 'system', content: '你是旅行风险评估专家,只输出 JSON。' },
+            { role: 'user', content: prompt }
+        ], { maxTokens: 1500, temperature: 0.4 });
+        // 解析 JSON
+        const jsonMatch = result.content.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error('AI 返回非 JSON 格式');
+        const data = JSON.parse(jsonMatch[0]);
+        renderRiskResult(data, result.provider);
+        status.innerHTML = `✅ 完成 (${result.provider})`;
+    } catch (e) {
+        renderAIError(output, e);
+        status.innerHTML = '❌ ' + (currentLang === 'en' ? 'Failed' : '失败');
+    }
+}
+
+function renderRiskResult(data, provider) {
+    const c = document.getElementById('risk-output');
+    const levelColor = l => l === '高' ? '#E74C3C' : l === '中' ? '#F39C12' : '#27AE60';
+    const levelBg = l => l === '高' ? '#FFEBEE' : l === '中' ? '#FFF3CD' : '#D4EDDA';
+    c.innerHTML = `
+        <div class="card" style="background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 12px; color: #888;">综合风险等级</div>
+                    <div style="font-size: 32px; font-weight: 800; color: ${levelColor(data.overall?.split(' ')[0] || data.overall)};">${data.overall || '中'}</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 48px; font-weight: 800; color: ${levelColor(data.overall?.split(' ')[0] || '中')};">${data.overallScore || 50}</div>
+                    <div style="font-size: 12px; color: #888;">/ 100 风险分</div>
+                </div>
+            </div>
+        </div>
+        ${['weather', 'health', 'safety'].map(k => {
+            const d = data[k] || {};
+            return `
+            <div class="card" style="margin-bottom: 12px; border-left: 4px solid ${levelColor(d.level)};">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div style="font-weight: 700; font-size: 15px;">${k === 'weather' ? '☀️ 天气风险' : k === 'health' ? '💊 健康风险' : '🔒 安全风险'}</div>
+                    <span style="background: ${levelBg(d.level)}; color: ${levelColor(d.level)}; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">${d.level || '中'} · ${d.score || 50}分</span>
+                </div>
+                <div style="font-size: 13px; color: #555; margin-bottom: 8px;">${d.summary || ''}</div>
+                ${(d.tips || []).map(t => `<div style="font-size: 12px; color: #666; margin: 2px 0;">💡 ${escapeHtml(t)}</div>`).join('')}
+            </div>`;
+        }).join('')}
+        ${data.budget ? `
+        <div class="card" style="margin-bottom: 12px; border-left: 4px solid ${levelColor(data.budget.level)};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <div style="font-weight: 700; font-size: 15px;">💰 预算评估</div>
+                <span style="background: ${levelBg(data.budget.level)}; color: ${levelColor(data.budget.level)}; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">${data.budget.level || '中'}</span>
+            </div>
+            ${data.budget.estimated ? `
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; font-size: 13px;">
+                ${[['✈️ 机票', data.budget.estimated.flight], ['🏨 酒店', data.budget.estimated.hotel], ['🍜 餐饮', data.budget.estimated.food], ['🚇 交通', data.budget.estimated.transport], ['🎫 门票', data.budget.estimated.tickets], ['🎁 其他', data.budget.estimated.misc]].map(([k, v]) => `<div style="background: #F8F9FA; padding: 6px 10px; border-radius: 6px;"><span style="color: #888;">${k}</span><br><b>¥${v || 0}</b></div>`).join('')}
+                <div style="background: linear-gradient(135deg, #FF764D, #FDCB6E); color: white; padding: 6px 10px; border-radius: 6px; font-weight: 700; grid-column: 1/-1;">💎 预估总计: ¥${data.budget.estimated.total || 0}</div>
+            </div>` : ''}
+            ${(data.budget.tips || []).map(t => `<div style="font-size: 12px; color: #666; margin: 4px 0;">💡 ${escapeHtml(t)}</div>`).join('')}
+        </div>` : ''}
+        ${data.equipment && data.equipment.length ? `
+        <div class="card" style="margin-bottom: 12px;">
+            <div style="font-weight: 700; font-size: 15px; margin-bottom: 10px;">🎒 装备清单</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                ${data.equipment.map(e => `<span style="background: #F0F8FF; color: #0984E3; padding: 4px 10px; border-radius: 12px; font-size: 12px;">${escapeHtml(e)}</span>`).join('')}
+            </div>
+        </div>` : ''}
+        ${data.emergency && data.emergency.length ? `
+        <div class="card" style="background: #FFEBEE; border: 1px solid #FFCDD2;">
+            <div style="font-weight: 700; font-size: 15px; margin-bottom: 8px; color: #C62828;">🆘 应急方案</div>
+            ${data.emergency.map(e => `<div style="font-size: 13px; color: #555; margin: 4px 0;">• ${escapeHtml(e)}</div>`).join('')}
+        </div>` : ''}
+        <div style="text-align: right; font-size: 11px; color: #BBB; margin-top: 8px;">由 ${provider} 智能分析 · 仅供决策参考</div>
+    `;
+}
+
+// ============================================================
+// ===== AI 故事中心 · 旅行电影 + 年度复盘 + AI 智能体 =====
+// ============================================================
+let _movieClips = [];
+let _movieIndex = 0;
+let _movieTimer = null;
+let _moviePaused = false;
+
+// ===== AI 故事中心档案选择器 =====
+let _selectedArchiveIds = new Set();
+let _storyListExpanded = false;
+function getSelectedArchives() {
+    if (_selectedArchiveIds.size === 0) return archives || [];
+    return (archives || []).filter(a => _selectedArchiveIds.has(a.id));
+}
+function renderStoryArchiveSelector() {
+    const countEl = document.getElementById('story-selection-count');
+    const listEl = document.getElementById('story-archive-list');
+    if (!countEl || !listEl) return;
+    const list = archives || [];
+    const sel = _selectedArchiveIds.size === 0 ? list.length : _selectedArchiveIds.size;
+    countEl.textContent = _selectedArchiveIds.size === 0
+        ? (currentLang === 'en' ? ('All ' + list.length + ' archives') : ('全部 ' + list.length + ' 段'))
+        : (currentLang === 'en' ? ('Selected ' + sel + ' / ' + list.length) : ('已选 ' + sel + ' / ' + list.length + ' 段'));
+    if (list.length === 0) {
+        listEl.innerHTML = '<div style="text-align:center;color:#9CA3AF;padding:24px;font-size:13px;">⚠ 还没有旅行档案,先去新建档案吧</div>';
+        return;
+    }
+    listEl.innerHTML = list.map(a => {
+        const checked = _selectedArchiveIds.size === 0 || _selectedArchiveIds.has(a.id);
+        const bg = checked ? '#F0F9FF' : '#FFF';
+        return '<label style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:13px;background:' + bg + ';" >'
+            + '<input type="checkbox" ' + (checked ? 'checked' : '') + ' onchange="toggleStoryArchive(' + a.id + ', this.checked)" style="width:16px;height:16px;cursor:pointer;flex-shrink:0;">'
+            + '<span style="flex:1;color:#1F2937;">📍 <b>' + escapeHtml(a.destination || '未知') + '</b> · ' + (a.start || '') + '</span>'
+            + '<span style="color:#6B7280;font-size:12px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHtml(a.title || '') + '</span>'
+            + '</label>';
+    }).join('');
+}
+function toggleStoryArchive(id, checked) {
+    if (_selectedArchiveIds.size === 0) {
+        _selectedArchiveIds = new Set((archives || []).map(a => a.id));
+    }
+    if (checked) _selectedArchiveIds.add(id);
+    else _selectedArchiveIds.delete(id);
+    renderStoryArchiveSelector();
+    refreshStoryContent();
+}
+function selectAllStoryArchives() {
+    _selectedArchiveIds = new Set();
+    renderStoryArchiveSelector();
+    refreshStoryContent();
+}
+function selectNoneStoryArchives() {
+    _selectedArchiveIds = new Set((archives || []).map(a => a.id));
+    renderStoryArchiveSelector();
+    refreshStoryContent();
+}
+function selectInvertStoryArchives() {
+    const list = archives || [];
+    if (_selectedArchiveIds.size === 0) {
+        _selectedArchiveIds = new Set();
+    } else {
+        const next = new Set();
+        list.forEach(a => { if (!_selectedArchiveIds.has(a.id)) next.add(a.id); });
+        _selectedArchiveIds = next;
+    }
+    renderStoryArchiveSelector();
+    refreshStoryContent();
+}
+function selectThisYearArchives() {
+    const yr = String(new Date().getFullYear());
+    _selectedArchiveIds = new Set((archives || []).filter(a => (a.start || '').startsWith(yr)).map(a => a.id));
+    if (_selectedArchiveIds.size === 0) {
+        if (typeof showToast === 'function') showToast('今年还没有旅行档案', 'info');
+        return;
+    }
+    renderStoryArchiveSelector();
+    refreshStoryContent();
+}
+function toggleStoryArchiveList() {
+    _storyListExpanded = !_storyListExpanded;
+    const listEl = document.getElementById('story-archive-list');
+    const btn = document.getElementById('story-toggle-list-btn');
+    if (listEl) listEl.style.display = _storyListExpanded ? 'block' : 'none';
+    if (btn) btn.innerHTML = _storyListExpanded ? '收起 ▲' : '展开 ▾';
+}
+function refreshStoryContent() {
+    const activeTab = document.querySelector('#story-tabs .story-tab.active');
+    if (!activeTab) return;
+    const tab = activeTab.dataset.tab;
+    if (tab === 'movie' && typeof initAiStoryPage === 'function') initAiStoryPage();
+    if (tab === 'yearly' && typeof renderYearlyReport === 'function') {
+        try { renderYearlyReport(); } catch (e) {}
+    }
+}
+
+
+// 1. 初始化 AI 故事中心
+function initAiStoryPage() {
+    // 收集已选档案的照片
+    const allPhotos = [];
+    getSelectedArchives().forEach(a => {
+        (a.photos || []).forEach(p => {
+            allPhotos.push({ archive: a, photo: p });
+        });
+    });
+    // 准备电影片段（按时间顺序）
+    _movieClips = allPhotos.map(({archive, photo}, i) => ({
+        type: 'photo',
+        title: archive.title || archive.destination || '旅行',
+        location: archive.destination || '',
+        date: archive.start || '',
+        imageUrl: photo.url || photo.dataUrl || '',
+        desc: photo.desc || ''
+    }));
+    // 加上开篇/结尾片段
+    _movieClips.unshift({
+        type: 'title',
+        title: '我的旅行',
+        subtitle: `${getSelectedArchives().length} 段旅程 · ${allPhotos.length} 张照片`
+    });
+    _movieClips.push({
+        type: 'end',
+        title: '未完待续',
+        subtitle: '下一次旅行,从这里开始'
+    });
+    // 渲染电影选项
+    const selector = document.getElementById('movie-selector');
+    if (selector) {
+        selector.innerHTML = getSelectedArchives().length > 0 ?
+            '<span style="display:inline-flex;align-items:center;gap:6px;background:#F0FDF4;color:#15803D;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;">✨ 准备就绪</span>' :
+            '<span style="display:inline-flex;align-items:center;gap:6px;background:#FFF7ED;color:#C2410C;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;">💡 先添加旅行档案</span>';
+    }
+    const totalEl = document.getElementById('movie-total-count');
+    const photoEl = document.getElementById('movie-photo-count');
+    if (totalEl) totalEl.textContent = getSelectedArchives().length;
+    if (photoEl) photoEl.textContent = allPhotos.length;
+    // 填充年份下拉
+    const years = Array.from(new Set(getSelectedArchives().map(a => (a.start || '').slice(0, 4)).filter(y => /^\d{4}$/.test(y)))).sort();
+    const yearSel = document.getElementById('yearly-year');
+    if (yearSel) {
+        yearSel.innerHTML = '<option value="all">📅 全部年份</option>' +
+            years.map(y => `<option value="${y}">${y} 年</option>`).join('');
+    }
+    // 同步档案选择器 UI
+    renderStoryArchiveSelector();
+}
+
+// 2. 子 tab 切换
+function switchStoryTab(tabName) {
+    document.querySelectorAll('#story-tabs .story-tab').forEach(b => {
+        const active = b.dataset.tab === tabName;
+        b.classList.toggle('active', active);
+        if (active) {
+            b.style.background = 'white';
+            b.style.color = '#1F2937';
+            b.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+        } else {
+            b.style.background = 'transparent';
+            b.style.color = '#6B7280';
+            b.style.boxShadow = 'none';
+        }
+    });
+    
+    renderStoryArchiveSelector();
+    document.querySelectorAll('.story-tab-panel').forEach(p => {
+        p.style.display = 'none';
+    });
+    const panel = document.getElementById('story-panel-' + tabName);
+    if (panel) panel.style.display = 'block';
+    // 切换到 yearly 时自动生成
+    if (tabName === 'yearly') {
+        // 不自动渲染，等用户点击
+    }
+}
+
+// 3. 播放旅行电影
+function playTravelMovie() {
+    if (!_movieClips || _movieClips.length <= 2) {
+        showToast('请先添加旅行档案 + 照片', 'error');
+        return;
+    }
+    const player = document.getElementById('movie-player');
+    if (player) player.style.display = 'block';
+    _movieIndex = 0;
+    _moviePaused = false;
+    _playNextClip();
+}
+
+function _playNextClip() {
+    if (_moviePaused) return;
+    if (_movieIndex >= _movieClips.length) {
+        stopTravelMovie();
+        return;
+    }
+    const clip = _movieClips[_movieIndex];
+    const bg = document.getElementById('movie-bg');
+    const text = document.getElementById('movie-text');
+    const bar = document.getElementById('movie-progress-bar');
+    // 设置背景
+    if (clip.type === 'photo' && clip.imageUrl) {
+        bg.style.backgroundImage = `url(${clip.imageUrl})`;
+    } else {
+        // title/end 段：纯色渐变
+        bg.style.backgroundImage = clip.type === 'title'
+            ? 'linear-gradient(135deg, #FF764D, #FDCB6E, #6C5CE7)'
+            : 'linear-gradient(135deg, #1F2937, #6C5CE7, #FF764D)';
+    }
+    // 文字
+    if (clip.type === 'photo') {
+        text.innerHTML = `
+            <div style="font-size:14px;opacity:0.85;letter-spacing:2px;margin-bottom:8px;">${escapeHtml(clip.date || '')}</div>
+            <div style="font-size:42px;font-weight:800;margin-bottom:8px;letter-spacing:1px;">${escapeHtml(clip.title)}</div>
+            <div style="font-size:20px;opacity:0.92;margin-bottom:12px;">📍 ${escapeHtml(clip.location || '')}</div>
+            ${clip.desc ? `<div style="font-size:14px;opacity:0.8;max-width:600px;margin:0 auto;">${escapeHtml(clip.desc)}</div>` : ''}
+        `;
+    } else if (clip.type === 'title') {
+        text.innerHTML = `
+            <div style="font-size:18px;opacity:0.9;letter-spacing:4px;margin-bottom:12px;">A TRAVEL MEMOIR</div>
+            <div style="font-size:64px;font-weight:900;letter-spacing:2px;margin-bottom:12px;text-shadow:0 8px 32px rgba(0,0,0,0.4);">${escapeHtml(clip.title)}</div>
+            <div style="font-size:18px;opacity:0.85;">${escapeHtml(clip.subtitle)}</div>
+            <div style="margin-top:24px;font-size:13px;opacity:0.7;">—— 按 ✕ 退出 · ⏸ 暂停 ——</div>
+        `;
+    } else {
+        text.innerHTML = `
+            <div style="font-size:18px;opacity:0.9;letter-spacing:4px;margin-bottom:12px;">THE END... OR NEW BEGINNING</div>
+            <div style="font-size:56px;font-weight:900;letter-spacing:2px;margin-bottom:12px;">${escapeHtml(clip.title)}</div>
+            <div style="font-size:18px;opacity:0.85;">${escapeHtml(clip.subtitle)}</div>
+        `;
+    }
+    // 显示
+    requestAnimationFrame(() => {
+        bg.style.opacity = '1';
+        bg.style.transform = 'scale(1.0)';
+        text.style.opacity = '1';
+    });
+    // 进度
+    if (bar) bar.style.width = ((_movieIndex + 1) / _movieClips.length * 100) + '%';
+    // 下一段（每段 4 秒，title/end 6 秒）
+    const dur = clip.type === 'photo' ? 4000 : 6000;
+    _movieTimer = setTimeout(() => {
+        // 淡出
+        bg.style.opacity = '0';
+        text.style.opacity = '0';
+        setTimeout(() => {
+            _movieIndex++;
+            _playNextClip();
+        }, 600);
+    }, dur);
+}
+
+function stopTravelMovie() {
+    if (_movieTimer) { clearTimeout(_movieTimer); _movieTimer = null; }
+    const player = document.getElementById('movie-player');
+    if (player) player.style.display = 'none';
+    const bg = document.getElementById('movie-bg');
+    if (bg) { bg.style.opacity = '0'; bg.style.transform = 'scale(1.05)'; }
+    const text = document.getElementById('movie-text');
+    if (text) text.style.opacity = '0';
+    _moviePaused = false;
+    const btn = document.getElementById('movie-pause-btn');
+    if (btn) btn.textContent = '⏸';
+}
+
+function toggleMoviePause() {
+    _moviePaused = !_moviePaused;
+    const btn = document.getElementById('movie-pause-btn');
+    if (btn) btn.textContent = _moviePaused ? '▶' : '⏸';
+    if (!_moviePaused) _playNextClip();
+}
+
+// 4. 年度复盘
+function renderYearlyReport() {
+    const archives = getSelectedArchives();
+    const yearEl = document.getElementById('yearly-year');
+    const year = yearEl ? yearEl.value : 'all';
+    const filtered = (archives || []).filter(a => {
+        if (year === 'all') return true;
+        return (a.start || '').startsWith(year);
+    });
+    const container = document.getElementById('yearly-content');
+    if (!container) return;
+    if (filtered.length === 0) {
+        container.innerHTML = `<div class="card" style="text-align:center;padding:60px 20px;color:#BBB;"><div style="font-size:48px;margin-bottom:12px;">📭</div><div>该年份没有旅行档案</div></div>`;
+        return;
+    }
+    // 计算数据
+    const totalExpense = filtered.reduce((s, a) => s + (a.expenses || []).reduce((x, e) => x + (e.amount || 0), 0), 0);
+    const totalDays = filtered.reduce((s, a) => s + ((a.start && a.end) ? Math.ceil((new Date(a.end) - new Date(a.start)) / 86400000) + 1 : 0), 0);
+    const cities = [...new Set(filtered.map(a => a.destination).filter(Boolean))];
+    const photos = filtered.reduce((s, a) => s + (a.photos || []).length, 0);
+    const avgRating = filtered.filter(a => a.rating).reduce((s, a) => s + a.rating, 0) / Math.max(1, filtered.filter(a => a.rating).length);
+    // 消费类别
+    const catStats = {};
+    filtered.forEach(a => (a.expenses || []).forEach(e => {
+        const c = e.category || '其他';
+        if (!catStats[c]) catStats[c] = { total: 0, count: 0 };
+        catStats[c].total += e.amount || 0;
+        catStats[c].count++;
+    }));
+    const catList = Object.entries(catStats).map(([k, v]) => ({name: k, ...v})).sort((a, b) => b.total - a.total);
+    // 同行人
+    const compStats = {};
+    filtered.forEach(a => {
+        const comps = a.companions;
+        const list = Array.isArray(comps) ? comps : (comps && typeof comps === 'object') ? Object.values(comps) : [];
+        list.forEach(c => {
+            const name = (typeof c === 'string') ? c : (c && c.name) ? c.name : null;
+            if (!name) return;
+            compStats[name] = (compStats[name] || 0) + 1;
+        });
+    });
+    const compList = Object.entries(compStats).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    // 标签云
+    const tagStats = {};
+    filtered.forEach(a => (a.tags || []).forEach(t => tagStats[t] = (tagStats[t] || 0) + 1));
+    const tagList = Object.entries(tagStats).sort((a, b) => b[1] - a[1]).slice(0, 12);
+    // 渲染
+    container.innerHTML = `
+        <div style="background:linear-gradient(135deg,#FF764D 0%,#FDCB6E 50%,#6C5CE7 100%);color:white;padding:32px;border-radius:20px;margin-bottom:18px;box-shadow:0 12px 32px rgba(108,92,231,0.3);">
+            <div style="font-size:13px;opacity:0.9;letter-spacing:3px;margin-bottom:6px;">${year === 'all' ? 'ALL TIME' : year + ' YEAR'}</div>
+            <div style="font-size:36px;font-weight:900;letter-spacing:1px;margin-bottom:6px;">我的旅行年度报告</div>
+            <div style="font-size:14px;opacity:0.92;">${filtered.length} 段旅程 · ${cities.length} 个城市 · ${totalDays} 天 · ${photos} 张照片</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:18px;">
+            ${[
+                {label:'总消费',val:'¥' + totalExpense.toFixed(0),color:'#10B981',icon:'💰'},
+                {label:'旅行次数',val:filtered.length,color:'#3B82F6',icon:'✈️'},
+                {label:'足迹城市',val:cities.length,color:'#F59E0B',icon:'📍'},
+                {label:'旅行天数',val:totalDays,color:'#8B5CF6',icon:'📅'},
+                {label:'照片总数',val:photos,color:'#EC4899',icon:'📷'},
+                {label:'平均评分',val:avgRating ? avgRating.toFixed(1) : '—',color:'#EF4444',icon:'⭐'}
+            ].map(k => `
+                <div style="background:linear-gradient(135deg,${k.color}22,${k.color}11);border:1px solid ${k.color}44;border-radius:14px;padding:14px;">
+                    <div style="font-size:22px;">${k.icon}</div>
+                    <div style="font-size:22px;font-weight:800;color:${k.color};margin:4px 0;">${k.val}</div>
+                    <div style="font-size:11px;color:#6B7280;">${k.label}</div>
+                </div>
+            `).join('')}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;">
+            <div class="card">
+                <div class="card-title">💰 消费分布</div>
+                ${catList.length === 0 ? '<div style="color:#9CA3AF;padding:20px;text-align:center;">暂无消费数据</div>' : catList.slice(0, 6).map(c => `
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                        <div style="width:80px;font-size:12px;color:#4B5563;">${escapeHtml(c.name)}</div>
+                        <div style="flex:1;height:8px;background:#F3F4F6;border-radius:4px;overflow:hidden;">
+                            <div style="width:${(c.total / catList[0].total * 100).toFixed(0)}%;height:100%;background:linear-gradient(90deg,#10B981,#34D399);"></div>
+                        </div>
+                        <div style="font-size:12px;font-weight:600;">¥${c.total.toFixed(0)}</div>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="card">
+                <div class="card-title">👥 最常同行</div>
+                ${compList.length === 0 ? '<div style="color:#9CA3AF;padding:20px;text-align:center;">暂无同行人数据</div>' : compList.map(([name, count], i) => `
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:8px;background:${i === 0 ? '#FEF3C7' : '#F9FAFB'};border-radius:8px;">
+                        <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#FF764D,#6C5CE7);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;">${i + 1}</div>
+                        <div style="flex:1;font-weight:600;">${escapeHtml(name)}</div>
+                        <div style="font-size:12px;color:#6B7280;">${count} 次</div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+        ${tagList.length > 0 ? `
+        <div class="card" style="margin-bottom:18px;">
+            <div class="card-title">🏷️ 年度标签云</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                ${tagList.map(([t, c]) => `<span style="background:linear-gradient(135deg,#FFF7ED,#FED7AA);color:#9A3412;padding:6px 14px;border-radius:14px;font-size:${12 + c}px;font-weight:600;">${escapeHtml(t)} × ${c}</span>`).join('')}
+            </div>
+        </div>` : ''}
+        <div class="card">
+            <div class="card-title">🏙️ 全部足迹</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                ${cities.map(c => `<span style="background:linear-gradient(135deg,#DBEAFE,#BFDBFE);color:#1E40AF;padding:6px 14px;border-radius:14px;font-size:13px;font-weight:600;">📍 ${escapeHtml(c)}</span>`).join('')}
+            </div>
+        </div>
+    `;
+}
+
+// 5. 明年预测
+async function predictNextYear() {
+    const archives = getSelectedArchives();
+    const predictEl = document.getElementById('yearly-predict');
+    if (!predictEl) return;
+    if (typeof hasAIConfig === 'function' && !hasAIConfig()) {
+        predictEl.innerHTML = '';
+        showAIMissingHint({ target: predictEl.parentElement });
+        return;
+    }
+    if ((archives || []).length < 2) {
+        predictEl.innerHTML = `<div class="card" style="background:linear-gradient(135deg,#FFF7ED,#FFEDD5);border:1px solid #FED7AA;padding:18px;color:#9A3412;">需要至少 2 段旅行档案才能预测</div>`;
+        return;
+    }
+    predictEl.innerHTML = `<div class="card" style="text-align:center;padding:24px;color:#888;"><div class="ai-spinner" style="margin:0 auto 12px;"></div>AI 正在分析你的旅行数据并预测明年...</div>`;
+    // 准备数据
+    const dataDigest = {
+        totalArchives: archives.length,
+        cities: [...new Set(archives.map(a => a.destination).filter(Boolean))].slice(0, 30),
+        avgExpense: archives.reduce((s, a) => s + (a.expenses || []).reduce((x, e) => x + (e.amount || 0), 0), 0) / archives.length,
+        avgDays: archives.reduce((s, a) => s + ((a.start && a.end) ? Math.ceil((new Date(a.end) - new Date(a.start)) / 86400000) + 1 : 0), 0) / archives.length,
+        companions: [...new Set(archives.flatMap(a => {
+            const comps = a.companions;
+            const list = Array.isArray(comps) ? comps : (comps && typeof comps === 'object') ? Object.values(comps) : [];
+            return list.map(c => typeof c === 'string' ? c : c?.name).filter(Boolean);
+        }))].slice(0, 10),
+        moods: archives.map(a => a.mood).filter(Boolean).slice(0, 20),
+        tags: [...new Set(archives.flatMap(a => a.tags || []))].slice(0, 20),
+        topCategories: Object.entries(archives.reduce((acc, a) => {
+            (a.expenses || []).forEach(e => {
+                const c = e.category || '其他';
+                acc[c] = (acc[c] || 0) + (e.amount || 0);
+            });
+            return acc;
+        }, {})).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([k, v]) => `${k}:¥${v.toFixed(0)}`)
+    };
+    const prompt = `你是旅行预测师。基于以下用户历史旅行数据,预测他明年(2027 年)最可能:
+1. 想去哪 3 个目的地
+2. 预计总消费
+3. 最可能和谁一起
+4. 总体旅行风格预测
+
+【用户数据】
+- 已完成 ${dataDigest.totalArchives} 段旅行
+- 已去过城市: ${dataDigest.cities.join(', ') || '无'}
+- 平均单次消费: ¥${dataDigest.avgExpense.toFixed(0)}
+- 平均单次天数: ${dataDigest.avgDays.toFixed(1)} 天
+- 同行人: ${dataDigest.companions.join(', ') || '独自'}
+- 心情偏好: ${dataDigest.moods.join(', ') || '无'}
+- 标签: ${dataDigest.tags.join(', ') || '无'}
+- 消费 Top 5: ${dataDigest.topCategories.join(', ')}
+
+输出严格 JSON(不要加额外文字):
+{
+  "destinations": [{"city": "城市", "reason": "理由", "month": "最佳月份", "budget": 估算预算}],
+  "totalBudget": 数字,
+  "companion": "最可能同行人",
+  "style": "旅行风格",
+  "summary": "100 字以内的预测总结(幽默但有数据支撑)"
+}`;
+    try {
+        const result = await callAIUniversal([
+            { role: 'system', content: '你是数据驱动的旅行预测师,只输出 JSON。' },
+            { role: 'user', content: prompt }
+        ], { maxTokens: 1200, temperature: 0.7 });
+        const jsonMatch = result.content.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error('AI 返回非 JSON');
+        const data = JSON.parse(jsonMatch[0]);
+        predictEl.innerHTML = `
+            <div style="background:linear-gradient(135deg,#1F2937,#6C5CE7);color:white;padding:28px;border-radius:18px;margin-bottom:14px;">
+                <div style="font-size:13px;opacity:0.85;letter-spacing:3px;margin-bottom:6px;">🔮 AI PREDICTION</div>
+                <div style="font-size:28px;font-weight:900;margin-bottom:10px;">明年(2027)你可能会...</div>
+                <div style="font-size:15px;line-height:1.7;opacity:0.95;">${escapeHtml(data.summary || '')}</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;">
+                <div style="background:linear-gradient(135deg,#10B981,#059669);color:white;padding:16px;border-radius:14px;text-align:center;">
+                    <div style="font-size:12px;opacity:0.9;">预计总消费</div>
+                    <div style="font-size:24px;font-weight:800;margin:4px 0;">¥${(data.totalBudget || 0).toLocaleString()}</div>
+                </div>
+                <div style="background:linear-gradient(135deg,#3B82F6,#1D4ED8);color:white;padding:16px;border-radius:14px;text-align:center;">
+                    <div style="font-size:12px;opacity:0.9;">最可能同行</div>
+                    <div style="font-size:18px;font-weight:700;margin:6px 0;">${escapeHtml(data.companion || '独自')}</div>
+                </div>
+                <div style="background:linear-gradient(135deg,#F59E0B,#D97706);color:white;padding:16px;border-radius:14px;text-align:center;">
+                    <div style="font-size:12px;opacity:0.9;">旅行风格</div>
+                    <div style="font-size:18px;font-weight:700;margin:6px 0;">${escapeHtml(data.style || '舒适')}</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">📍 推荐目的地 Top 3</div>
+                ${(data.destinations || []).map((d, i) => `
+                    <div style="display:flex;gap:12px;padding:14px;margin-bottom:10px;background:linear-gradient(135deg,#FFF7ED,#FFEDD5);border-radius:12px;border-left:4px solid #FF764D;">
+                        <div style="font-size:28px;font-weight:800;color:#FF764D;min-width:36px;">${i + 1}</div>
+                        <div style="flex:1;">
+                            <div style="font-size:18px;font-weight:700;margin-bottom:4px;">${escapeHtml(d.city || '')}</div>
+                            <div style="font-size:13px;color:#6B7280;margin-bottom:6px;">${escapeHtml(d.reason || '')}</div>
+                            <div style="font-size:12px;color:#9A3412;">🗓️ ${escapeHtml(d.month || '')} · 预算 ¥${(d.budget || 0).toLocaleString()}</div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            <div style="text-align:right;font-size:11px;color:#BBB;margin-top:8px;">由 ${result.provider} 预测 · 仅供娱乐参考</div>
+        `;
+    } catch (e) {
+        renderAIError(predictEl, e);
+    }
+}
+
+// 6. AI 智能体
+async function askAgent(question) {
+    const archives = getSelectedArchives();
+    const chatEl = document.getElementById('agent-chat');
+    if (!chatEl) return;
+    if (!question || !question.trim()) return;
+    // 清空欢迎语
+    if (chatEl.querySelector('div[style*="text-align:center"]')) {
+        chatEl.innerHTML = '';
+    }
+    // 用户消息
+    const userBubble = `<div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
+        <div style="max-width:80%;background:linear-gradient(135deg,#FF764D,#FDCB6E);color:white;padding:10px 16px;border-radius:18px 18px 4px 18px;font-size:14px;line-height:1.5;">${escapeHtml(question)}</div>
+    </div>`;
+    chatEl.innerHTML += userBubble;
+    chatEl.scrollTop = chatEl.scrollHeight;
+    // AI 占位
+    const placeholderId = 'ai-bubble-' + Date.now();
+    chatEl.innerHTML += `<div id="${placeholderId}" style="display:flex;justify-content:flex-start;margin-bottom:12px;">
+        <div style="max-width:86%;background:white;border:1px solid #E5E7EB;padding:12px 16px;border-radius:18px 18px 18px 4px;font-size:13px;color:#6B7280;"><div class="ai-spinner" style="display:inline-block;width:14px;height:14px;vertical-align:middle;margin-right:6px;"></div>AI 正在分析你 ${(archives || []).length} 段旅行数据...</div>
+    </div>`;
+    chatEl.scrollTop = chatEl.scrollHeight;
+    if ((archives || []).length === 0) {
+        document.getElementById(placeholderId).innerHTML = `<div style="max-width:86%;background:white;border:1px solid #E5E7EB;padding:12px 16px;border-radius:18px 18px 18px 4px;font-size:13px;color:#6B7280;">🤔 你的旅行档案还是空的。先添加几段旅行,这样我能基于你的真实数据回答。</div>`;
+        return;
+    }
+    if (!hasAIConfig()) {
+        const hint = showAIMissingHint({ compact: true });
+        document.getElementById(placeholderId).innerHTML = hint;
+        return;
+    }
+    // 准备数据摘要
+    const summary = {
+        totalArchives: archives.length,
+        cities: [...new Set(archives.map(a => a.destination).filter(Boolean))],
+        avgExpense: archives.reduce((s, a) => s + (a.expenses || []).reduce((x, e) => x + (e.amount || 0), 0), 0) / Math.max(1, archives.length),
+        companions: [...new Set(archives.flatMap(a => {
+            const comps = a.companions;
+            const list = Array.isArray(comps) ? comps : (comps && typeof comps === 'object') ? Object.values(comps) : [];
+            return list.map(c => typeof c === 'string' ? c : c?.name).filter(Boolean);
+        }))],
+        tags: [...new Set(archives.flatMap(a => a.tags || []))].slice(0, 20),
+        moodCounts: archives.reduce((acc, a) => { if (a.mood) acc[a.mood] = (acc[a.mood] || 0) + 1; return acc; }, {})
+    };
+    const prompt = `你是用户的私人旅行助手,熟悉他所有的旅行数据。基于以下真实数据回答问题。
+
+【用户数据摘要】
+- ${summary.totalArchives} 段旅行
+- 城市: ${summary.cities.join(', ') || '无'}
+- 平均单次: ¥${summary.avgExpense.toFixed(0)}
+- 同行人: ${summary.companions.join(', ') || '独自'}
+- 标签: ${summary.tags.join(', ') || '无'}
+- 心情分布: ${Object.entries(summary.moodCounts).map(([k, v]) => `${k}:${v}`).join(', ') || '无'}
+
+【详细数据】
+${archives.slice(0, 10).map(a => `- ${a.start || ''} ${a.destination || ''} ¥${(a.expenses || []).reduce((s, e) => s + (e.amount || 0), 0)} 心情:${a.mood || '?'} 评分:${a.rating || '?'} ${(a.tags || []).join('/')}`).join('\n')}
+
+【用户问题】${question}
+
+要求:用对话式中文回答(150-300 字),结合数据说话,有温度有观点。可以给出具体建议或预测。`;
+    try {
+        const result = await callAIUniversal([
+            { role: 'system', content: '你是私人旅行助手,数据驱动,语言自然亲切。' },
+            { role: 'user', content: prompt }
+        ], { maxTokens: 800, temperature: 0.8 });
+        document.getElementById(placeholderId).innerHTML = `<div style="max-width:86%;background:white;border:1px solid #E5E7EB;padding:12px 16px;border-radius:18px 18px 18px 4px;font-size:14px;line-height:1.7;color:#1F2937;white-space:pre-wrap;">${escapeHtml(result.content)}</div><div style="font-size:10px;color:#BBB;margin-top:2px;padding-left:8px;">由 ${result.provider} 回答</div>`;
+        chatEl.scrollTop = chatEl.scrollHeight;
+    } catch (e) {
+        try { renderAIError(document.getElementById(placeholderId), e, { style: 'chat' }); } catch (e2) { document.getElementById(placeholderId).innerHTML = '❌ ' + escapeHtml(e.message || String(e)); }
+    }
+}
+
+function askAgentFromInput() {
+    const input = document.getElementById('agent-input');
+    if (!input) return;
+    const q = input.value.trim();
+    if (!q) return;
+    input.value = '';
+    askAgent(q);
+}
+
 
 // 调用 AI API（OpenAI 兼容）
 async function callAI(baseUrl, apiKey, model, messages, opts = {}) {
